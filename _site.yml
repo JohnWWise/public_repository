@@ -5,9 +5,24 @@ description: |
 output_dir: "docs"
 theme: public.css
 navbar:
+  logo:
+    image: 'images/JW_logo_cutout.png'
+    href: index.html
   right:
-    - text: "Home"
-      href: index.html
+    - text: "Analysis"
+      href: html.html
+    - text: "Creative Writing"
+      href: tables.html
     - text: "About"
-      href: about.html
+      menu:
+        - text: "Introduction to John Wise"
+          href: index.html
+        - text: "Resume"
+          href: index.html
+        - text: "CV"
+          href: index.html
+        - text: "Cat Pics"
+          href: index.html
+        - text: "Contact"
+          href: contact.html
 output: distill::distill_article

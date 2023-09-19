@@ -2220,23 +2220,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     
   }
 
-  .distill-site-header .title {
-    font-size: 24px; /* Adjust this value as needed */
-    margin-left: 45px; /* Adjust this value as needed to create spacing */
-  }
-
-  .distill-site-header {
-    /* Set the background image to your logo with a relative path */
-    background-image: url('images/JW_logo_cutout.png');
-    /* Set the background size, position, and other styles as needed */
-    background-size: contain;
-    background-position: left center;
-    background-repeat: no-repeat; /* Prevent the image from tiling */
-    padding: 10px;
-    margin: 0;
-    display: flex; /* Use flexbox for layout control */
-    align-items: center; /* Vertically center items */
-    justify-content: space-between;
+  .distill-site-header .logo img{
+    max-height: 55px; /* Makes logo bigger, default was 20px */
   }
 
   .distill-site-footer {
@@ -2432,11 +2417,28 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <header class="header header--fixed" role="banner">
 <nav class="distill-site-nav distill-site-header">
 <div class="nav-left">
+<a class="logo" href="index.html">
+<img src="images/JW_logo_cutout.png" alt="Logo"/>
+</a>
 <a href="index.html" class="title">John Wise's Public Repository</a>
 </div>
 <div class="nav-right">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
+<a href="html.html">Analysis</a>
+<a href="tables.html">Creative Writing</a>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+About
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="index.html">Introduction to John Wise</a>
+<a href="index.html">Resume</a>
+<a href="index.html">CV</a>
+<a href="index.html">Cat Pics</a>
+<a href="contact.html">Contact</a>
+</div>
+</div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>

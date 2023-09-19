@@ -67,23 +67,8 @@ d-appendix {
   
 }
 
-.distill-site-header .title {
-  font-size: 24px; /* Adjust this value as needed */
-  margin-left: 45px; /* Adjust this value as needed to create spacing */
-}
-
-.distill-site-header {
-  /* Set the background image to your logo with a relative path */
-  background-image: url('images/JW_logo_cutout.png');
-  /* Set the background size, position, and other styles as needed */
-  background-size: contain;
-  background-position: left center;
-  background-repeat: no-repeat; /* Prevent the image from tiling */
-  padding: 10px;
-  margin: 0;
-  display: flex; /* Use flexbox for layout control */
-  align-items: center; /* Vertically center items */
-  justify-content: space-between;
+.distill-site-header .logo img{
+  max-height: 55px; /* Makes logo bigger, default was 20px */
 }
 
 .distill-site-footer {
