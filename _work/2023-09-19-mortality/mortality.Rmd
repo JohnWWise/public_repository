@@ -1,0 +1,6 @@
+---
+title: "Investigation of FDOC Public 'Inmate Mortality Data'"
+output:
+  distill::distill_article:
+---
+content!

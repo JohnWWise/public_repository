@@ -6,14 +6,30 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2023-09-19T13:16:09-04:00"
+      "last_modified": "2023-09-19T17:03:26-04:00"
+    },
+    {
+      "path": "cats.html",
+      "title": "John's Cats",
+      "description": "I love my cats!!!!\n",
+      "author": [],
+      "date": "`r Sys.Date()`",
+      "contents": "\nI will get his part of the site up ASAP!!!!\n\n\n\n",
+      "last_modified": "2023-09-19T17:03:26-04:00"
     },
     {
       "path": "contact.html",
       "title": "Let's Start a Conversation!",
       "author": [],
-      "contents": "\n\n          \n          \n          \n          \n          John Wise's Public Repository\n          \n          \n          Analysis\n          Creative Writing\n          \n          \n          About\n           \n          ▾\n          \n          \n          Introduction to John Wise\n          Resume\n          CV\n          Cats\n          Contact\n          \n          \n          ☰\n          \n          \n      \n        \n          \n            Let’s Start a Conversation!\n          \n          \n            \n              \n            \n            \n              \n            \n          \n\n          \n            \n              \n                  \n                    \n                      Email\n                    \n                  \n                \n                                \n                  \n                    \n                      Call or Text\n                    \n                  \n                \n                              \n          \n\n          \n            \n              \n                                \n                  \n                    Email\n                  \n                \n                                \n                  \n                    Call or Text\n                  \n                \n                              \n            \n          \n        \n      \n    \n\n    \n    \n    \n          Late Updated 2023-09-19\n          Distill is a publication format for scientific and technical writing,\n          native to the web.\n          Learn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n          \n          \n\n    \n  ",
-      "last_modified": "2023-09-19T13:16:10-04:00"
+      "contents": "\n\n          \n          \n          \n          \n          John Wise's Public Repository\n          \n          \n          Work\n          Creative Writing\n          \n          \n          About\n           \n          ▾\n          \n          \n          Introduction to John Wise\n          Resume\n          CV\n          Cats\n          Contact\n          \n          \n          ☰\n          \n          \n      \n        \n          \n            Let’s Start a Conversation!\n          \n          \n            \n              \n            \n            \n              \n            \n          \n\n          \n            \n              \n                  \n                    \n                      Email\n                    \n                  \n                \n                                \n                  \n                    \n                      Call or Text\n                    \n                  \n                \n                              \n          \n\n          \n            \n              \n                                \n                  \n                    Email\n                  \n                \n                                \n                  \n                    Call or Text\n                  \n                \n                              \n            \n          \n        \n      \n    \n\n    \n    \n    \n          Late Updated 2023-09-19\n          Distill is a publication format for scientific and technical writing,\n          native to the web.\n          Learn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n          \n          \n\n    \n  ",
+      "last_modified": "2023-09-19T17:03:27-04:00"
+    },
+    {
+      "path": "creative.html",
+      "title": "Creative writing works",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2023-09-19T17:03:28-04:00"
     },
     {
       "path": "cv.html",
@@ -22,21 +38,21 @@
       "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n\n\n\n",
-      "last_modified": "2023-09-19T13:16:11-04:00"
+      "last_modified": "2023-09-19T17:03:28-04:00"
     },
     {
       "path": "index.html",
       "title": "John Wise's Public Repository",
       "author": [],
-      "contents": "\n\n          \n          \n          \n          \n          John Wise's Public Repository\n          \n          \n          Analysis\n          Creative Writing\n          \n          \n          About\n           \n          ▾\n          \n          \n          Introduction to John Wise\n          Resume\n          CV\n          Cats\n          Contact\n          \n          \n          ☰\n          \n          \n      \n        \n          \n            \n              \n            \n              John Wise’s Public Repository\n            \n            \n              \n                \n            \n          \n        \n        \n        \n          \n            \n            Welcome to my repository/website!\n            My name is John Wise, and I spent nearly 19 years\n            incarcerated in Florida. During my time inside, I dedicated\n            myself to studying mathematics and data science with the\n            aspiration of communicating my experience of being\n            incarcerated.\n            This repository serves as a platform where I can share my\n            endeavors, including my insights on incarceration, as well\n            as some of my creative writing. It is my sincere hope that\n            my work will contribute to a greater understanding of the\n            challenges faced by those who have been incarcerated and\n            foster meaningful conversations.\n            Thank you for visiting my repository and joining me on\n            this journey.\n            \n          \n        \n      \n    \n\n    \n      \n        \n          \n            \n              \n            \n              John Wise’s Public Repository\n            \n            \n              \n                \n                                  \n              \n            \n            \n              \n              Welcome to my repository/website!\n              My name is John Wise, and I spent nearly 19 years\n              incarcerated in Florida. During my time inside, I\n              dedicated myself to studying mathematics and data science\n              with the aspiration of communicating my experience of\n              being incarcerated.\n              This repository serves as a platform where I can share\n              my endeavors, including my insights on incarceration, as\n              well as some of my creative writing. It is my sincere hope\n              that my work will contribute to a greater understanding of\n              the challenges faced by those who have been incarcerated\n              and foster meaningful conversations.\n              Thank you for visiting my repository and joining me on\n              this journey.\n              \n            \n        \n      \n    \n\n    \n    \n    \n      Late Updated 2023-09-19\n      Distill is a publication format for scientific and technical writing,\n      native to the web.\n      Learn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n      \n      \n\n  \n  ",
-      "last_modified": "2023-09-19T13:16:12-04:00"
+      "contents": "\n\n          \n          \n          \n          \n          John Wise's Public Repository\n          \n          \n          Work\n          Creative Writing\n          \n          \n          About\n           \n          ▾\n          \n          \n          Introduction to John Wise\n          Resume\n          CV\n          Cats\n          Contact\n          \n          \n          ☰\n          \n          \n      \n        \n          \n            \n              \n            \n              John Wise’s Public Repository\n            \n            \n              \n                \n            \n          \n        \n        \n        \n          \n            \n            Welcome to my repository/website!\n            My name is John Wise, and I spent nearly 19 years\n            incarcerated in Florida. During my time inside, I dedicated\n            myself to studying mathematics and data science with the\n            aspiration of someday communicating my experience of being\n            incarcerated.\n            This repository serves as a platform where I can share my\n            endeavors, including my insights on incarceration, as well\n            as some of my creative writing. It is my sincere hope that\n            my work will contribute to a greater understanding of the\n            challenges faced by those who have been incarcerated and\n            foster meaningful conversations.\n            Thank you for visiting my repository and joining me on\n            this journey.\n            \n          \n        \n      \n    \n\n    \n      \n        \n          \n            \n              \n            \n              John Wise’s Public Repository\n            \n            \n              \n                \n                                  \n              \n            \n            \n              \n              Welcome to my repository/website!\n              My name is John Wise, and I spent nearly 19 years\n              incarcerated in Florida. During my time inside, I\n              dedicated myself to studying mathematics and data science\n              with the aspiration of someday communicating my experience\n              of being incarcerated.\n              This repository serves as a platform where I can share\n              my endeavors, including my insights on incarceration, as\n              well as some of my creative writing. It is my sincere hope\n              that my work will contribute to a greater understanding of\n              the challenges faced by those who have been incarcerated\n              and foster meaningful conversations.\n              Thank you for visiting my repository and joining me on\n              this journey.\n              \n            \n        \n      \n    \n\n    \n    \n    \n      Late Updated 2023-09-19\n      Distill is a publication format for scientific and technical writing,\n      native to the web.\n      Learn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n      \n      \n\n  \n  ",
+      "last_modified": "2023-09-19T17:03:30-04:00"
     },
     {
       "path": "intro.html",
       "title": "John W. Wise",
       "author": [],
-      "contents": "\n\n          \n          \n          \n          \n          John Wise's Public Repository\n          \n          \n          Analysis\n          Creative Writing\n          \n          \n          About\n           \n          ▾\n          \n          \n          Introduction to John Wise\n          Resume\n          CV\n          Cats\n          Contact\n          \n          \n          ☰\n          \n          \n      \n        \n          \n            \n              \n            \n              John W. Wise\n            \n            \n              \n                \n            \n          \n        \n        \n        \n          \n            \n            Introduction\n            I don’t like to talk about myself, so I’ll write this\n            part last!\n            \n          \n        \n      \n    \n\n    \n      \n        \n          \n            \n              \n            \n              John W. Wise\n            \n            \n              \n                \n                                  \n              \n            \n            \n              \n              Introduction\n              I don’t like to talk about myself, so I’ll write this\n              part last!\n              \n            \n        \n      \n    \n\n    \n    \n    \n      Late Updated 2023-09-19\n      Distill is a publication format for scientific and technical writing,\n      native to the web.\n      Learn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n      \n      \n\n  \n  ",
-      "last_modified": "2023-09-19T13:16:14-04:00"
+      "contents": "\n\n          \n          \n          \n          \n          John Wise's Public Repository\n          \n          \n          Work\n          Creative Writing\n          \n          \n          About\n           \n          ▾\n          \n          \n          Introduction to John Wise\n          Resume\n          CV\n          Cats\n          Contact\n          \n          \n          ☰\n          \n          \n      \n        \n          \n            \n              \n            \n              John W. Wise\n            \n            \n              \n                \n            \n          \n        \n        \n        \n          \n            \n            Introduction\n            I don’t like to talk about myself, so I’ll write this\n            part last!\n            \n          \n        \n      \n    \n\n    \n      \n        \n          \n            \n              \n            \n              John W. Wise\n            \n            \n              \n                \n                                  \n              \n            \n            \n              \n              Introduction\n              I don’t like to talk about myself, so I’ll write this\n              part last!\n              \n            \n        \n      \n    \n\n    \n    \n    \n      Late Updated 2023-09-19\n      Distill is a publication format for scientific and technical writing,\n      native to the web.\n      Learn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n      \n      \n\n  \n  ",
+      "last_modified": "2023-09-19T17:03:31-04:00"
     },
     {
       "path": "resume.html",
@@ -45,8 +61,15 @@
       "author": [],
       "date": "`r Sys.Date()`",
       "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n\n\n\n",
-      "last_modified": "2023-09-19T13:16:14-04:00"
+      "last_modified": "2023-09-19T17:03:32-04:00"
+    },
+    {
+      "path": "work.html",
+      "title": "Work",
+      "author": [],
+      "contents": "\n\n\n\n",
+      "last_modified": "2023-09-19T17:03:32-04:00"
     }
   ],
-  "collections": []
+  "collections": ["creative/creative.json", "work/work.json"]
 }

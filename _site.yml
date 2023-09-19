@@ -9,10 +9,10 @@ navbar:
     image: 'images/JW_logo_cutout.png'
     href: index.html
   right:
-    - text: "Analysis"
-      href: html.html
+    - text: "Work"
+      href: work.html
     - text: "Creative Writing"
-      href: tables.html
+      href: creative.html
     - text: "About"
       menu:
         - text: "Introduction to John Wise"
@@ -22,7 +22,7 @@ navbar:
         - text: "CV"
           href: cv.html
         - text: "Cats"
-          href: index.html
+          href: cats.html
         - text: "Contact"
           href: contact.html
 output: distill::distill_article

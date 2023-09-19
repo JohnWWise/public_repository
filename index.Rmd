@@ -8,7 +8,7 @@ site: distill::distill_website
  
 ## Welcome to my repository/website!
 
-My name is John Wise, and I spent nearly 19 years incarcerated in Florida. During my time inside, I dedicated myself to studying mathematics and data science with the aspiration of communicating my experience of being incarcerated.
+My name is John Wise, and I spent nearly 19 years incarcerated in Florida. During my time inside, I dedicated myself to studying mathematics and data science with the aspiration of someday communicating my experience of being incarcerated.
 
 This repository serves as a platform where I can share my endeavors, including my insights on incarceration, as well as some of my creative writing. It is my sincere hope that my work will contribute to a greater understanding of the challenges faced by those who have been incarcerated and foster meaningful conversations.
 
