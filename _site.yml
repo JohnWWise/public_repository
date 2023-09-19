@@ -16,11 +16,11 @@ navbar:
     - text: "About"
       menu:
         - text: "Introduction to John Wise"
-          href: index.html
+          href: intro.html
         - text: "Resume"
-          href: index.html
+          href: resume.html
         - text: "CV"
-          href: index.html
+          href: cv.html
         - text: "Cats"
           href: index.html
         - text: "Contact"

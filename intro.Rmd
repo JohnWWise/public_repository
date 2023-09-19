@@ -1,0 +1,10 @@
+---
+title: "John W. Wise"
+image: "images/meinjail.png"
+output:
+  postcards::trestles
+site: distill::distill_website
+---
+ 
+## Introduction
+I don't like to talk about myself, so I'll write this part last!
