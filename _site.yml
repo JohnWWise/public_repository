@@ -3,6 +3,7 @@ title: "John Wise's Public Repository"
 description: |
   John Wise's Public Repository
 output_dir: "docs"
+theme: public.css
 navbar:
   right:
     - text: "Home"
