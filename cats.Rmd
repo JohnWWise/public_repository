@@ -1,7 +1,5 @@
 ---
 title: "John's Cats"
-description: |
-  I love my cats!!!!
 date: "`r Sys.Date()`"
 output: distill::distill_article
 ---
@@ -10,9 +8,34 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-I will get his part of the site up ASAP!!!!
 
 
+<section>
+  <h2>Yuki</h2>
+  <img src= "images/Yuki_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
+  <p>This is Yuki. My partner had her, a rescue of a rescue, for about a year before I came home, and she was already very senior. She was a very cranky and particular girl, but, still, she accepted me and welcomed me home immediately. We miss Yuki terribly.</p>
+</section>
 
+<section>
+  <h2>Jinx</h2>
+  <img src= "images/Jinx_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
+  <p>This is Jinx! She and her brother and sister were baby kittens under the deck of our house when we moved in, and they have all been the best cats ever!</p>
+</section>
 
+<section>
+  <h2>Bruiser</h2>
+  <img src= "images/Bruiser_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
+  <p>Bruiser is a big sweet silly goof.</p>
+</section>
 
+<section>
+  <h2>Ladybird</h2>
+  <img src= "images/Ladybird_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
+  <p>And this is Ladybird, who, if you ask her, is an only child, at least out in public. She's the most precious and delicate little sweetheart, as long as she's not hunting lizards!</p>
+</section>
+
+<section>
+  <h2>Everyone</h2>
+  <img src= "images/more_cats.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
+  <p>Here are more pictures of those same cats! You're welcome!</p>
+</section>
