@@ -1,0 +1,12 @@
+name: "."
+title: "John Wise's Public Repository"
+description: |
+  John Wise's Public Repository
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+output: distill::distill_article
