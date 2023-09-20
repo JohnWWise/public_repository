@@ -1,0 +1,146 @@
+---
+title: "Constitution"
+description: |
+  A Drama, initially written sometime around late 2017
+output:
+  distill::distill_article:
+---
+
+::: {.figure .first-image style="text-align: center; border: 3px solid black;"}
+<img src="/Users/johnwise/pubic_repository/images/constitution.jpg" alt="John Wise Gives Ceremonial Graduation Day Speech, Colummbia Correctional Institution May 2018" width="80%"/>
+</p>
+:::
+
+[In a noisy open-bay prison dormitory, one tall, middle-aged inmate (Kevin) excitedly
+approaches another inmate (James) who is reclining on the bottom rack of a double
+bunk. James, a slightly younger and shorter sort, places his book upon his chest and
+listens]
+
+Kevin: Hey, James?
+
+James: What’s up Kevin?
+
+Kevin: The Florida Channel is about to broadcast yesterday’s hearing on juvenile
+life sentences, if you want to come and watch it.
+
+James: Maybe, I’ve been kind of following that, what are they talking about now?
+
+Kevin: This is the hearing that will determine whether or not the last decision will be
+retroactive.
+
+James: And the last decision was... that it is unconstitutional to sentence a juvenile
+to a life sentence without any hope of release?
+
+Kevin: So, that was the U.S. Supreme Court, and that was a few years ago... I
+guess that was 2010, so four years.
+
+James: That was the Miller Case?
+
+Kevin: No, that was Graham v. Florida. Miller v. Alabama was the case that
+determined it unconstitutional for juveniles to receive a life sentence without the
+possibility of parole for homicide cases.
+
+James [confused]: Ok, so...
+
+Kevin: You were, what, six months over eighteen when you caught your case? I’d
+think you’d be paying closer attention here! I wish I had the luxury of being ignorant
+of what is going on... These last few years have been a real roller coaster for me.
+
+James: But I didn’t get a life sentence! I got twenty-five years. I’m almost done
+now... You’re right though. I should be paying closer attention.
+
+Kevin: I don’t know why I keep forgetting you don’t have life. It’s like an automatic
+assumption with our charge... Murder equals life. You’re a lucky outlier.
+
+James: I know...most of my best friends have life sentences for juvenile cases... I’m
+going to come and watch it; bring me up to speed real quick.
+
+Kevin: Okay. So, first the U.S. Supreme court ruled that it was illegal to sentence a
+juvenile to life without the possibility of parole for non-homicide cases. Then, two
+years later, they decided that applies to homicide cases as well. Now, the Florida
+Supreme Court is going to decide whether they consider that decision to apply
+retroactively.
+
+James: What, could it not? They could decide that the decision of the U.S. Supreme
+Court only applies to those who committed their crime after 2012? So, guys like you
+– guys that have been in prison for decades – would have to still wear life
+sentences?
+
+Kevin: Yeah, but we’d be comforted by the knowledge that what happened to us
+can’t happen to anyone else... that’s the argument anyway! Well, come on, it’s about
+to start.
+
+James: Ok, just a second. Let me hit the can, and I’ll be right there.
+
+[Kevin leaves, and James sits up to put his shoes on. As Kevin walks away, James’s
+bunkmate, Steven, approaches. He hesitates before climbing onto the top rack and
+speaks to James.]
+
+Steven: They just changed the channel. I was right in the middle of a movie, and
+they changed the fucking channel! I’d be wrong if I floor-modeled that bitch.
+Inconsiderate fuckers! They want to watch some law bullshit. They should have
+been worried about the law on the streets, and they wouldn’t be in prison!
+
+James: Well, what they are watching actually is important. It’s the Florida Supreme
+Court’s decision on whether juvenile life sentences are constitutional or not.
+
+Steven: Juvenile life sentences? Humph. What’s unconstitutional about that?
+
+James: Well, the idea is that giving a juvenile a life sentence is the same as giving
+him the death penalty, because he’s going to die in prison. The death penalty for
+juveniles was declared unconstitutional in 2005. Now they are working on the life
+sentences.
+
+Steven: Fuckers should be in prison for life, the death penalty is too easy for them!
+
+James [stunned]: What?
+
+Steven: Anybody that kills someone deserves to suffer. They should have to do life
+in prison; the death penalty is letting them off too light. They should do life, and they
+should send them all to the worst possible prisons – prisons where they get beaten
+and raped.
+
+James: But... are you serious? People make mistakes! You made a mistake, you’re
+in prison!
+
+Steven: Not for killing nobody! I just sold some drugs, and it wasn’t no mistake. I
+knew what I was doing; I wanted some easy money. Those fuckers didn’t make no
+mistake neither; they knew what they were doing. That’s why it’s called
+murder – it wasn’t no mistake. They are just sick. They’re sick, and deserve
+the worst that can happen to them.
+
+James [weakly]: I... the worst that can happen to them? But, the juveniles, they were
+so young. [gains confidence] They didn’t have the ability to understand the
+consequences of their actions! Studies have shown that the brain isn’t fully
+developed until-
+
+Steven [interrupts]: When? 35? That’s a bunch of bullshit. They got kids these days
+drivin’ around and goin’ to college at 17. If they’s old enough to kill someone then
+they can deal with the consequences! Aint no mopin’ around feelin’ sorry that some
+killer is put away forever! That’s what’s best!
+
+James: People can change though...
+
+Steven: Yeah, sure. Those juvenile killers can grow up and become grown-up
+killers. Once a killer, always a killer. They got diseased minds. Once they get that
+taste for blood – it’s like a dog – they turn evil; there aint no good in them anymore.
+You wouldn’t want none of them out there around your family, that’s for sure.
+James [clearly shaken, hesitates]: You really believe that? I mean, you’re not just
+talking because you’re mad they changed the channel, but you think that’s true?
+Really?
+
+Steven[hops up on his rack and considers it for a few moments]: Yeah man.
+
+James: That’s a hell of a thing to say though, “Once a killer, always a killer.” That’s
+saying that a person that commits murder is not only not like a normal human being
+anymore, but that they are so un-human that they are not safe for others to be
+around, ever. Do you really think that’s true?
+
+Steven: I know it is. I known lots of murders since I been locked up, they’re all
+fucked up. There’s probably even a few of them in here... I don’t trust none of them. That’s why I keep to myself. You never know who you’re talking to around here.
+Some people are real fucked up.
+
+[James nods his head and walks away. The spotlight follows him to the bathroom,
+where he quietly sits
+down on a toilet stool. He places his elbows on his knees, his head in his hands, and
+begins to weep]
