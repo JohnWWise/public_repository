@@ -1,5 +1,5 @@
 ---
-title: "Work"
+title: "Analysis"
 listing: work
 ---
 

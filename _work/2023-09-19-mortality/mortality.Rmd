@@ -10,25 +10,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-pkgs = c("tidyverse",
-         "ggplot2",
-         "kableExtra",
-         "outliers",
-         "boot",
-         "forcats",
-         "DT",
-         "plotly",
-         "gridExtra",
-         "leaflet",
-         "htmltools",
-         "purrr",
-         "RColorBrewer",
-         "readxl",
-         "waffle",
-         "ggforce",
-         "viridis")
-inst = lapply(pkgs, library, character.only = TRUE)
-set.seed(8675309)
 ```
 
 The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website. This page lists all deaths that occurred throughout the department during the preceding fiscal year. The webpage provides data for fiscal years 2017-2018 up to the present and can be accessed at [Inmate Mortality -- Florida Department of Corrections (myflorida.com)](https://fdc.myflorida.com/pub/mortality/index.html).
@@ -75,45 +56,85 @@ This paper utilizes these lists for the fiscal years 2015 - present. Although th
 
 While many records lack names and the manner of death, the FDOC data does contain 3,497 death observations, each of which is accompanied by a "Date of Death". The earliest recorded date of death is July 2nd, 2015, and the latest is July 31st, 2023. To begin, I have compiled the data into a sortable and searchable data table.
 
-
-```{r import, echo=FALSE, code_folding = TRUE}
-# Here we are bringing in our csv files -- I copied and pasted the FDOC tables into spreadsheets and saved them as #csvs. The coordinates of FDOC facilities were manually looked up by me on Google maps.
-cords <- read_csv("/Users/johnwise/pubic_repository/csvs/fdoc_mortality/facility_cords.csv")
-fy15 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2015-2016.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy15$`DC Number` <- str_extract(fy15$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy16 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2016-2017.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy16$`DC Number` <- str_extract(fy16$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy17 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2017-2018.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy17$`DC Number` <- str_extract(fy17$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy18 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2018-2019.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy18$`DC Number` <- str_extract(fy18$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy19 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2019-2020.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy19$`DC Number` <- str_extract(fy19$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy20 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2020-2021.csv', col_names = TRUE, skip=0, show_col_types = FALSE)
-colnames(fy20) <- names(fy19)
-fy20$`DC Number` <- str_extract(fy20$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy21 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2021-2022.csv', col_names = TRUE, show_col_types = FALSE, skip=1)
-fy21$`DC Number` <- str_extract(fy21$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy22 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2022-2023.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy22$`DC Number` <- str_extract(fy22$`DC Number`, "(?<=DCNumber=)[^&]+")
-fy23 <- read_csv('/Users/johnwise/pubic_repository/csvs/fdoc_mortality/FY 2023-2024.csv', col_names = TRUE, skip=1, show_col_types = FALSE)
-fy23$`DC Number` <- str_extract(fy23$`DC Number`, "(?<=DCNumber=)[^&]+")
+```{r libraries and seed, echo=FALSE, code_folding = TRUE}
+pkgs = c("tidyverse",
+         "ggplot2",
+         "kableExtra",
+         "outliers",
+         "boot",
+         "forcats",
+         "DT",
+         "plotly",
+         "gridExtra",
+         "leaflet",
+         "htmltools",
+         "purrr",
+         "RColorBrewer",
+         "readxl",
+         "waffle",
+         "ggforce",
+         "viridis")
+inst = lapply(pkgs, library, character.only = TRUE)
+set.seed(8675309)
 ```
 
-```{r preprocessing, echo=FALSE, code_folding = TRUE}
-deaths <- rbind(fy15,fy16,fy17,fy18,fy19,fy20,fy21,fy22,fy23)
-remove(fy15,fy16,fy17,fy18,fy19,fy20,fy21,fy22,fy23)
-colnames(deaths) <- c('Name','DCNumber','Date_Death','FACILITY_description','Manner_Death','Status')
+```{r import and preprocess, echo=FALSE, code_folding = TRUE}
+# Here we are bringing in our csv files -- I copied and pasted the FDOC tables into spreadsheets and saved them as csvs. The coordinates of FDOC facilities were manually looked up by me on Google maps.
+
+# base directory for CSV files
+base_dir <- "/Users/johnwise/pubic_repository/csvs/fdoc_mortality/"
+
+# Define a function to read and preprocess CSV files
+read_and_preprocess_csv <- function(file_path) {
+  # Read the CSV file
+  data <- read_csv(file_path, col_names = TRUE, skip = 1, show_col_types = FALSE)
+  
+  # Extract 'DC Number' using regular expression
+  data$`DC Number` <- str_extract(data$`DC Number`, "(?<=DCNumber=)[^&]+")
+  
+  return(data)
+}
+
+# Read and preprocess CSV files for each fiscal year
+fy15 <- read_and_preprocess_csv(paste0(base_dir, "FY 2015-2016.csv"))
+fy16 <- read_and_preprocess_csv(paste0(base_dir, "FY 2016-2017.csv"))
+fy17 <- read_and_preprocess_csv(paste0(base_dir, "FY 2017-2018.csv"))
+fy18 <- read_and_preprocess_csv(paste0(base_dir, "FY 2018-2019.csv"))
+fy19 <- read_and_preprocess_csv(paste0(base_dir, "FY 2019-2020.csv"))
+fy20 <- read_and_preprocess_csv(paste0(base_dir, "FY 2020-2021.csv"))
+fy21 <- read_and_preprocess_csv(paste0(base_dir, "FY 2021-2022.csv"))
+fy22 <- read_and_preprocess_csv(paste0(base_dir, "FY 2022-2023.csv"))
+fy23 <- read_and_preprocess_csv(paste0(base_dir, "FY 2023-2024.csv"))
+
+# Brining in Facility coordinates, manually acquired (someone should double check these!) by the author
+cords <-read_csv(paste0(base_dir, 'facility_cords.csv'))
+```
+
+```{r more preprocessing, echo=FALSE, code_folding = TRUE}
+# Combine data frames from different fiscal years into one
+deaths <- rbind(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
+
+# Remove individual fiscal year data frames to free up memory
+remove(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
+
+# Rename columns for consistency and clarity
+colnames(deaths) <- c('Name', 'DCNumber', 'Date_Death', 'FACILITY_description', 'Manner_Death', 'Status')
+
+# Extract the first word from the 'Status' column
 deaths$Status <- str_extract(deaths$Status, "^\\S+")
+
+# Convert the 'Date_Death' column to Date format (assuming 'mdy' function from lubridate)
 deaths$Date_Death <- as.Date(mdy(deaths$Date_Death))
-deaths$FACILITY_description <- as.factor(deaths$FACILITY_description)
+
+# Convert selected columns to factor variables for categorical data
+deaths$FACILITY_descriptionn <- as.factor(deaths$FACILITY_description)
 deaths$Manner_Death <- as.factor(deaths$Manner_Death)
 deaths$Status <- as.factor(deaths$Status)
 deaths$DCNumber <- as.factor(deaths$DCNumber)
 ```
 
 
-```{r cleaning: collapsing factors, echo=FALSE, code_folding = TRUE}
+```{r cleaning typos and mis-entries: collapsing factors, echo=FALSE, code_folding = TRUE}
 # Manner of Death
 deaths$Manner_Death <- recode(deaths$Manner_Death, "Natrual" = "Natural")
 deaths$Manner_Death <- recode(deaths$Manner_Death, "CLOSED" = "Closed")
@@ -167,24 +188,6 @@ facilities <- deaths %>%
 datatable(facilities, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
-
-```{r plotting all, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, code_folding = TRUE}
-per_month_all <- deaths %>%
-  group_by(month = floor_date(Date_Death, unit = "month")) %>%
-  summarise(Total_month_Deaths = n())
-
-plot_all <- ggplot(per_month_all, aes(x = as.Date(month), y = Total_month_Deaths)) + 
-  geom_rect(aes(xmin = as.Date("2020-03-09"), xmax = as.Date("2021-08-25"), ymin = -Inf, ymax = Inf), fill = "lightpink", alpha = 0.3) +
-  geom_col(fill = "blue") + 
-  guides(color = 'none') +
-  ggtitle("FDOC Dates of Death July 2015 - June 2023") +
-  scale_x_date(date_labels = "%B, %Y", date_breaks = "1 year") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  coord_cartesian(xlim = as.Date(c("2015-07-02", "2023-06-29"))) +
-  geom_text(aes(label = Total_month_Deaths), vjust = 1.6, color = "white", size = 1.5) +
-  xlab(NULL) +
-  ylab('Count')
-```
 
 # Lake Butler Medical Reception Center
 Upon initial examination of the data, it becomes apparent that the majority of deaths occur at the Reception and Medical Center (RMC) in Lake Butler, Florida. This is because the RMC is the secure medical facility for the entire Florida Department of Corrections, and includes a hospital on site where individuals in need of hospitalization or specialty medical care are housed. The facility was founded in 1968 as an intake and processing point for all male state prisoners and as a secure medical facility.
@@ -258,7 +261,7 @@ ggplot(violent_FDOC, aes(x = reorder(FACILITY_description, FACILITY_description,
 ```
 
 # Accidental Deaths
-```{r id_accident_weeks, echo=FALSE, code_folding = TRUE}
+```{r plotting p_valued weeks2, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_week_all4 <- deaths %>%
   filter(Manner_Death== 'Accident') %>%
   group_by(week = floor_date(Date_Death, unit = "week")) %>%
@@ -272,9 +275,7 @@ t_value <- function(data, indices) {
 boot_tee <- boot(per_week_all4$Total_week_Deaths, t_value, R = 10000)
 per_week_all4$p_values <- 1 - pnorm(boot_tee$t0)
 per_week_all4$high <- per_week_all4$p_values<=0.05
-```
 
-```{r plotting p_valued weeks2, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 ggplot(per_week_all4, aes(x = week, y= Total_week_Deaths, col= high)) +
   geom_rect(aes(xmin = as.Date("2020-03-09"), xmax = as.Date("2021-08-25"), ymin = -Inf, ymax = Inf), fill = "lightpink", alpha = 0.7) +
   geom_col() +

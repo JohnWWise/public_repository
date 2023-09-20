@@ -9,9 +9,9 @@ navbar:
     image: 'images/JW_logo_cutout.png'
     href: index.html
   right:
-    - text: "Work"
+    - text: "Analysis"
       href: work.html
-    - text: "Creative Writing"
+    - text: "Writing"
       href: creative.html
     - text: "About"
       menu:
