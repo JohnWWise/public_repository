@@ -363,11 +363,9 @@ kable(departmentwide %>% select(-high)) %>%
 
 # Groupings Across Space, Natural Deaths
 
-In the following analysis, we examine maps of groups of facilities that experienced months of statistically significant natural death counts. Any facilities which individually and independently experienced high death counts of statistical significance in the same month were plotted, as well as results that were not necessarily statistically significant but high enough to be considered when searching for spatial patterns linking significant results (p ≤ 0.25).
+In the following analysis, we examine maps of groups of facilities that experienced months with statistically significant natural death counts. The plots that follow show all facilities that had at least one death during the respective month. The size and color of the markers correspond to the p-value, which represents the likelihood of observing such a high value for that facility based on its individual historical death data. Less likely results are plotted larger and redder than death counts that are more typical for that facility. You can see the labels for the facilities by hovering over the individual map markers.
 
-The plotting algorithm automatically fits the mapping as tightly as possible but keeps the size of the marker proportional to the magnitude of the mapped effect, in this case p-values (the calculated probability that a given week is 'usual'). It is important to note that, when viewing these maps, the sizes of the circles remain constant regardless of zoom level. Comparing the magnitude of effect across different maps is valid, but it should be done with caution, as the size of the marker does not correspond to an area of land covered.
-
-It is not valid to compare colorations across maps at this time, as the colors of each map cover the spectrum of their respective associated data entries (this is a coding issue -- frustrating -- i hope to soon fix).
+While it is valid to compare the p-values across maps by observing the size of the markers, it is not valid to compare colorations across maps at this time. This is because the colors of each map cover the spectrum of their respective associated data entries. Please note that this is a coding issue that I hope to fix soon.
 
 ```{r flip through, echo=TRUE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_month_natural2 <- deaths %>%
@@ -389,8 +387,8 @@ per_month_natural2 <- per_month_natural2 %>%
 per_month_natural2$FACILITY_description <- as.factor(per_month_natural2$FACILITY_description)
 summary_data1 <- per_month_natural2 %>%
      group_by(month) %>%
-     filter(high == TRUE) %>% 
-     filter(n() > 1) %>% 
+     #filter(high == TRUE) %>% 
+     #filter(n() > 1) %>% 
      arrange(month) %>% 
      select(-high) %>%
      mutate(group_index = row_number())
@@ -426,8 +424,10 @@ interest <- per_month_natural2 %>%
   filter(month %in% weeks_of_interest_mult)
 interest$p_values <- ifelse(is.na(interest$p_values) | is.nan(interest$p_values), 0.5, interest$p_values)
 
-interesting <- merge(interest, cords[seq(1,138),], by = 'FACILITY_description') %>% arrange(month) %>% filter(p_values<=0.25)
+interesting <- merge(interest, cords[seq(1,138),], by = 'FACILITY_description') %>% arrange(month) #%>% filter(p_values<=0.25)
 interesting$p_values[interesting$p_values == 0] <- 1e-6
+interesting$high[is.na(interesting$high)] <- FALSE
+
 ```
 
 ## 2015
@@ -444,44 +444,34 @@ manners <- deaths %>%
   pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
   select(FACILITY_description, everything())
 
-# Define a continuous color palette
 palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
+num_colors <- 9
 colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
 pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
-
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>December 2015</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ## 2016
 ### January 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2016-01-01')
 
 manners <- deaths %>%
@@ -499,35 +489,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>January 2016</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### February 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2016-02-01')
 
 manners <- deaths %>%
@@ -545,35 +527,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>February 2016</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### June 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2016-06-01')
 
 manners <- deaths %>%
@@ -591,34 +565,26 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>June 2016</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 ### July 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2016-07-01')
 
 manners <- deaths %>%
@@ -636,36 +602,28 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>July 2016</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ## 2018
 ### January 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2018-01-01')
 
 manners <- deaths %>%
@@ -683,35 +641,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>January 2018</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### February 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2018-02-01')
 
 manners <- deaths %>%
@@ -729,35 +679,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>February 2018</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### March 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2018-03-01')
 
 manners <- deaths %>%
@@ -775,35 +717,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>March 2018</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### May 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2018-05-01')
 
 manners <- deaths %>%
@@ -821,35 +755,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>May 2018</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### October 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2018-10-01')
 
 manners <- deaths %>%
@@ -867,37 +793,29 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>October 2018</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ## 2019
 
 ### January 2019
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2019-01-01')
 
 manners <- deaths %>%
@@ -915,35 +833,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>January 2019</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### July 2019
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2019-07-01')
 
 manners <- deaths %>%
@@ -961,37 +871,29 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>July 2019</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ## 2020
 
 ### February 2020
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2020-02-01')
 
 manners <- deaths %>%
@@ -1009,35 +911,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>February 2020</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### September 2021
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2021-09-01')
 
 manners <- deaths %>%
@@ -1055,35 +949,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>September 2021</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### October 2021
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2021-10-01')
 
 manners <- deaths %>%
@@ -1101,35 +987,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>October 2021</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### December 2021
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2021-12-01')
 
 manners <- deaths %>%
@@ -1147,36 +1025,28 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>December 2021</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ## 2022
 ### January 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2022-01-01')
 
 manners <- deaths %>%
@@ -1194,35 +1064,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>January 2022</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### April 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2022-04-01')
 
 manners <- deaths %>%
@@ -1240,35 +1102,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>April 2022</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### May 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2022-05-01')
 
 manners <- deaths %>%
@@ -1286,35 +1140,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>May 2022</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### June 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2022-06-01')
 
 manners <- deaths %>%
@@ -1332,35 +1178,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>June 2022</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### September 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2022-09-01')
 
 manners <- deaths %>%
@@ -1378,35 +1216,27 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>September 2022</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ### December 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2022-12-01')
 
 manners <- deaths %>%
@@ -1424,37 +1254,29 @@ pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
 
 leaflet(data) %>%
-  addTiles() %>%
+  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
   addCircleMarkers(
     radius = ~sqrt(sqrt(1/p_values)),
     color = ~pal(sqrt(sqrt(1/p_values))),
     fillOpacity = .45,
     stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
   addControl(
     position = "bottomleft",
     html = "<b style='font-size: 28px;'>December 2022</b>"
-  )
+  ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
 
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 ## 2023
 
 ### February 2023
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE}
+```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 data <- interesting %>% filter(month == '2023-02-01')
 
 manners <- deaths %>%
@@ -1470,31 +1292,21 @@ num_colors <- 9  # Number of colors in the palette
 colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
 pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
 
-
 leaflet(data) %>%
-  addTiles() %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste(
-      FACILITY_description
-    ),
-    labelOptions = labelOptions(
-      noHide = TRUE,          # Keep the label open by default
-      direction = "auto",      # Position of the label relative to the marker
-      textOnly = FALSE,        # Display only text (no HTML content)
-      textsize = "12px",
-      opacity = 1,
-      offset = c(0,0),
-      style = list("white-space" = "nowrap", "font-weight" = "bold"))  # CSS styles for the label
+    addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
+    addCircleMarkers(
+        radius = ~sqrt(sqrt(1/p_values)),
+        color = ~pal(sqrt(sqrt(1/p_values))),
+        fillOpacity = .45,
+        stroke = TRUE,
+        label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
     ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>February 2023</b>"
-  )
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high)) %>% 
+    addControl(
+        position = "bottomleft",
+        html = "<b style='font-size: 28px;'>February 2023</b>"
+    )%>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
+kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
   kable_styling(latex_options = "hold_position")
 ```
