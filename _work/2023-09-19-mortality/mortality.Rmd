@@ -1,5 +1,7 @@
 ---
 title: "Investigation of FDOC Public 'Inmate Mortality Data'"
+description: |
+  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data
 output:
   distill::distill_article:
     toc: true
@@ -192,7 +194,7 @@ datatable(facilities, options = list(scrollX = TRUE, pageLength = 10, lengthMenu
 # Lake Butler Medical Reception Center
 Upon initial examination of the data, it becomes apparent that the majority of deaths occur at the Reception and Medical Center (RMC) in Lake Butler, Florida. This is because the RMC is the secure medical facility for the entire Florida Department of Corrections, and includes a hospital on site where individuals in need of hospitalization or specialty medical care are housed. The facility was founded in 1968 as an intake and processing point for all male state prisoners and as a secure medical facility.
 
-```{r plotting RMC, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+```{r plotting RMC, echo=FALSE, fig.align='center', fig.height=6, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_month_all2 <- deaths %>%
   group_by(FACILITY_description, month = floor_date(Date_Death, unit = "month")) %>%
   summarise(Total_month_Deaths = n()) %>%
@@ -208,7 +210,7 @@ ggplot(per_month_rmc_keyed, aes(x = as.Date(month), y = Total_month_Deaths, fill
   coord_cartesian(xlim = as.Date(c("2015-07-02", "2023-06-29"))) +
   xlab(NULL) +
   ylab('Count') +
-  labs(fill = "", title = "FDOC Deaths -- RMC/Not-RMC:") +
+  labs(fill = "", title = "Monthly FDOC Deaths -- RMC/Not-RMC:") +
   theme(legend.position = "top",
         legend.direction = "horizontal",
         legend.key.width = unit(1, "cm"),
@@ -216,7 +218,8 @@ ggplot(per_month_rmc_keyed, aes(x = as.Date(month), y = Total_month_Deaths, fill
         legend.key = element_rect(fill = c("blue", "lightpink"), color = "gray")) +
   scale_fill_manual(values = c("FALSE" = "blue", "TRUE" = "black"),
                     labels = c("Non Lake Butler RMC Death", "Lake Butler RMC Death")) +
-  annotate(geom="text", label='2020 COVID 19 Florida Emergency', x=as.Date('2020-12-09'), y=-1.75, size=2.5)
+  annotate(geom="text", label='2020 COVID 19 Florida Emergency', x=as.Date('2020-12-09'), y=-1.75, size=2.5) +
+  labs(caption = "Figure 4")
 ```
 
 The plot above displays the total number of deaths over time for the period covered by our data. It has been separated into Lake Butler and Non-Lake Butler deaths to better understand the contribution of deaths from Lake Butler and to highlight that the total number of deaths in the Florida Department of Corrections is largely determined by the frequency of deaths at Lake Butler RMC.
@@ -243,7 +246,7 @@ I am greatly saddened that anyone would have to die there, in that nightmare of 
 
 The chart below shows the number of homicides by facility.  While it is possible that many of the homicides at Lake Butler RMC are individuals who were attacked at other facilities and then transferred to Lake Butler for medical treatment and subsequently counted as Lake Butler deaths (I'm sure any FDOC official would argue this to be the case), I personally don't believe that this fully accounts for the entire homicide count at Lake Butler RMC.
 
-```{r plotting homicide facilities, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+```{r plotting homicide facilities, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 violent_FDOC <- deaths %>%
   filter(Manner_Death =="Homicide") %>%
   mutate(month = floor_date(Date_Death, "week")) %>%
@@ -261,7 +264,7 @@ ggplot(violent_FDOC, aes(x = reorder(FACILITY_description, FACILITY_description,
 ```
 
 # Accidental Deaths
-```{r plotting p_valued weeks2, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+```{r plotting p_valued weeks2, echo=FALSE, fig.align='center', fig.height=6, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_week_all4 <- deaths %>%
   filter(Manner_Death== 'Accident') %>%
   group_by(week = floor_date(Date_Death, unit = "week")) %>%
@@ -285,7 +288,8 @@ ggplot(per_week_all4, aes(x = week, y= Total_week_Deaths, col= high)) +
   xlab(NULL) +
   ylab('Count of Accidents') +
   guides(color='none') +
-  annotate(geom="text", label='2020 COVID 19 Florida Emergency', x=as.Date('2020-12-09'), y=-.25, size=2.5)
+  annotate(geom="text", label='2020 COVID 19 Florida Emergency', x=as.Date('2020-12-09'), y=-.25, size=2.5) +
+  labs(caption = "Figure 6")
 ```
 
 The plot above shows the historical rate of occurrence of accidents resulting in deaths over the entire period covered by our data. To explain the coloration, the scores() algorithm utilizes the historical information available on frequency of accidental deaths to assess the probability of a given week being both 'usual' and having as many accidental deaths observed in that week as seen. The weeks that we see above displayed in blue are those weeks in which that calculated probability is less than 5%.
@@ -307,14 +311,14 @@ ggplot(accidents_FDOC %>% filter(Manner_Death == 'Accident'), aes(x = reorder(FA
   xlab("FDOC Facilities") + 
   ylab("Fatal Accident Count") +
   ggtitle("Fatal FDOC Accidents by Facility July 2015- June 2023") +
-  labs(caption = "Figure 19")
+  labs(caption = "Figure 7")
 ```
 I would say, yes, those are the facilites with the worst k2 problems. Someone should certainly double-check all those RMC 'accidents' though, particularly ones where incarcerated persons 'fell down stairs'.
 
 
 # Natural Deaths
 
-```{r echo=TRUE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+```{r plotting p_valued natural weeks, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_week_natural <- deaths %>%
   filter(Manner_Death == 'Natural') %>%
   group_by(week = floor_date(Date_Death, unit = "week")) %>%
@@ -328,10 +332,7 @@ t_value <- function(data, indices) {
 boot_t <- boot(per_week_natural$Total_week_Deaths, t_value, R = 10000)
 per_week_natural$p_values <- pnorm(boot_t$t0, lower.tail = FALSE)
 per_week_natural$high <- per_week_natural$p_values<=0.05
-```
 
-
-```{r plotting p_valued natural weeks, echo=FALSE, fig.align='center', fig.height=5, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 ggplot(per_week_natural, aes(x = week, y= Total_week_Deaths, col= high)) +
   geom_rect(aes(xmin = as.Date("2020-03-09"), xmax = as.Date("2021-08-25"), ymin = -Inf, ymax = Inf), fill = "lightpink", alpha = 0.7) +
   geom_col() +
@@ -342,7 +343,8 @@ ggplot(per_week_natural, aes(x = week, y= Total_week_Deaths, col= high)) +
   ylab('Count') +
   guides(color='none') +
   annotate(geom="text", label='2020 COVID 19 Florida Emergency', x=as.Date('2020-12-09'), y=-1.75, size=2.5) +
-  ggtitle(label = 'FDOC Natural Deaths, June 2015 -July 2023')
+  ggtitle(label = 'FDOC Natural Deaths, June 2015 -July 2023') +
+  labs(caption = "Figure 8")
 ```
 
 Here we have a plot of the rate of natural deaths over the time period covered by our data. Once again, the weeks where the calculated probability of observing a result as extreme as the one seen is less than 5%.
@@ -358,6 +360,14 @@ kable(departmentwide %>% select(-high)) %>%
   kable_styling(latex_options = "hold_position")
 ```
 
+
+# Groupings Across Space, Natural Deaths
+
+In the following analysis, we examine maps of groups of facilities that experienced months of statistically significant natural death counts. Any facilities which individually and independently experienced high death counts of statistical significance in the same month were plotted, as well as results that were not necessarily statistically significant but high enough to be considered when searching for spatial patterns linking significant results (p ≤ 0.25).
+
+The plotting algorithm automatically fits the mapping as tightly as possible but keeps the size of the marker proportional to the magnitude of the mapped effect, in this case p-values (the calculated probability that a given week is 'usual'). It is important to note that, when viewing these maps, the sizes of the circles remain constant regardless of zoom level. Comparing the magnitude of effect across different maps is valid, but it should be done with caution, as the size of the marker does not correspond to an area of land covered.
+
+It is not valid to compare colorations across maps at this time, as the colors of each map cover the spectrum of their respective associated data entries (this is a coding issue -- frustrating -- i hope to soon fix).
 
 ```{r flip through, echo=TRUE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_month_natural2 <- deaths %>%
@@ -375,11 +385,7 @@ per_month_natural2 <- per_month_natural2 %>%
   group_by(FACILITY_description) %>%
   mutate(p_values = 1 - pnorm(boot(Total_month_naturalDeaths, t_value, R = 1000)$t0),
             high = p_values <= 0.05)
-```
 
-
-
-```{r echo = FALSE, eval=TRUE, code_folding = TRUE}
 per_month_natural2$FACILITY_description <- as.factor(per_month_natural2$FACILITY_description)
 summary_data1 <- per_month_natural2 %>%
      group_by(month) %>%
@@ -394,9 +400,7 @@ summary_data2 <-  summary_data1 %>%
          Total_month_naturalDeaths = sum(Total_month_naturalDeaths)
      )
 summary_data3 <- summary_data2 %>% select(-Total_month_naturalDeaths)
-```
 
-```{r echo=FALSE, code_folding = TRUE}
 generate_group_names <- function(group_indices) {
   group_names <- character(length(group_indices))
   current_group <- 1
@@ -409,12 +413,6 @@ generate_group_names <- function(group_indices) {
   return(group_names)
 }
 summary_data1$group_names <- generate_group_names(summary_data1$group_index)
-#kable(summary_data1 %>% filter(!(month >= as.Date("2020-03-09") & month <= as.Date("2021-08-25")))) %>%
-#  kable_styling(latex_options = "hold_position", full_width = FALSE) %>%
-#  column_spec(
-#    column = 6,
-#    background = "#FFFFCC"
-#  )
 ```
 
 ```{r echo=FALSE, code_folding = TRUE}
@@ -423,27 +421,14 @@ groupz2 <- merge(groupz, cords, by = 'FACILITY_description') %>% arrange(month)
 interesting_groups <- groupz2 %>%
   filter(!(month >= as.Date("2020-03-09") & month <= as.Date("2021-08-25")))
 weeks_of_interest_mult <- unique(interesting_groups$month)
-```
 
-```{r echo=FALSE, code_folding = TRUE}
 interest <- per_month_natural2 %>% 
   filter(month %in% weeks_of_interest_mult)
 interest$p_values <- ifelse(is.na(interest$p_values) | is.nan(interest$p_values), 0.5, interest$p_values)
-```
 
-```{r echo=FALSE, code_folding = TRUE}
 interesting <- merge(interest, cords[seq(1,138),], by = 'FACILITY_description') %>% arrange(month) %>% filter(p_values<=0.25)
 interesting$p_values[interesting$p_values == 0] <- 1e-6
 ```
-
-
-# Groupings Across Space, Natural Deaths
-
-In the following analysis, we examine maps of groups of facilities that experienced months of statistically significant natural death counts. Any facilities which individually and independently experienced high death counts of statistical significance in the same month were plotted, as well as results that were not necessarily statistically significant but high enough to be considered when searching for spatial patterns linking significant results (p ≤ 0.25).
-
-The plotting algorithm automatically fits the mapping as tightly as possible but keeps the size of the marker proportional to the magnitude of the mapped effect, in this case p-values (the calculated probability that a given week is 'usual'). It is important to note that, when viewing these maps, the sizes of the circles remain constant regardless of zoom level. Comparing the magnitude of effect across different maps is valid, but it should be done with caution, as the size of the marker does not correspond to an area of land covered.
-
-It is not valid to compare colorations across maps at this time, as the colors of each map cover the spectrum of their respective associated data entries (this is a coding issue -- frustrating -- i hope to soon fix).
 
 ## 2015
 

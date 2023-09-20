@@ -1,4 +1,5 @@
-﻿Title,Column 1,Column 2,Column 3,Column 4,Column 5
+Title,Column 1,Column 2,Column 3,Column 4,Column 5
+Name,DC Number,Date of Death,Institution Name,Manner of DeathDetermined by ME,Investigative Status
 "GARVIN, MICHAEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=126380&TypeSearch=IR,07/04/2020,S.F.R.C.,Natural,CLOSED
 "ALMAYAHI, ADNAN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=J43012&TypeSearch=IR,07/05/2020,WAKULLA C.I.,Natural,Closed
 "AVILAPENA, JOSE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=N50800&TypeSearch=IR,07/05/2020,S.F.R.C.,Natural,Closed
@@ -22,7 +23,7 @@
 "BEAN, JACK",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=166861&TypeSearch=IR,07/12/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "BAKER, WILLIAM",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=Q19681&TypeSearch=IR,07/14/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "HUNT, JOEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=573587&TypeSearch=IR,07/14/2020,SUWANNEE C.I. ANNEX,Natural,Closed
-,,07/14/2020,MARTIN C.I.,Homicide,Closed
+NA,NA,07/14/2020,MARTIN C.I.,Homicide,Closed
 "JACKSON, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=884676&TypeSearch=IR,07/15/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "PINCUS, RONALD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=601664&TypeSearch=IR,07/15/2020,COLUMBIA ANNEX,Natural,Closed
 "CALANDRA, JOSEPH",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=193913&TypeSearch=IR,07/15/2020,EVERGLADES C.I.,Natural,OPEN-MDPD
@@ -97,7 +98,7 @@
 "RODRIGUEZ, RAYMOND",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=D25413&TypeSearch=IR,08/15/2020,CFRC-SOUTH,Natural,Closed
 "BOND, SACHA",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=K06444&TypeSearch=IR,08/16/2020,APALACHEE EAST UNIT,Natural,Closed
 "ANDREU, JULIAN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=928224&TypeSearch=IR,08/16/2020,R.M.C.- MAIN UNIT,Natural,Closed
-,,08/17/2020,CENTURY C.I.,Homicide,OPEN-FDLE
+NA,NA,08/17/2020,CENTURY C.I.,Homicide,OPEN-FDLE
 "MCKINLEY, CHARLES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=595383&TypeSearch=IR,08/18/2020,GRACEVILLE C.F.,Natural,Closed
 "SMITH, KENNETH",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=N26816&TypeSearch=IR,08/18/2020,GRACEVILLE C.F.,Natural,Closed
 "GRAYDON, ROGER",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=188124&TypeSearch=IR,08/18/2020,S.F.R.C.,Natural,OPEN-MDPD
@@ -117,7 +118,7 @@
 "CASTILLO, REYNALDO",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=405623&TypeSearch=IR,08/25/2020,S.F.R.C.,Natural,Closed
 "LIVINGSTON, CLEO",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=044483&TypeSearch=IR,08/26/2020,CROSS CITY C.I.,Natural,Closed
 "MOORE, BARRY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=638329&TypeSearch=IR,08/26/2020,EVERGLADES C.I.,Accident,OPEN-MDPD
-,,08/28/2020,SANTA ROSA C.I.,Homicide,Closed
+NA,NA,08/28/2020,SANTA ROSA C.I.,Homicide,Closed
 "SINNOTT, COREY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=V51184&TypeSearch=IR,08/28/2020,LIBERTY C.I.,Natural,Closed
 "SWIGGUM, JERRY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=258442&TypeSearch=IR,08/28/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "ROWLIE, THOMAS",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=063965&TypeSearch=IR,08/28/2020,SOUTH BAY C.F.,Natural,Closed
@@ -158,7 +159,7 @@
 "MARTINEZ, JORGE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=082092&TypeSearch=IR,09/11/2020,S.F.R.C.,Natural,Closed
 "CARSON, ALLEN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=122348&TypeSearch=IR,09/12/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "WILLIAMS, NATHANIEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=576993&TypeSearch=IR,09/12/2020,R.M.C.- MAIN UNIT,Natural,Closed
-,,09/12/2020,MAYO C.I. ANNEX,Homicide,Closed
+NA,NA,09/12/2020,MAYO C.I. ANNEX,Homicide,Closed
 "GRAVES, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=P19083&TypeSearch=IR,09/15/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "ROBERSON, TOMMY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=055093&TypeSearch=IR,09/16/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "MCCAMPBELL, THOMAS",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=068153&TypeSearch=IR,09/17/2020,R.M.C.- MAIN UNIT,Natural,Closed
@@ -179,7 +180,7 @@
 "JONES, REGINALD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=206655&TypeSearch=IR,09/23/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "LUNA, HOWARD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=N60562&TypeSearch=IR,09/24/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "KOHN, JOHNNIE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=042193&TypeSearch=IR,09/24/2020,CFRC-SOUTH,Natural,Closed
-,,09/25/2020,NWFRC MAIN UNIT.,Homicide,Closed
+NA,NA,09/25/2020,NWFRC MAIN UNIT.,Homicide,Closed
 "WINTERS, RONALD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=556857&TypeSearch=IR,09/25/2020,UNION C.I.,Natural,Closed
 "BARBER, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=V17509&TypeSearch=IR,09/25/2020,CFRC-MAIN,Natural,Closed
 "COSTALES, SANTIAGO",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=086688&TypeSearch=IR,09/25/2020,S.F.R.C.,Natural,CLOSED
@@ -278,7 +279,7 @@
 "FLECHA, HECTOR",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=C12078&TypeSearch=IR,11/09/2020,APALACHEE EAST UNIT,Natural,Closed
 "HAYS, TROY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=W10631&TypeSearch=IR,11/09/2020,FLORIDA STATE PRISON,Suicide,Closed
 "BELL, ARNOLD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=835776&TypeSearch=IR,11/09/2020,CFRC-MAIN,Natural,Closed
-,,11/09/2020,DADE C.I.,Homicide,OPEN
+NA,NA,11/09/2020,DADE C.I.,Homicide,OPEN
 "ROQUE, BRYAN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=R52889&TypeSearch=IR,11/10/2020,WAKULLA ANNEX,Suicide,OPEN
 "MCLACHLAN, MICHAEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=134109&TypeSearch=IR,11/11/2020,S.F.R.C.,Natural,OPEN
 "BRANNIN, KARL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=091247&TypeSearch=IR,11/11/2020,DADE C.I.,Natural,Closed
@@ -302,7 +303,7 @@
 "DOCK, KEVIN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=Q80786&TypeSearch=IR,11/19/2020,S.F.R.C.,Natural,Closed
 "SHARRITT, WALTER",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=049204&TypeSearch=IR,11/20/2020,R.M.C.- MAIN UNIT,Natural,Closed
 "BAILEY, JEROME",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=678986&TypeSearch=IR,11/21/2020,S.F.R.C.,Natural,CLOSED
-,,11/21/2020,DADE C.I.,Homicide,OPEN-FDLE
+NA,NA,11/21/2020,DADE C.I.,Homicide,OPEN-FDLE
 "REDMAN, ROBIN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=L78031&TypeSearch=IR,11/23/2020,APALACHEE WEST UNIT,Natural,Closed
 "WALKER, GEORGE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=066865&TypeSearch=IR,11/24/2020,CFRC-SOUTH,Natural,Closed
 "MCGUIRE, MICHAEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=137355&TypeSearch=IR,11/25/2020,SOUTH BAY C.F.,Natural,Closed
@@ -355,11 +356,11 @@
 "MORALEZ, ELPIDIO",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=037535&TypeSearch=IR,01/06/2021,R.M.C.- MAIN UNIT,Natural,OPEN
 "DISHONG, CHRISTOPHER",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=E04127&TypeSearch=IR,01/06/2021,SUMTER  C.I.,Natural,OPEN
 "ALLEN, JACK",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=745804&TypeSearch=IR,01/08/2021,GRACEVILLE C.F.,Natural,OPEN
-,,01/08/2021,GRACEVILLE C.F.,Homicide,OPEN
+NA,NA,01/08/2021,GRACEVILLE C.F.,Homicide,OPEN
 "WEBB, CARY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=B04199&TypeSearch=IR,01/09/2021,R.M.C.- MAIN UNIT,Natural,OPEN
 "CARPENTER, ROBERT",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=051546&TypeSearch=IR,01/11/2021,MADISON C.I.,Natural,OPEN
 "CANNELLA, CHARLES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=517448&TypeSearch=IR,01/11/2021,R.M.C.- MAIN UNIT,Natural,OPEN
-,,01/12/2021,MARTIN C.I.,Homicide,OPEN
+NA,NA,01/12/2021,MARTIN C.I.,Homicide,OPEN
 "WASHINKO, STEVEN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=169090&TypeSearch=IR,01/12/2021,UNION C.I.,Natural,OPEN
 "JORDAN, FREDERICK",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=112392&TypeSearch=IR,01/15/2021,OKALOOSA C.I.,Natural,OPEN
 "DAVIS, FRANK",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=043177&TypeSearch=IR,01/16/2021,HARDEE C.I.,Natural,OPEN
@@ -378,8 +379,8 @@
 "FONSECA, JOSE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=M59148&TypeSearch=IR,01/28/2021,R.M.C.- MAIN UNIT,Natural,OPEN
 "MILLS, DONALD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=B15750&TypeSearch=IR,01/29/2021,SOUTH BAY C.F.,Natural,OPEN
 "MCCUE, RAYMOND",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=169453&TypeSearch=IR,01/29/2021,WAKULLA C.I.,Natural,OPEN
-,,01/31/2021,TAYLOR C.I.,Homicide,Closed
-,,02/01/2021,R.M.C.- MAIN UNIT,Homicide,Closed
+NA,NA,01/31/2021,TAYLOR C.I.,Homicide,Closed
+NA,NA,02/01/2021,R.M.C.- MAIN UNIT,Homicide,Closed
 "CURTIS, TIMOTHY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=449873&TypeSearch=IR,02/01/2021,CFRC-SOUTH,Natural,OPEN
 "MCCARTHY, WILLIAM",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=075446&TypeSearch=IR,02/01/2021,DADE C.I.,Natural,OPEN
 "AMON, THOMAS",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=J03282&TypeSearch=IR,02/02/2021,R.M.C.- MAIN UNIT,Natural,OPEN
@@ -387,7 +388,7 @@
 "WILLIAMS, ALFRED",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=837895&TypeSearch=IR,02/08/2021,R.M.C.- MAIN UNIT,Natural,OPEN
 "CARROLL, JERRY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=081596&TypeSearch=IR,02/08/2021,SUMTER  C.I.,Natural,OPEN
 "FERNANDEZ, JAVIER",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=439199&TypeSearch=IR,02/10/2021,SANTA ROSA C.I.,Natural,OPEN
-,,02/10/2021,GRACEVILLE C.F.,Homicide,Closed
+NA,NA,02/10/2021,GRACEVILLE C.F.,Homicide,Closed
 "ROSS, ROBERT",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=F20042&TypeSearch=IR,02/10/2021,COLUMBIA C.I.,Natural,OPEN
 "MADRID, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=182771&TypeSearch=IR,02/11/2021,R.M.C.- MAIN UNIT,Natural,OPEN
 "OWENS, PAUL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=820823&TypeSearch=IR,02/12/2021,R.M.C.- MAIN UNIT,Natural,OPEN
@@ -395,7 +396,7 @@
 "SANDERS, CHARLES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=036774&TypeSearch=IR,02/14/2021,S.F.R.C.,Natural,OPEN-MDPD
 "MANSFIELD, JOSEPH",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=470670&TypeSearch=IR,02/15/2021,CFRC-SOUTH,Natural,Closed
 "WATTS, FREDDIE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=977711&TypeSearch=IR,02/16/2021,GRACEVILLE C.F.,Natural,Closed
-,,02/19/2021,BAKER C.I.,Homicide,OPEN-FDLE
+NA,NA,02/19/2021,BAKER C.I.,Homicide,OPEN-FDLE
 "BUTTERFIELD, EARL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=E31244&TypeSearch=IR,02/19/2021,DESOTO WORK CAMP,Natural,OPEN
 "BLUE, MARTRAVIUS",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=K75254&TypeSearch=IR,02/20/2021,LAKE C.I.,Natural,Closed
 "BARBER, RODNEY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=J09222&TypeSearch=IR,02/21/2021,BAY C.F.,Natural,Closed
@@ -414,11 +415,11 @@
 "GORDON, CHARLES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=885700&TypeSearch=IR,03/01/2021,WAKULLA C.I.,Natural,Closed
 "BROWN, MICKEY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=055744&TypeSearch=IR,03/01/2021,CFRC-SOUTH,Natural,Closed
 "JOHNSON, MICHELLE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=U58073&TypeSearch=IR,03/01/2021,HOMESTEAD C.I.,Natural,Closed
-,,03/02/2021,CHARLOTTE C.I.,Homicide,OPEN-FDLE
+NA,NA,03/02/2021,CHARLOTTE C.I.,Homicide,OPEN-FDLE
 "PEREZ, JULIO",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=Y26342&TypeSearch=IR,03/03/2021,R.M.C.- MAIN UNIT,Natural,Closed
 "KERESTESY, RICHARD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=165905&TypeSearch=IR,03/04/2021,R.M.C.- MAIN UNIT,Natural,Closed
 "BEAHR, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=I08266&TypeSearch=IR,03/04/2021,SUWANNEE C.I. ANNEX,Natural,Closed
-,,03/04/2021,SUWANNEE C.I. ANNEX,Homicide,OPEN-FDLE
+NA,NA,03/04/2021,SUWANNEE C.I. ANNEX,Homicide,OPEN-FDLE
 "CONNER, TIMOTHY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=U54290&TypeSearch=IR,03/04/2021,MARION C.I.,Natural,Closed
 "GADSON, TIMOTHY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=108439&TypeSearch=IR,03/05/2021,SANTA ROSA C.I.,Natural,Closed
 "HERNANDEZ, MICHAEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=P31867&TypeSearch=IR,03/05/2021,FLORIDA STATE PRISON,Natural,Closed
@@ -462,12 +463,12 @@
 "SOUTHALL, ANTHONY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=085194&TypeSearch=IR,04/16/2021,CFRC-SOUTH,Natural,Closed
 "KEMP, GEORGE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=065790&TypeSearch=IR,04/16/2021,ZEPHYRHILLS C.I.,Natural,Closed
 "JACKSON, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=310883&TypeSearch=IR,04/17/2021,R.M.C.- MAIN UNIT,Natural,OPEN
-,,04/18/2021,DADE C.I.,Homicide,Closed
+NA,NA,04/18/2021,DADE C.I.,Homicide,Closed
 "ALEXANDER, CLAUDE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=046045&TypeSearch=IR,04/19/2021,WALTON C.I.,Natural,Closed
 "HOOD, JOHN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=P60211&TypeSearch=IR,04/20/2021,CENTURY C.I.,Natural,Closed
 "JOHNSON, ANTHONY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=342620&TypeSearch=IR,04/21/2021,LAKE C.I.,Natural,Closed
 "JONES, ORA",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=752930&TypeSearch=IR,04/22/2021,FL.WOMENS RECPN.CTR,Natural,Closed
-,,04/23/2021,FRANKLIN C.I.,Homicide,Closed
+NA,NA,04/23/2021,FRANKLIN C.I.,Homicide,Closed
 "MCCLOUGH, JOSEPH",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=S26154&TypeSearch=IR,04/28/2021,CALHOUN C.I.,Accident,Closed
 "LARRINAGA, RONALD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=138878&TypeSearch=IR,04/28/2021,SUWANNEE C.I. ANNEX,Natural,Closed
 "CRUZ, RAMON",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=089118&TypeSearch=IR,04/28/2021,S.F.R.C.,Natural,Closed
@@ -478,8 +479,8 @@
 "WELLS, ROBERT",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=267560&TypeSearch=IR,04/30/2021,S.F.R.C.,Natural,OPEN-MDPD
 "LORD, DARRELL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=C05916&TypeSearch=IR,05/02/2021,WAKULLA ANNEX,Suicide,Closed
 "SEIDNER, EDWARD",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=I52585&TypeSearch=IR,05/02/2021,MADISON C.I.,Natural,Closed
-,,05/02/2021,TAYLOR C.I.,Homicide,Closed
-,,05/02/2021,TAYLOR C.I.,Homicide,Closed
+NA,NA,05/02/2021,TAYLOR C.I.,Homicide,Closed
+NA,NA,05/02/2021,TAYLOR C.I.,Homicide,Closed
 "CALLAHAN, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=048238&TypeSearch=IR,05/03/2021,R.M.C.- MAIN UNIT,Natural,Closed
 "DEANGELO, JOSEPH",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=596197&TypeSearch=IR,05/03/2021,DADE C.I.,Natural,Closed
 "VANCE, DANA",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=P70626&TypeSearch=IR,05/04/2021,BLACKWATER C.F.,Natural,Closed
@@ -516,7 +517,7 @@
 "KING, LARRY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=663611&TypeSearch=IR,06/03/2021,BAKER C.I.,Natural,Closed
 "MCRAE, JAMES",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=019550&TypeSearch=IR,06/05/2021,CENTURY C.I.,Natural,Closed
 "LOPEZ-SANCHEZ, LUIS",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=D70630&TypeSearch=IR,06/05/2021,NEW RIVER CI,Suicide,Closed
-,,06/06/2021,WAKULLA C.I.,Homicide,OPEN-FDLE
+NA,NA,06/06/2021,WAKULLA C.I.,Homicide,OPEN-FDLE
 "DANIELS, CARLOS",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=J90810&TypeSearch=IR,06/07/2021,BAY C.F.,Natural,Closed
 "ODONNELL, MICHAEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=810307&TypeSearch=IR,06/07/2021,WAKULLA C.I.,Natural,Closed
 "BAKER, JOHN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=122831&TypeSearch=IR,06/07/2021,S.F.R.C.,Natural,OPEN-MDPD
@@ -530,7 +531,7 @@
 "GREEN, GREGORY",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=J59116&TypeSearch=IR,06/17/2021,R.M.C.- MAIN UNIT,Natural,Closed
 "THOMPSON, CHARLIE",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=476532&TypeSearch=IR,06/18/2021,R.M.C.- MAIN UNIT,Natural,Closed
 "MINNIS, HERBERT",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=L07542&TypeSearch=IR,06/20/2021,CALHOUN C.I.,Natural,Closed
-,,06/21/2021,TOMOKA WORK CAMP,Natural,Closed
+NA,NA,06/21/2021,TOMOKA WORK CAMP,Natural,Closed
 "FELICIANO, MICHAEL",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=G70526&TypeSearch=IR,06/22/2021,APALACHEE EAST UNIT,Natural,Closed
 "BATTIE, KEITHAN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=186928&TypeSearch=IR,06/24/2021,R.M.C.- MAIN UNIT,Natural,Closed
 "DOWHAN, KEVIN",https://fdc.myflorida.com/OffenderSearch/detail.aspx?Page=Detail&DCNumber=942621&TypeSearch=IR,06/26/2021,LAWTEY C.I.,Natural,OPEN
