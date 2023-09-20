@@ -6,10 +6,15 @@ output:
   distill::distill_article:
 ---
 
-<header>
-  <img src="https://stories.usatodaynetwork.com/wastedminds/wp-content/uploads/sites/205/2019/07/P1250519-1024x576.jpg" alt="John Wise gives graduation day speech, Columbia Correctional Institution, May 2018">
-</header>
+::: {.figure .first-image style="text-align: center; border: 3px solid black;"}
+<img src="https://stories.usatodaynetwork.com/wastedminds/wp-content/uploads/sites/205/2019/07/P1250519-1024x576.jpg" alt="John Wise Gives Ceremonial Graduation Day Speech, Colummbia Correctional Institution May 2018" width="80%"/>
 
+<p class="caption" style="text-align: center; margin-top: -0.5rem; margin-bottom: 0.5rem; font-size: smaller">
+
+<a href="https://stories.usatodaynetwork.com/wastedminds/wp-content/uploads/sites/205/2019/07/P1250519-1024x576.jpg">John Wise Gives Ceremonial Graduation Day Speech, Colummbia Correctional Institution May 2018 USA Today Network</a>
+
+</p>
+:::
  
 Friends, family, fellow graduates, esteemed staff, and guests, thank you for joining us here today in celebration of this achievement.
 
