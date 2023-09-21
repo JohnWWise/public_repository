@@ -94,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; }
 
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2023-09-20"/>
-<meta property="article:created" itemprop="dateCreated" content="2023-09-20"/>
+<meta property="article:published" itemprop="datePublished" content="2023-09-21"/>
+<meta property="article:created" itemprop="dateCreated" content="2023-09-21"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
 <meta property="og:title" content="John Wise&#39;s Public Repository: Investigation of FDOC Public &#39;Inmate Mortality Data&#39;"/>
@@ -113,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; }
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","date"]}},"value":[{"type":"character","attributes":{},"value":["Investigation of FDOC Public 'Inmate Mortality Data'"]},{"type":"character","attributes":{},"value":["The Florida Department of Corrections hosts a webpage called \"Inmate Mortality\" on their website; this document is an ONGOING mining of that data"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth","df_print"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]},{"type":"character","attributes":{},"value":["paged"]}]}]},{"type":"character","attributes":{},"value":["2023-09-20"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","date"]}},"value":[{"type":"character","attributes":{},"value":["Investigation of FDOC Public 'Inmate Mortality Data'"]},{"type":"character","attributes":{},"value":["The Florida Department of Corrections hosts a webpage called \"Inmate Mortality\" on their website; this document is an ONGOING mining of that data"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth","df_print"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]},{"type":"character","attributes":{},"value":["paged"]}]}]},{"type":"character","attributes":{},"value":["2023-09-21"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -9248,7 +9248,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Investigation of FDOC Public 'Inmate Mortality Data'","description":"The Florida Department of Corrections hosts a webpage called \"Inmate Mortality\" on their website; this document is an ONGOING mining of that data","authors":[],"publishedDate":"2023-09-20T00:00:00.000-04:00"}
+{"title":"Investigation of FDOC Public 'Inmate Mortality Data'","description":"The Florida Department of Corrections hosts a webpage called \"Inmate Mortality\" on their website; this document is an ONGOING mining of that data","authors":[],"publishedDate":"2023-09-21T00:00:00.000-04:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -9722,7 +9722,7 @@ Show code
 </div>
 <p>Here we have a plot of the rate of natural deaths over the time period covered by our data. Once again, the weeks where the calculated probability of observing a result as extreme as the one seen is less than 5%.
 While it’s acknowledged that the pandemic has disrupted the normalcy of mortality rates, leading to a skewed baseline for expected deaths, this actually strengthens our case that the results here obtained using scores() are all the more salient and deserving of urgent attention, as the pandemic-induced distortions - <strong>resulting in a less sensitive scores() test</strong> - imply that any weeks yielding high scores are indicative of mortality rates that <em>stand out as unusual even in the context of the pandemic</em>.</p>
-<p>The following weeks, filtered to exclude weeks during the 2020-2021 COVID emergency in Florida, stand out as exceptional in the FDOC with regards to the amount of natural deaths.</p>
+<p>The following weeks, filtered to exclude weeks during the 2020-2021 COVID emergency in Florida, stand out as exceptional in the FDOC with regards to the amount of natural deaths. While I refrain from positing any definitive explanations for why these particular facilities experienced heightened instances of natural deaths, I present this information as a potential avenue for future investigations by interested parties. The identification of any genuine causal relationships is of paramount interest, not only to the families who have lost loved ones during their incarceration but also to society at large, for a myriad of compelling reasons.</p>
 <div class="layout-chunk" data-layout="l-body">
 <details>
 <summary>
@@ -15760,10 +15760,198 @@ Show code
 Show code
 </summary>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="co">#kable(data %&gt;% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %&gt;% arrange(p_values)) %&gt;% </span></span>
-<span>  <span class="co">#kable_styling(latex_options = &quot;hold_position&quot;)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">kable</span><span class="op">(</span><span class="va">data</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">FACILITY_description</span>,<span class="va">Total_month_naturalDeaths</span>,<span class="va">p_values</span>,<span class="va">high</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">arrange</span><span class="op">(</span><span class="va">p_values</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">kable_styling</span><span class="op">(</span>latex_options <span class="op">=</span> <span class="st">&quot;hold_position&quot;</span><span class="op">)</span></span></code></pre>
 </div>
 </details>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+FACILITY_description
+</th>
+<th style="text-align:right;">
+Total_month_naturalDeaths
+</th>
+<th style="text-align:right;">
+p_values
+</th>
+<th style="text-align:left;">
+high
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+MARION C.I.
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.0022543
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OKALOOSA C.I.
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.0288898
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DADE C.I.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.2409548
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SUWANNEE C.I. ANNEX
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.2449102
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ZEPHYRHILLS C.I.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.2655688
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+UNION C.I.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.3137573
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CFRC-MAIN
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.3286469
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+APALACHEE EAST UNIT
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.3308400
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HAMILTON ANNEX
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.3812502
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CROSS CITY C.I.
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.4094192
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+R.M.C.- MAIN UNIT
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0.4475405
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+S.F.R.C.
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.4654324
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->

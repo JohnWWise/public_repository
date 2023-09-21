@@ -350,8 +350,7 @@ ggplot(per_week_natural, aes(x = week, y= Total_week_Deaths, col= high)) +
 Here we have a plot of the rate of natural deaths over the time period covered by our data. Once again, the weeks where the calculated probability of observing a result as extreme as the one seen is less than 5%.
 While it's acknowledged that the pandemic has disrupted the normalcy of mortality rates, leading to a skewed baseline for expected deaths, this actually strengthens our case that the results here obtained using scores() are all the more salient and deserving of urgent attention, as the pandemic-induced distortions - **resulting in a less sensitive scores() test** - imply that any weeks yielding high scores are indicative of mortality rates that *stand out as unusual even in the context of the pandemic*.
 
-The following weeks, filtered to exclude weeks during the 2020-2021 COVID emergency in Florida, stand out as exceptional in the FDOC with regards to the amount of natural deaths.
-
+The following weeks, filtered to exclude weeks during the 2020-2021 COVID emergency in Florida, stand out as exceptional in the FDOC with regards to the amount of natural deaths. While I refrain from positing any definitive explanations for why these particular facilities experienced heightened instances of natural deaths, I present this information as a potential avenue for future investigations by interested parties. The identification of any genuine causal relationships is of paramount interest, not only to the families who have lost loved ones during their incarceration but also to society at large, for a myriad of compelling reasons.
 
 ```{r Recommend, echo= FALSE, code_folding = TRUE}
 departmentwide <- per_week_natural %>%
