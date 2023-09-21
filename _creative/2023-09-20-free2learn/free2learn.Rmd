@@ -1,0 +1,28 @@
+---
+title: "Free to Learn Podcast, Santa Fe College"
+description: |
+  In March of 2023 I was a guest on the Santa Fe College's *Free to Learn* podcast, wherein I talked about my expereinces with higher education in prison, as well as my adjustment after release. My interview was broken into two episodes.
+output:
+  distill::distill_article:
+---
+
+::: {.figure .first-image style="text-align: center; border: 3px solid black;"}
+<img src="/Users/johnwise/pubic_repository/images/Free_to_Learn_Logo_Black.png" width="80%"/>
+</p>
+:::
+
+<section>
+# Episode 1:
+<audio controls>
+  <source src="/Users/johnwise/pubic_repository/audio/free2learn/whatever-it-takes-part-1.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+</section>
+
+<section>
+# Episode 2:
+<audio controls>
+  <source src="/Users/johnwise/pubic_repository/audio/free2learn/whatever-it-takes-part-2.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+</section>
