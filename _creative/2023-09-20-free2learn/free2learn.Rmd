@@ -1,28 +1,59 @@
 ---
-title: "Free to Learn Podcast, Santa Fe College"
+title: "2023 Santa Fe College's Free to Learn Initiative and Symposium"
 description: |
-  In March of 2023 I was a guest on the Santa Fe College's *Free to Learn* podcast, wherein I talked about my expereinces with higher education in prison, as well as my adjustment after release. My interview was broken into two episodes.
+  In March of 2023 I was a guest on the Santa Fe College's <i>Free to Learn</i> podcast, wherein I talked about my expereinces with higher education in prison, as well as my adjustment after release. Later, in April, I participated in the associated Summer Symposium.
 output:
   distill::distill_article:
 ---
+To begin, I invite you to listen to the entire series. I was one of many formerly incarcerated individuals who participated in these events, and my peers in this space are truly amazing. You can find the entire series and additional information on the events by clicking the logo below.
 
 ::: {.figure .first-image style="text-align: center; border: 3px solid black;"}
-<img src="/Users/johnwise/pubic_repository/images/Free_to_Learn_Logo_Black.png" width="80%"/>
-</p>
+<a href="https://www.sfcollege.edu/FreeToLearn/">
+    <img src="/Users/johnwise/pubic_repository/images/Free_to_Learn_Logo_Black.png" width="80%" alt="Producer Logo"/>
+</a>
 :::
 
-<section>
 # Episode 1:
+<section>
 <audio controls>
   <source src="/Users/johnwise/pubic_repository/audio/free2learn/whatever-it-takes-part-1.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 </section>
 
-<section>
 # Episode 2:
+<section>
 <audio controls>
   <source src="/Users/johnwise/pubic_repository/audio/free2learn/whatever-it-takes-part-2.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
+</section>
+
+# After the Panel
+During the symposium, I had the honor of participating in a panel discussion on higher education for individuals currently incarcerated. Unfortunately, the presence of Mr. Patrick Mahooney, the Florida Department of Corrections Director of Programs, greatly diminished the experience and quality of the panel by, I must admit, accurately representing the style, aims, and interests of the Florida prison system.
+
+Below is my response to this intrusion in our academic space, which I sent directly to the symposium administrators, Mr. Mahooney, and several FDOC department heads.
+
+<section>
+Good afternoon, everyone.
+
+Thank you for the opportunity to share some of my story and insights at last week's symposium. Today, I am writing to follow up and share my overall thoughts on the experience.
+
+Regarding the student's question about mental health services for formerly incarcerated students during the symposium, I want to clarify that I did not seek out mental health support while I was enrolled at your school because I did not realize the extent of my trauma until recently. After spending two decades under tremendous mental pressure and constant physical danger, it became the norm for me. It has taken me months to recognize and begin to address the void left behind by that trauma. I believe it is important to offer mental health support services to students like myself, realizing that they may not know that they need it.
+
+More than anything, I would like to bring your attention to the fact that the inclusion of Mr. Mahoney in our breakout session was wholly inappropriate. Carceral agencies, such as prisons and detention centers, are inherently political organizations that often operate to the detriment of vulnerable communities. These institutions are designed to protect the interests of those who benefit from a world full of inequality, rather than to promote justice or rehabilitation. They are often used to maintain social control and to silence dissent, particularly among marginalized groups such as people of color, the LGBTQ+ community, and those living in poverty.
+
+I was not surprised when Mr. Mahoney lamented the Florida Department of Corrections' neglect by the state legislature in the budget for too long. He was there to act as a political tool, hitting his talking points and maintaining the illusion of legitimacy and efficacy. As expected, he seized the opportunity to talk about the legitimate purposes of a correctional agency. However, from an academic perspective, the five legitimate purposes of incarceration as punishment - retribution, deterrence, incapacitation, rehabilitation, and restoration - are not without their critiques. Retribution is based on vengeance rather than justice, and deterrence is ineffective and disproportionately targets marginalized communities. Incapacitation, to the degree in which it is exercised in modern society, is overly punitive and fails to address underlying issues.
+
+FDOC officials nevertheless hide behind this flimsy support for legitimacy unfailingly and at every public opportunity. All mentions of the non-existent last two - the total failure of the state to provide anything more than the opposite of rehabilitation and restoration - are only heard as a call to bring us "to the classroom" on the others. However, what was most offensive was that Mr. Mahoney misrepresented those "in the care" of the Florida Department of Corrections while making these points.
+
+Prison officials often misrepresent the educational levels of incarcerated individuals to maintain the illusion that the prison system is rehabilitating and educating them. By exaggerating the situation and claiming that "the majority of those incarcerated are illiterate" (which is absurd), they gain emotional and shock-based leverage to request more funding for training, hiring, and morale.
+
+The visions and missions of corrections agencies, whose primary aim is to incarcerate people, and educational institutions like colleges and universities, whose primary aim is to educate and empower individuals, are necessarily contradictory.
+
+While it may seem like a good idea for educational institutions to "partner" with carceral agencies like the Florida Department of Corrections, it is important to remember that these partnerships are often pursued for self-serving ends. Carceral agencies are not interested in rehabilitation, education, or empowerment. Instead, they aim to maintain their power and control. They use partnerships with educational institutions to gain legitimacy and funding, while perpetuating an unjust system that disproportionately harms marginalized communities.
+
+The only way to run an educational program within a carceral setting that is not harmful is through a pedagogy of freedom. This approach recognizes the humanity and dignity of all individuals, regardless of their past actions. Carceral agencies must be resisted when they place barriers to legitimate connections with academic opportunities for those incarcerated, as well as when they use those opportunities as a means to control and coerce. When they deny access to books, the proper action is to take that to the media. When they try to control enrollment, the proper action is to take them to court. They must be resisted on every rule that limits, every whimsical and harmful decree.
+
+They do not deserve a seat at a table.
 </section>
