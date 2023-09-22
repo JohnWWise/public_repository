@@ -1,7 +1,7 @@
 ---
 title: "Investigation of FDOC Public 'Inmate Mortality Data'"
 description: |
-  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data
+  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (note -- I will be adding downloadable files of initial data as well as intermediate stages of data cleaning within the coming days)
 output:
   distill::distill_article:
     toc: true
@@ -119,6 +119,9 @@ deaths <- rbind(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
 # Remove individual fiscal year data frames to free up memory
 remove(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
 
+# Save the 'deaths' object to a file (e.g., deaths.RDS)
+saveRDS(deaths, file = "deaths.RDS")
+
 # Rename columns for consistency and clarity
 colnames(deaths) <- c('Name', 'DCNumber', 'Date_Death', 'FACILITY_description', 'Manner_Death', 'Status')
 
@@ -134,6 +137,7 @@ deaths$Manner_Death <- as.factor(deaths$Manner_Death)
 deaths$Status <- as.factor(deaths$Status)
 deaths$DCNumber <- as.factor(deaths$DCNumber)
 ```
+You can download the cleaned data frame as an RDS file here: [Download deaths.RDS](deaths.RDS).
 
 
 ```{r cleaning typos and mis-entries: collapsing factors, echo=FALSE, code_folding = TRUE}
