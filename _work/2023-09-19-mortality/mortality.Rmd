@@ -58,7 +58,20 @@ This paper utilizes these lists for the fiscal years 2015 - present. Although th
 
 While many records lack names and the manner of death, the FDOC data does contain 3,497 death observations, each of which is accompanied by a "Date of Death". The earliest recorded date of death is July 2nd, 2015, and the latest is July 31st, 2023. To begin, I have compiled the data into a sortable and searchable data table.
 
-```{r libraries and seed, echo=FALSE, code_folding = TRUE}
+
+<head>
+  <style>
+    /* Your CSS styles go here */
+  </style>
+</head>
+<body>
+  <h3>Coding work and downloadable initial and intermediate data are visible under the toggle sections for each subtask:</h3>
+  <ul>
+    <li>
+      <details>
+        <summary>Importing libraries, setting seed</summary>
+        <p>
+```{r libraries and seed, echo=TRUE}
 pkgs = c("tidyverse",
          "ggplot2",
          "kableExtra",
@@ -80,7 +93,15 @@ inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
 
-```{r import and preprocess, echo=FALSE, code_folding = TRUE}
+  </p>
+  </details>
+  </li>
+  <li>
+    <details>
+      <summary>Reading in csv files</summary>
+      <p>
+You can download the initial csv files here: [Download fdoc_mortality.zip](fdoc_mortality.zip).
+```{r import and preprocess, echo=TRUE}
 # Here we are bringing in our csv files -- I copied and pasted the FDOC tables into spreadsheets and saved them as csvs. The coordinates of FDOC facilities were manually looked up by me on Google maps.
 
 # base directory for CSV files
@@ -110,17 +131,23 @@ fy23 <- read_and_preprocess_csv(paste0(base_dir, "FY 2023-2024.csv"))
 
 # Brining in Facility coordinates, manually acquired (someone should double check these!) by the author
 cords <-read_csv(paste0(base_dir, 'facility_cords.csv'))
-```
+```      
+  
+  </p>
+  </details>
+  </li>
+  <li>
+    <details>
+      <summary>Data cleaning</summary>
+      <p>
 
-```{r more preprocessing, echo=FALSE, code_folding = TRUE}
+
+```{r more preprocessing, echo= TRUE}
 # Combine data frames from different fiscal years into one
 deaths <- rbind(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
 
 # Remove individual fiscal year data frames to free up memory
 remove(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
-
-# Save the 'deaths' object to a file (e.g., deaths.RDS)
-saveRDS(deaths, file = "deaths.RDS")
 
 # Rename columns for consistency and clarity
 colnames(deaths) <- c('Name', 'DCNumber', 'Date_Death', 'FACILITY_description', 'Manner_Death', 'Status')
@@ -136,11 +163,12 @@ deaths$FACILITY_descriptionn <- as.factor(deaths$FACILITY_description)
 deaths$Manner_Death <- as.factor(deaths$Manner_Death)
 deaths$Status <- as.factor(deaths$Status)
 deaths$DCNumber <- as.factor(deaths$DCNumber)
+
+write_csv(deaths, 'deaths1.csv')
 ```
-You can download the cleaned data frame as an RDS file here: [Download deaths.RDS](deaths.RDS).
+You can download this cleaned data as an csv file here: [Download deaths1.csv](deaths1.csv).
 
-
-```{r cleaning typos and mis-entries: collapsing factors, echo=FALSE, code_folding = TRUE}
+```{r cleaning typos and mis-entries: collapsing factors, echo=TRUE}
 # Manner of Death
 deaths$Manner_Death <- recode(deaths$Manner_Death, "Natrual" = "Natural")
 deaths$Manner_Death <- recode(deaths$Manner_Death, "CLOSED" = "Closed")
@@ -180,11 +208,19 @@ deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Walton" = "W
 
 # there are three records for which the cause of death was determined to be 'Undetermined' and three records for which this variable was valued as 'Closed'. This "Closed" is meant to be a category for investigative status, so for the purposes of this investigation we collapse those categorized as "Closed" to be "Undetermined".
 deaths$Manner_Death <-  recode(deaths$Manner_Death, "Closed" = "Undetermined")
+
+write_csv(deaths, 'deaths2.csv')
 ```
+You can download this cleaned data as an csv file here: [Download deaths2.csv](deaths2.csv).
 
-
+  </p>
+  </details>
+  </li>
+  </ul>
+</body>
 
 ```{r making table of deaths by faclility, echo=FALSE, warning=FALSE, message=FALSE, code_folding=TRUE}
+# Creating the table utilizing the data imported and cleaned above
 facilities <- deaths %>% 
   group_by(FACILITY_description, Manner_Death) %>% 
   summarise(count = n()) %>%
@@ -192,8 +228,9 @@ facilities <- deaths %>%
   mutate(total = sum(Natural,Suicide, Accident)) %>%
   arrange(desc(total))
 datatable(facilities, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+write_csv(facilities, 'facilities.csv')
 ```
-
+You can download this cleaned and aggregated data as an csv file here: [Download facilities.csv](facilities.csv).
 
 # Lake Butler Medical Reception Center
 Upon initial examination of the data, it becomes apparent that the majority of deaths occur at the Reception and Medical Center (RMC) in Lake Butler, Florida. This is because the RMC is the secure medical facility for the entire Florida Department of Corrections, and includes a hospital on site where individuals in need of hospitalization or specialty medical care are housed. The facility was founded in 1968 as an intake and processing point for all male state prisoners and as a secure medical facility.
