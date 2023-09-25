@@ -1,12 +1,12 @@
 ---
 title: "Investigation of FDOC Public 'Inmate Mortality Data'"
 description: |
-  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (note -- I will be adding downloadable files of initial data as well as intermediate stages of data cleaning within the coming days)
+  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data.
 output:
   distill::distill_article:
     toc: true
     toc_float: true
-    toc_depth: 3
+    toc_depth: 2
     df_print: paged
 ---
 
@@ -72,6 +72,7 @@ While many records lack names and the manner of death, the FDOC data does contai
         <summary>Importing libraries, setting seed</summary>
         <p>
 ```{r libraries and seed, echo=TRUE}
+# Packages utilized:
 pkgs = c("tidyverse",
          "ggplot2",
          "kableExtra",
@@ -100,9 +101,10 @@ set.seed(8675309)
     <details>
       <summary>Reading in csv files</summary>
       <p>
-You can download the initial csv files here: [Download fdoc_mortality.zip](fdoc_mortality.zip).
+### You can download the initial csv files here: [Download fdoc_mortality.zip](fdoc_mortality.zip).
 ```{r import and preprocess, echo=TRUE}
-# Here we are bringing in our csv files -- I copied and pasted the FDOC tables into spreadsheets and saved them as csvs. The coordinates of FDOC facilities were manually looked up by me on Google maps.
+# Here we are bringing in our csv files -- I copied and pasted the FDOC tables into spreadsheets and saved them 
+# as csvs. The coordinates of FDOC facilities were manually looked up by me on Google maps.
 
 # base directory for CSV files
 base_dir <- "/Users/johnwise/pubic_repository/csvs/fdoc_mortality/"
@@ -166,16 +168,16 @@ deaths$DCNumber <- as.factor(deaths$DCNumber)
 
 write_csv(deaths, 'deaths1.csv')
 ```
-You can download this cleaned data as an csv file here: [Download deaths1.csv](deaths1.csv).
+### You can download this cleaned data as a csv file here: [Download deaths1.csv](deaths1.csv).
 
 ```{r cleaning typos and mis-entries: collapsing factors, echo=TRUE}
-# Manner of Death
+# Manner of Death Data Cleaning
 deaths$Manner_Death <- recode(deaths$Manner_Death, "Natrual" = "Natural")
 deaths$Manner_Death <- recode(deaths$Manner_Death, "CLOSED" = "Closed")
 deaths$Manner_Death <- recode(deaths$Manner_Death, "4Suicide" = "Suicide")
 deaths$Manner_Death <- recode(deaths$Manner_Death, "Acdident" = "Suicide")
 
-# Facilities
+# Facilities Data Cleaning
 deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Apalachee East" = "APALACHEE EAST UNIT")
 deaths$FACILITY_description <- recode(deaths$FACILITY_description, "BAKER Re-Entry" = "BAKER RE-ENTRY CENTR")
 deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Blackwater CF" = "BLACKWATER C.F.")
@@ -206,12 +208,14 @@ deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Wakulla" = "
 deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Wakulla Annex" = "WAKULLA ANNEX")
 deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Walton" = "WALTON C.I.")
 
-# there are three records for which the cause of death was determined to be 'Undetermined' and three records for which this variable was valued as 'Closed'. This "Closed" is meant to be a category for investigative status, so for the purposes of this investigation we collapse those categorized as "Closed" to be "Undetermined".
+# there are three records for which the cause of death was determined to be 'Undetermined' and three records for 
+#which this variable was valued as 'Closed'. This "Closed" is meant to be a category for investigative status, 
+# so for the purposes of this investigation we collapse those categorized as "Closed" to be "Undetermined".
 deaths$Manner_Death <-  recode(deaths$Manner_Death, "Closed" = "Undetermined")
 
 write_csv(deaths, 'deaths2.csv')
 ```
-You can download this cleaned data as an csv file here: [Download deaths2.csv](deaths2.csv).
+### You can download this cleaned data as a csv file here: [Download deaths2.csv](deaths2.csv).
 
   </p>
   </details>
@@ -230,7 +234,7 @@ facilities <- deaths %>%
 datatable(facilities, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 write_csv(facilities, 'facilities.csv')
 ```
-You can download this cleaned and aggregated data as an csv file here: [Download facilities.csv](facilities.csv).
+### You can download this cleaned and aggregated data as an csv file here: [Download facilities.csv](facilities.csv).
 
 # Lake Butler Medical Reception Center
 Upon initial examination of the data, it becomes apparent that the majority of deaths occur at the Reception and Medical Center (RMC) in Lake Butler, Florida. This is because the RMC is the secure medical facility for the entire Florida Department of Corrections, and includes a hospital on site where individuals in need of hospitalization or specialty medical care are housed. The facility was founded in 1968 as an intake and processing point for all male state prisoners and as a secure medical facility.
@@ -345,7 +349,7 @@ The chemicals used to make synthetic cannabinoids used around 2017, it seems, we
 
 ```{r plotting accidents_facilites, echo=FALSE, fig.align='center', fig.height=10, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 accidents_FDOC <- deaths %>% filter(Manner_Death == 'Accident')
-ggplot(accidents_FDOC %>% filter(Manner_Death == 'Accident'), aes(x = reorder(FACILITY_description, FACILITY_description, function(x) length(x)))) +
+ggplot(accidents_FDOC, aes(x = reorder(FACILITY_description, FACILITY_description, function(x) length(x)))) +
   geom_bar() +   
   geom_text(aes(label = ..count..), stat = "count", size =3.25, hjust = 1.5, color = "white") +
   coord_flip() +
@@ -427,8 +431,6 @@ per_month_natural2 <- per_month_natural2 %>%
 per_month_natural2$FACILITY_description <- as.factor(per_month_natural2$FACILITY_description)
 summary_data1 <- per_month_natural2 %>%
      group_by(month) %>%
-     #filter(high == TRUE) %>% 
-     #filter(n() > 1) %>% 
      arrange(month) %>% 
      select(-high) %>%
      mutate(group_index = row_number())
@@ -470,883 +472,298 @@ interesting$high[is.na(interesting$high)] <- FALSE
 
 ```
 
+```{r leaflet and kable function def, echo=FALSE, code_folding = TRUE}
+mapping_naturals <- function(date) {
+  data <- interesting %>% filter(month == date)
+  manners <- deaths %>% 
+    filter(month(Date_Death) == month(as.Date(date)) & year(Date_Death) == year(as.Date(date))) %>%
+    group_by(FACILITY_description, Manner_Death) %>%
+    summarise(count = n()) %>%
+    pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
+    select(FACILITY_description, everything())
+  
+  # Define a continuous color palette
+  palette_name <- "YlOrRd"
+  num_colors <- 9  
+  colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
+  pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
+  
+  leaflet(data) %>%
+    addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
+    addCircleMarkers(
+      radius = ~log(1/p_values)*3,
+      color = ~pal((1/p_values)^(1/4)),
+      fillOpacity = .45,
+      stroke = TRUE,
+      label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
+    ) %>%
+    addControl(
+      position = "bottomleft",
+      html = paste0("<b style='font-size: 28px;'>", format(as.Date(date), "%B %Y"), "</b>")
+    ) %>%
+    setView(lng = -84, lat = 28.3, zoom = 6.5)
+}
+
+create_kable_table <- function(date) {
+  kable(interesting %>% filter(month == as.Date(date)) %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>%
+    kable_styling(latex_options = "hold_position")
+}
+```
+
+
 ## 2015
 
 ### December 2015
 
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2015-12-01')
-
-manners <- deaths %>%
-  filter(month(Date_Death) == 12 & year(Date_Death) == 2015) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-palette_name <- "YlOrRd"
-num_colors <- 9
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>December 2015</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2015-12-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2015-12-01')
+```
+
 
 ## 2016
 ### January 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2016-01-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 01 & year(Date_Death) == 2016) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>January 2016</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2016-01-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2016-01-01')
+```
+
+
 
 ### February 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2016-02-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 02 & year(Date_Death) == 2016) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>February 2016</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2016-02-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2016-02-01')
+```
+
+
 
 ### June 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2016-06-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 06 & year(Date_Death) == 2016) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>June 2016</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2016-06-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2016-06-01')
+```
+
 ### July 2016
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2016-07-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 07 & year(Date_Death) == 2016) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>July 2016</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2016-07-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2016-07-01')
+```
+
+
 
 ## 2018
 ### January 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2018-01-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 01 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2018-01-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>January 2018</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2018-01-01')
 ```
 
 ### February 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2018-02-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 02 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>February 2018</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2018-02-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2018-02-01')
+```
+
 
 ### March 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2018-03-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 03 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>March 2018</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2018-02-01')
 ```
 
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2018-02-01')
+```
+
+
 ### May 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2018-05-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 05 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2018-05-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>May 2018</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2018-05-01')
 ```
 
 ### October 2018
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2018-10-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 10 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2018-10-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>October 2018</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2018-10-01')
 ```
 
 ## 2019
 
 ### January 2019
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2019-01-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 01 & year(Date_Death) == 2019) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2019-01-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>January 2019</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2019-01-01')
 ```
 
 ### July 2019
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2019-07-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 01 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2016-07-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>July 2019</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2016-07-01')
 ```
 
 ## 2020
 
 ### February 2020
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2020-02-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 02 & year(Date_Death) == 2020) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2020-02-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>February 2020</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2020-02-01')
 ```
 
 ### September 2021
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2021-09-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 09 & year(Date_Death) == 2021) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>September 2021</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2021-09-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2021-09-01')
+```
+
 
 ### October 2021
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2021-10-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 10 & year(Date_Death) == 2021) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>October 2021</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2021-10-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2021-10-01')
+```
+
 
 ### December 2021
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2021-12-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 01 & year(Date_Death) == 2018) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>December 2021</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2021-12-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2021-12-01')
+```
+
 
 ## 2022
 ### January 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2022-01-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 01 & year(Date_Death) == 2022) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>January 2022</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2022-01-01')
 ```
 
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2022-01-01')
+```
+
+
 ### April 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2022-04-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 04 & year(Date_Death) == 2022) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2022-04-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>April 2022</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2022-04-01')
 ```
 
 ### May 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2022-05-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 05 & year(Date_Death) == 2022) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2022-05-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>May 2022</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2022-05-01')
 ```
 
 ### June 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2022-06-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 06 & year(Date_Death) == 2022) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>June 2022</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2022-06-01')
 ```
 
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2022-06-01')
+```
+
+
 ### September 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2022-09-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 09 & year(Date_Death) == 2022) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2022-09-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>September 2022</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2022-09-01')
 ```
 
 ### December 2022
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2022-12-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 12 & year(Date_Death) == 2022) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2022-12-01')
+```
 
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-
-leaflet(data) %>%
-  addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-  addCircleMarkers(
-    radius = ~sqrt(sqrt(1/p_values)),
-    color = ~pal(sqrt(sqrt(1/p_values))),
-    fillOpacity = .45,
-    stroke = TRUE,
-    label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-  addControl(
-    position = "bottomleft",
-    html = "<b style='font-size: 28px;'>December 2022</b>"
-  ) %>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2022-12-01')
 ```
 
 ## 2023
 
 ### February 2023
-```{r echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-data <- interesting %>% filter(month == '2023-02-01')
 
-manners <- deaths %>%
-  filter(month(Date_Death) == 02 & year(Date_Death) == 2023) %>%
-  group_by(FACILITY_description, Manner_Death) %>% 
-  summarise(count = n()) %>% 
-  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  select(FACILITY_description, everything())
-
-# Define a continuous color palette
-palette_name <- "YlOrRd"
-num_colors <- 9  # Number of colors in the palette
-colors <- brewer.pal(n = num_colors, name = palette_name)[(num_colors / 2 + 1):num_colors]
-pal <- colorNumeric(palette = colors, domain = sqrt(sqrt(1/data$p_values)))
-
-leaflet(data) %>%
-    addTiles(urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", 
-             options = tileOptions(minZoom = 1, maxZoom = 19)) %>%
-    addCircleMarkers(
-        radius = ~sqrt(sqrt(1/p_values)),
-        color = ~pal(sqrt(sqrt(1/p_values))),
-        fillOpacity = .45,
-        stroke = TRUE,
-        label = ~paste("Facility:\n", FACILITY_description, "# Deaths: ", Total_month_naturalDeaths, "P_value:", round(p_values, 3))
-    ) %>%
-    addControl(
-        position = "bottomleft",
-        html = "<b style='font-size: 28px;'>February 2023</b>"
-    )%>%
-    setView(lng = -84, lat = 28.3, zoom = 6.5)
-kable(data %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>% 
-  kable_styling(latex_options = "hold_position")
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+mapping_naturals('2023-02-01')
 ```
+
+```{r, echo=FALSE, code_folding = TRUE}
+create_kable_table('2023-02-01')
+```
+
