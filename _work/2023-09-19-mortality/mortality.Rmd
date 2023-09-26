@@ -414,7 +414,19 @@ In the following analysis, we examine maps of groups of facilities that experien
 
 While it is valid to compare the p-values across maps by observing the size of the markers, it is not valid to compare colorations across maps at this time. This is because the colors of each map cover the spectrum of their respective associated data entries. Please note that this is a coding issue that I hope to fix soon.
 
-```{r flip through, echo=TRUE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+<head>
+  <style>
+    /* Your CSS styles go here */
+  </style>
+</head>
+<body>
+  <h3>Coding work:</h3>
+  <ul>
+    <li>
+      <details>
+        <summary>Discovering and Grouping Facilities</summary>
+        <p>
+```{r flip through, echo=TRUE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = FALSE}
 per_month_natural2 <- deaths %>%
   filter(Manner_Death == 'Natural') %>%
   group_by(FACILITY_description, month = floor_date(Date_Death, unit = "month")) %>%
@@ -456,9 +468,7 @@ generate_group_names <- function(group_indices) {
   return(group_names)
 }
 summary_data1$group_names <- generate_group_names(summary_data1$group_index)
-```
 
-```{r echo=FALSE, code_folding = TRUE}
 groupz <- summary_data1
 groupz2 <- merge(groupz, cords, by = 'FACILITY_description') %>% arrange(month)
 interesting_groups <- groupz2 %>%
@@ -472,10 +482,17 @@ interest$p_values <- ifelse(is.na(interest$p_values) | is.nan(interest$p_values)
 interesting <- merge(interest, cords[seq(1,138),], by = 'FACILITY_description') %>% arrange(month) #%>% filter(p_values<=0.25)
 interesting$p_values[interesting$p_values == 0] <- 1e-6
 interesting$high[is.na(interesting$high)] <- FALSE
-
 ```
 
-```{r leaflet and kable function def, echo=FALSE, code_folding = TRUE}
+  </p>
+  </details>
+  </li>
+  <li>
+    <details>
+      <summary>Building function for mappings</summary>
+      <p>
+
+```{r}
 mapping_naturals <- function(date) {
   data <- interesting %>% filter(month == date)
   manners <- deaths %>% 
@@ -507,12 +524,33 @@ mapping_naturals <- function(date) {
     ) %>%
     setView(lng = -84, lat = 28.3, zoom = 6.5)
 }
-
+```
+     
+  
+  </p>
+  </details>
+  </li>
+  <li>
+    <details>
+      <summary>Building function for tables</summary>
+      <p>
+```{r leaflet and kable function def, echo=FALSE, code_folding = FALSE}
 create_kable_table <- function(date) {
   kable(interesting %>% filter(month == as.Date(date)) %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>%
     kable_styling(latex_options = "hold_position")
 }
 ```
+
+  </p>
+  </details>
+  </li>
+  </ul>
+</body>
+
+
+
+
+
 
 
 ## 2015

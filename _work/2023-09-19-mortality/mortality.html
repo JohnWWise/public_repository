@@ -8804,11 +8804,23 @@ p_values
 <h1 id="groupings-across-space-natural-deaths">Groupings Across Space, Natural Deaths</h1>
 <p>In the following analysis, we examine maps of groups of facilities that experienced months with statistically significant natural death counts. The plots that follow show all facilities that had at least one death during the respective month. The size and color of the markers correspond to the p-value, which represents the likelihood of observing such a high value for that facility based on its individual historical death data. Less likely results are plotted larger and redder than death counts that are more typical for that facility. You can see the labels for the facilities by hovering over the individual map markers.</p>
 <p>While it is valid to compare the p-values across maps by observing the size of the markers, it is not valid to compare colorations across maps at this time. This is because the colors of each map cover the spectrum of their respective associated data entries. Please note that this is a coding issue that I hope to fix soon.</p>
-<div class="layout-chunk" data-layout="l-body">
+<head>
+<style>
+
+</style>
+</head>
+<body>
+<h3>
+Coding work:
+</h3>
+<ul>
+<li>
 <details>
 <summary>
-Show code
+Discovering and Grouping Facilities
 </summary>
+<p>
+<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">per_month_natural2</span> <span class="op">&lt;-</span> <span class="va">deaths</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Manner_Death</span> <span class="op">==</span> <span class="st">&#39;Natural&#39;</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -8850,17 +8862,9 @@ Show code
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">group_names</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="va">summary_data1</span><span class="op">$</span><span class="va">group_names</span> <span class="op">&lt;-</span> <span class="fu">generate_group_names</span><span class="op">(</span><span class="va">summary_data1</span><span class="op">$</span><span class="va">group_index</span><span class="op">)</span></span></code></pre>
-</div>
-</details>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<details>
-<summary>
-Show code
-</summary>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">groupz</span> <span class="op">&lt;-</span> <span class="va">summary_data1</span></span>
+<span><span class="va">summary_data1</span><span class="op">$</span><span class="va">group_names</span> <span class="op">&lt;-</span> <span class="fu">generate_group_names</span><span class="op">(</span><span class="va">summary_data1</span><span class="op">$</span><span class="va">group_index</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">groupz</span> <span class="op">&lt;-</span> <span class="va">summary_data1</span></span>
 <span><span class="va">groupz2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span><span class="va">groupz</span>, <span class="va">cords</span>, by <span class="op">=</span> <span class="st">&#39;FACILITY_description&#39;</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">arrange</span><span class="op">(</span><span class="va">month</span><span class="op">)</span></span>
 <span><span class="va">interesting_groups</span> <span class="op">&lt;-</span> <span class="va">groupz2</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="op">(</span><span class="va">month</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">&quot;2020-03-09&quot;</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">month</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">&quot;2021-08-25&quot;</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -8874,13 +8878,17 @@ Show code
 <span><span class="va">interesting</span><span class="op">$</span><span class="va">p_values</span><span class="op">[</span><span class="va">interesting</span><span class="op">$</span><span class="va">p_values</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1e-6</span></span>
 <span><span class="va">interesting</span><span class="op">$</span><span class="va">high</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">interesting</span><span class="op">$</span><span class="va">high</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span></code></pre>
 </div>
-</details>
 </div>
-<div class="layout-chunk" data-layout="l-body">
+</p>
+</details>
+</li>
+<li>
 <details>
 <summary>
-Show code
+Building function for mappings
 </summary>
+<p>
+<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">mapping_naturals</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">interesting</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">month</span> <span class="op">==</span> <span class="va">date</span><span class="op">)</span></span>
@@ -8912,15 +8920,26 @@ Show code
 <span>      html <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">&quot;&lt;b style=&#39;font-size: 28px;&#39;&gt;&quot;</span>, <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, <span class="st">&quot;%B %Y&quot;</span><span class="op">)</span>, <span class="st">&quot;&lt;/b&gt;&quot;</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>    <span class="fu">setView</span><span class="op">(</span>lng <span class="op">=</span> <span class="op">-</span><span class="fl">84</span>, lat <span class="op">=</span> <span class="fl">28.3</span>, zoom <span class="op">=</span> <span class="fl">6.5</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">create_kable_table</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">kable</span><span class="op">(</span><span class="va">interesting</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">month</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">FACILITY_description</span>,<span class="va">Total_month_naturalDeaths</span>,<span class="va">p_values</span>,<span class="va">high</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">arrange</span><span class="op">(</span><span class="va">p_values</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">kable_styling</span><span class="op">(</span>latex_options <span class="op">=</span> <span class="st">&quot;hold_position&quot;</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 </div>
-</details>
 </div>
+</p>
+</details>
+</li>
+<li>
+<details>
+<summary>
+Building function for tables
+</summary>
+<p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+</p>
+</details>
+</li>
+</ul>
+</body>
 <h2 id="section">2015</h2>
 <h3 id="december-2015">December 2015</h3>
 <div class="layout-chunk" data-layout="l-body">
