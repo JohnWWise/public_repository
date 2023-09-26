@@ -17,10 +17,8 @@ navbar:
       menu:
         - text: "Introduction to John Wise"
           href: intro.html
-        - text: "Resume"
+        - text: "Resume/CV"
           href: resume.html
-        - text: "CV"
-          href: cv.html
         - text: "Cats"
           href: cats.html
         - text: "Contact"
