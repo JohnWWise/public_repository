@@ -534,7 +534,7 @@ mapping_naturals <- function(date) {
     <details>
       <summary>Building function for tables</summary>
       <p>
-```{r leaflet and kable function def, echo=FALSE, code_folding = FALSE}
+```{r kable function def, code_folding = FALSE}
 create_kable_table <- function(date) {
   kable(interesting %>% filter(month == as.Date(date)) %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>%
     kable_styling(latex_options = "hold_position")
