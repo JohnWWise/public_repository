@@ -718,8 +718,8 @@ mapping_naturals('2016-07-01')
 ```
 
 ```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-high_facilities_facet_plotter('2016-07-01', interesting, per_month_natural2)
-create_kable_table('2016-07-01')
+high_facilities_facet_plotter('2019-07-01', interesting, per_month_natural2)
+create_kable_table('2019-07-01')
 ```
 
 ## 2020
