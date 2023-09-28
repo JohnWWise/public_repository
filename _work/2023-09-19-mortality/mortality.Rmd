@@ -1,7 +1,7 @@
 ---
 title: "Investigation of FDOC Public 'Inmate Mortality Data'"
 description: |
-  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (NOTE, error discovered and corrected 2023-09-26 1:51 pm, typoed entry "Acdident" (sic) was erroously cleaned and recoded to the value "Suicide". Now amended to be the proper "Accident".)
+  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (NOTE, added natural deaths historical plot by facility for high-scoring facilites in groupings across space section)
 output:
   distill::distill_article:
     toc: true
@@ -87,7 +87,6 @@ pkgs = c("tidyverse",
          "purrr",
          "RColorBrewer",
          "readxl",
-         "waffle",
          "ggforce",
          "viridis")
 inst = lapply(pkgs, library, character.only = TRUE)
@@ -440,8 +439,11 @@ t_value <- function(data, indices) {
 
 per_month_natural2 <- per_month_natural2 %>%
   group_by(FACILITY_description) %>%
-  mutate(p_values = 1 - pnorm(boot(Total_month_naturalDeaths, t_value, R = 1000)$t0),
-            high = p_values <= 0.05)
+  mutate(
+    t_values = boot(Total_month_naturalDeaths, t_value, R = 1000)$t0,  # Get t-values
+    p_values = pnorm(t_values, lower.tail = FALSE),
+    high = p_values <= 0.05
+  )
 
 per_month_natural2$FACILITY_description <- as.factor(per_month_natural2$FACILITY_description)
 summary_data1 <- per_month_natural2 %>%
@@ -479,7 +481,7 @@ interest <- per_month_natural2 %>%
   filter(month %in% weeks_of_interest_mult)
 interest$p_values <- ifelse(is.na(interest$p_values) | is.nan(interest$p_values), 0.5, interest$p_values)
 
-interesting <- merge(interest, cords[seq(1,138),], by = 'FACILITY_description') %>% arrange(month) #%>% filter(p_values<=0.25)
+interesting <- merge(interest, cords[seq(1,138),], by = 'FACILITY_description') %>% arrange(month) %>% filter(p_values<=0.33)
 interesting$p_values[interesting$p_values == 0] <- 1e-6
 interesting$high[is.na(interesting$high)] <- FALSE
 ```
@@ -532,12 +534,32 @@ mapping_naturals <- function(date) {
   </li>
   <li>
     <details>
-      <summary>Building function for tables</summary>
+      <summary>Building function for tables and flip-plots</summary>
       <p>
 ```{r kable function def, code_folding = FALSE}
 create_kable_table <- function(date) {
   kable(interesting %>% filter(month == as.Date(date)) %>% select(FACILITY_description,Total_month_naturalDeaths,p_values,high) %>% arrange(p_values)) %>%
     kable_styling(latex_options = "hold_position")
+}
+
+high_facilities_facet_plotter <- function(block, high_frame, frame){
+  facilities_high <- high_frame %>% filter(month == as.Date(block) & high == TRUE) %>% select(1)
+  facilities_data <- merge(frame, facilities_high, by = 'FACILITY_description') %>% select(FACILITY_description, month, Total_month_naturalDeaths, p_values, high)
+  block_date <- ymd(block)
+  xmax_date <- block_date + days(30)
+  ggplot(facilities_data, aes(x = month, y = Total_month_naturalDeaths, fill = high)) +
+  geom_rect(aes(xmin = block_date, xmax = block_date + days(30), ymin = -Inf, ymax = Inf), fill = "yellow", alpha = 0.7) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~FACILITY_description, ncol = 1, strip.position = "top") +  # Labels on the top doesn't work!
+  theme_minimal() +
+  scale_x_date(limits = as.Date(c("2015-07-01", "2023-08-01"), format = "%Y-%m-%d")) +
+  theme(
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 2), # Add black borders
+    panel.spacing = unit(0.5, "lines"), # Adjust spacing between panels
+    strip.text = element_text(face = "bold")  # Bolden the strip labels
+  ) +
+  guides(fill = FALSE) +
+  facet_grid(FACILITY_description ~ ., scales = "free_y")
 }
 ```
 
@@ -561,7 +583,8 @@ create_kable_table <- function(date) {
 mapping_naturals('2015-12-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2015-12-01', interesting, per_month_natural2)
 create_kable_table('2015-12-01')
 ```
 
@@ -573,7 +596,8 @@ create_kable_table('2015-12-01')
 mapping_naturals('2016-01-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2016-01-01', interesting, per_month_natural2)
 create_kable_table('2016-01-01')
 ```
 
@@ -585,7 +609,8 @@ create_kable_table('2016-01-01')
 mapping_naturals('2016-02-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2016-02-01', interesting, per_month_natural2)
 create_kable_table('2016-02-01')
 ```
 
@@ -597,7 +622,8 @@ create_kable_table('2016-02-01')
 mapping_naturals('2016-06-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2016-06-01', interesting, per_month_natural2)
 create_kable_table('2016-06-01')
 ```
 
@@ -607,7 +633,8 @@ create_kable_table('2016-06-01')
 mapping_naturals('2016-07-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2016-07-01', interesting, per_month_natural2)
 create_kable_table('2016-07-01')
 ```
 
@@ -620,7 +647,8 @@ create_kable_table('2016-07-01')
 mapping_naturals('2018-01-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2018-01-01', interesting, per_month_natural2)
 create_kable_table('2018-01-01')
 ```
 
@@ -630,7 +658,8 @@ create_kable_table('2018-01-01')
 mapping_naturals('2018-02-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2018-02-01', interesting, per_month_natural2)
 create_kable_table('2018-02-01')
 ```
 
@@ -638,11 +667,12 @@ create_kable_table('2018-02-01')
 ### March 2018
 
 ```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-mapping_naturals('2018-02-01')
+mapping_naturals('2018-03-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
-create_kable_table('2018-02-01')
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2018-03-01', interesting, per_month_natural2)
+create_kable_table('2018-03-01')
 ```
 
 
@@ -652,7 +682,8 @@ create_kable_table('2018-02-01')
 mapping_naturals('2018-05-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2018-05-01', interesting, per_month_natural2)
 create_kable_table('2018-05-01')
 ```
 
@@ -662,7 +693,8 @@ create_kable_table('2018-05-01')
 mapping_naturals('2018-10-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2018-10-01', interesting, per_month_natural2)
 create_kable_table('2018-10-01')
 ```
 
@@ -674,7 +706,8 @@ create_kable_table('2018-10-01')
 mapping_naturals('2019-01-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2019-01-01', interesting, per_month_natural2)
 create_kable_table('2019-01-01')
 ```
 
@@ -684,7 +717,8 @@ create_kable_table('2019-01-01')
 mapping_naturals('2016-07-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2016-07-01', interesting, per_month_natural2)
 create_kable_table('2016-07-01')
 ```
 
@@ -696,7 +730,8 @@ create_kable_table('2016-07-01')
 mapping_naturals('2020-02-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2020-02-01', interesting, per_month_natural2)
 create_kable_table('2020-02-01')
 ```
 
@@ -706,7 +741,8 @@ create_kable_table('2020-02-01')
 mapping_naturals('2021-09-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2021-09-01', interesting, per_month_natural2)
 create_kable_table('2021-09-01')
 ```
 
@@ -717,7 +753,8 @@ create_kable_table('2021-09-01')
 mapping_naturals('2021-10-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2021-10-01', interesting, per_month_natural2)
 create_kable_table('2021-10-01')
 ```
 
@@ -728,7 +765,8 @@ create_kable_table('2021-10-01')
 mapping_naturals('2021-12-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2021-12-01', interesting, per_month_natural2)
 create_kable_table('2021-12-01')
 ```
 
@@ -740,7 +778,8 @@ create_kable_table('2021-12-01')
 mapping_naturals('2022-01-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2022-01-01', interesting, per_month_natural2)
 create_kable_table('2022-01-01')
 ```
 
@@ -751,30 +790,10 @@ create_kable_table('2022-01-01')
 mapping_naturals('2022-04-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE,  fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2022-04-01', interesting, per_month_natural2)
 create_kable_table('2022-04-01')
 ```
-
-### May 2022
-
-```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-mapping_naturals('2022-05-01')
-```
-
-```{r, echo=FALSE, code_folding = TRUE}
-create_kable_table('2022-05-01')
-```
-
-### June 2022
-
-```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
-mapping_naturals('2022-06-01')
-```
-
-```{r, echo=FALSE, code_folding = TRUE}
-create_kable_table('2022-06-01')
-```
-
 
 ### September 2022
 
@@ -782,7 +801,8 @@ create_kable_table('2022-06-01')
 mapping_naturals('2022-09-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE,fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2022-09-01', interesting, per_month_natural2)
 create_kable_table('2022-09-01')
 ```
 
@@ -792,7 +812,8 @@ create_kable_table('2022-09-01')
 mapping_naturals('2022-12-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE,fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+high_facilities_facet_plotter('2022-12-01', interesting, per_month_natural2)
 create_kable_table('2022-12-01')
 ```
 
@@ -804,7 +825,8 @@ create_kable_table('2022-12-01')
 mapping_naturals('2023-02-01')
 ```
 
-```{r, echo=FALSE, code_folding = TRUE}
+```{r, echo=FALSE, fig.align='center', fig.height=8, fig.width= 10, warning=FALSE, message=FALSE,code_folding = TRUE}
+high_facilities_facet_plotter('2023-02-01', interesting, per_month_natural2)
 create_kable_table('2023-02-01')
 ```
 
