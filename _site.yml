@@ -21,6 +21,6 @@ navbar:
           href: resume.html
         - text: "Cats"
           href: cats.html
-        - text: "Contact"
-          href: contact.html
+        - text: "Email"
+          href: "mailto:jwalterwi@gmail.com"
 output: distill::distill_article
