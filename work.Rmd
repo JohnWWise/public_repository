@@ -2,5 +2,3 @@
 title: "Analysis"
 listing: work
 ---
-
-can I add content directly to this page?

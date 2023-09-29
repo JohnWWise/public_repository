@@ -171,41 +171,41 @@ write_csv(deaths, 'deaths1.csv')
 
 ```{r cleaning typos and mis-entries: collapsing factors, echo=TRUE}
 # Manner of Death Data Cleaning
-deaths$Manner_Death <- recode(deaths$Manner_Death, "Natrual" = "Natural")
-deaths$Manner_Death <- recode(deaths$Manner_Death, "CLOSED" = "Closed")
-deaths$Manner_Death <- recode(deaths$Manner_Death, "4Suicide" = "Suicide")
-deaths$Manner_Death <- recode(deaths$Manner_Death, "Acdident" = "Accident")
+deaths$Manner_Death <- recode(deaths$Manner_Death, "Natrual" = "Natural",
+                              "CLOSED" = "Closed",
+                              "4Suicide" = "Suicide",
+                              "Acdident" = "Accident")
 
 # Facilities Data Cleaning
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Apalachee East" = "APALACHEE EAST UNIT")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "BAKER Re-Entry" = "BAKER RE-ENTRY CENTR")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Blackwater CF" = "BLACKWATER C.F.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "CFRC" = "CFRC-MAIN")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "CFRC East" = "CFRC-EAST")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "CFRC South" = "CFRC-SOUTH")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "COLUMBIA C.I." = "COLUMBIA CI")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Charlotte" = "CHARLOTTE C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Cross City" = "CROSS CITY C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "FSP West" = "FSP WEST UNIT")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Hamilton Annex" = "HAMILTON ANNEX")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Hardee" = "HARDEE C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Hardee Work Camp" = "HARDEE WORK CAMP")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "LAKE CITY" = "LAKE CITY C.F.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Lake" = "LAKE C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Marion" = "MARION C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Okeechobee" = "OKEECHOBEE C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "RMC-Main Unit" = "R.M.C.- MAIN UNIT")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "R.M.C.-MAIN UNIT" = "R.M.C.- MAIN UNIT")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "S.F.R.C" = "S.F.R.C.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "S.F.R.C. SOUTH" = "S.F.R.C. SOUTH UNIT")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "SFRC" = "S.F.R.C.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "SUMTER  C.I." = "SUMTER C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Suwannee Annex" = "SUWANNEE C.I. ANNEX")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Taylor" = "TAYLOR C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Union" = "UNION C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Wakulla" = "WAKULLA C.I.")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Wakulla Annex" = "WAKULLA ANNEX")
-deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Walton" = "WALTON C.I.")
+deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Apalachee East" = "APALACHEE EAST UNIT",
+                                      "BAKER Re-Entry" = "BAKER RE-ENTRY CENTR",
+                                      "Blackwater CF" = "BLACKWATER C.F.",
+                                      "CFRC" = "CFRC-MAIN",
+                                      "CFRC East" = "CFRC-EAST", 
+                                      "CFRC South" = "CFRC-SOUTH", 
+                                      "COLUMBIA C.I." = "COLUMBIA CI", 
+                                      "Charlotte" = "CHARLOTTE C.I.", 
+                                      "Cross City" = "CROSS CITY C.I.", 
+                                      "FSP West" = "FSP WEST UNIT", 
+                                      "Hamilton Annex" = "HAMILTON ANNEX", 
+                                      "Hardee" = "HARDEE C.I.", 
+                                      "Hardee Work Camp" = "HARDEE WORK CAMP", 
+                                      "LAKE CITY" = "LAKE CITY C.F.", 
+                                      "Lake" = "LAKE C.I.", 
+                                      "Marion" = "MARION C.I.", 
+                                      "Okeechobee" = "OKEECHOBEE C.I.", 
+                                      "RMC-Main Unit" = "R.M.C.- MAIN UNIT", 
+                                      "R.M.C.-MAIN UNIT" = "R.M.C.- MAIN UNIT", 
+                                      "S.F.R.C" = "S.F.R.C.", 
+                                      "S.F.R.C. SOUTH" = "S.F.R.C. SOUTH UNIT", 
+                                      "SFRC" = "S.F.R.C.", 
+                                      "SUMTER  C.I." = "SUMTER C.I.", 
+                                      "Suwannee Annex" = "SUWANNEE C.I. ANNEX", 
+                                      "Taylor" = "TAYLOR C.I.", 
+                                      "Union" = "UNION C.I.", 
+                                      "Wakulla" = "WAKULLA C.I.", 
+                                      "Wakulla Annex" = "WAKULLA ANNEX", 
+                                      "Walton" = "WALTON C.I.")
 
 # there are three records for which the cause of death was determined to be 'Undetermined' and three records for 
 #which this variable was valued as 'Closed'. This "Closed" is meant to be a category for investigative status, 
