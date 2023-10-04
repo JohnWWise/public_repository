@@ -1,7 +1,7 @@
 ---
-title: "FDOC Returns"
+title: "FDOC Reincarceration"
 description: |
-  This document is an ongoing investigation into the data available on individuals who have returned to prison. I choose not to use the term "recidivism" because it is often associated with a punitive and stigmatizing perspective on individuals who have been involved with the criminal legal system. The term implies a focus on reoffending and the idea of a "criminal" identity, rather than acknowledging the complex social, economic, and systemic factors at play.
+  This document is an ongoing investigation into the data available reincarcerations in Florida. I choose not to use the term "recidivism", as the term implies a focus on reoffending and the idea of a "criminal" identity, rather than acknowledging the complex social, economic, and systemic factors at play.
 output:
   distill::distill_article:
     toc: true
@@ -95,6 +95,8 @@ public <- current_incarcerated_returned_less_1year %>% select(-DCNumber, -FirstN
 
 # Inital Look
 
+## Time Free Since Last Release
+
 To begin, we should examine the amount of time that those who are currently incarcerated in Florida were free since their last incarceration:
 
 ```{r fig.align='center', fig.height=8, fig.width=8, code_folding = TRUE}
@@ -118,7 +120,7 @@ Wherein we see that the vast majority of those who are currently incarcerated an
 quartiles <- round(quantile(returners_time_free$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
 
 quartile_table <- data.frame(
-  "Quartile" = c("Q1", "Median (Q2)", "Q3"),  # Change the column name here
+  "Quartile" = c("Q1", "Median (Q2)", "Q3"),
   Years_Free = quartiles
 )
 
@@ -128,12 +130,19 @@ kable(quartile_table) %>%
 ```
 
 
-We often come across statistics that state "X amount of prisoners will return within 3 years". However, a more appropriate framing would be that among those currently incarcerated in Florida who have served time previously, a staggering quarter of them were returned to prison in less than 1.8 years after their most recent release. Half were not out longer than 3.2 years. Additionally, only 25% of them were able to stay out of prison for longer than 5.7 years.
+We frequently encounter statistics that state "X amount of prisoners will return within 5 years." However, a more appropriate way to present this information is to focus on the current incarcerated population in Florida who have served time before. Shockingly, a quarter of them were returned to prison in less than 1.8 years after their most recent release, while half of them were not out longer than 3.2 years. Moreover, only 25% of them managed to stay out of prison for more than 5.7 years.
 
-This subtle change in framing highlights the inefficiency of traditional carceral structures in "preventing recidivism" while maintaining proper responsibility attribution to the correctional agency.
+This subtle change in framing emphasizes the inefficiency of traditional carceral structures in preventing recidivism, while also highlighting the responsibility of the correctional agency. If the purpose of a sentence is to 'correct,' why do we frequently find the need to re-correct so soon?
+
+
+## County of most Recent Commitment
+
+
+## Charges
+
 
 # Returns Less than 1 Year
-I have identified 4260 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration.
+I have identified 4253 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration.
 
 ```{r code_folding = TRUE}
 datatable(public, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
