@@ -13,6 +13,11 @@ The Florida Department of Corrections makes its OBIS database accessible for pub
 
 This document is an ONGOING mining of that data. Keep an eye out for my newsletter (which doesn’t exist yet) for updates, or press f5 to refresh.
 
+<ul>
+    <li>
+      <details>
+        <summary>Importing libraries, setting seed</summary>
+        <p>
 ```{r libraries and seed, echo=TRUE}
 # Packages utilized:
 pkgs = c("readxl",
@@ -21,17 +26,23 @@ pkgs = c("readxl",
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
+  </p>
+  </details>
+  </li>
+</ul>
 
 Since my github respoitory is being finicky about large file sizes and the size of the fdoc file of all releases on record is quite large, we limit ourselves to the data on returns for those who are currently incarcerated. That is, we look at everyone who is currently incarcerated and retuned to prison within one year of thier most recent release.
 
+<ul>
+    <li>
+      <details>
+        <summary>Importing Data, Identifying Population for Analysis</summary>
+        <p>
 ```{r}
 base_dir <- "/Users/johnwise/Downloads"
 Root <- read_excel(paste0(base_dir, "/Inmate_Active_2023-10.XLSX"))
 Incarhist <- read_excel(paste0(base_dir, "/Inmate_Active_2023-10.XLSX"), sheet = 6)
-```
 
-```{r}
-# Identify those who are in for first offense
 first_timers <- Incarhist %>%
   arrange(DCNumber, desc(ReceiptDate)) %>%
   group_by(DCNumber) %>%
@@ -41,9 +52,8 @@ first_timers <- Incarhist %>%
   count(DCNumber) %>%
   filter(n==1)
 ```
-
+Remove first-timers from analysis, filter for those out less than 1 year on most recent release
 ```{r}
-# remove first-timers from analysis, filter for those out less than 1 year on most recent release
 returners <- anti_join(Incarhist, first_timers, by ='DCNumber')
 # grab the two most recent receipts of those who have returned
 returners_current_and_last <- returners %>%
@@ -53,27 +63,35 @@ returners_current_and_last <- returners %>%
   filter(row_num <= 2) %>%
   select(-row_num)
 ```
-
+Discovering the amount of time each person was free last time they were out
 ```{r}
-# discovering the amount of time each person was free last time they were out
 returners_time_free <- returners_current_and_last %>%
   group_by(DCNumber) %>%
   summarise(TimeOut = as.numeric(difftime(max(ReceiptDate, na.rm = TRUE), max(ReleaseDate, na.rm = TRUE), units = "days")))
 ```
-
+Isolating those out less than one year on most recent release
 ```{r}
-# isolating those out less than one year on most recent release
 short_out <- returners_time_free %>%
   filter(TimeOut <= 365)
 ```
-
+Going back to fetch general information on those identified
 ```{r}
 current_incarcerated_returned_less_1year <- merge(Root, short_out, by = 'DCNumber')
 ```
-
+Removing DCNumbers and names before public display
 ```{r}
-# removing DCNumbers and names before public display
 public <- current_incarcerated_returned_less_1year %>% select(-DCNumber, -FirstName, -LastName, -MiddleName, -BirthDate, -NameSuffix)
+```
+
+  </p>
+  </details>
+  </li>
+</ul>
+
+
+```{r code_folding = TRUE}
 datatable(public, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
-To clarify, I have identified 4260 individuals who are currently incarcerated. These individuals had previously been incarcerated and were out for less than one year since their release from that previous incarceration. The analysis will begin shortly.
+
+
+I have identified 4260 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration. The analysis will begin shortly.
