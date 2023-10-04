@@ -22,7 +22,9 @@ This document is an ONGOING mining of that data. Keep an eye out for my newslett
 # Packages utilized:
 pkgs = c("readxl",
          "dplyr",
-         "DT")
+         "DT",
+         "ggforce",
+         "kableExtra")
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
@@ -67,7 +69,9 @@ Discovering the amount of time each person was free last time they were out
 ```{r}
 returners_time_free <- returners_current_and_last %>%
   group_by(DCNumber) %>%
-  summarise(TimeOut = as.numeric(difftime(max(ReceiptDate, na.rm = TRUE), max(ReleaseDate, na.rm = TRUE), units = "days")))
+  summarise(TimeOut = as.numeric(difftime(max(ReceiptDate, na.rm = TRUE), max(ReleaseDate, na.rm = TRUE), units = "days"))) %>% # Note, there were 7 entires for which a negative time free was calculated. Investigation shows
+  filter(TimeOut >= 0) # that this is due to these individuals having missing most ReceiptDate for most recent conviction.
+# We omit these 7 observations for the purpose of this analysis
 ```
 Isolating those out less than one year on most recent release
 ```{r}
@@ -89,9 +93,48 @@ public <- current_incarcerated_returned_less_1year %>% select(-DCNumber, -FirstN
 </ul>
 
 
+# Inital Look
+
+To begin, we should examine the amount of time that those who are currently incarcerated in Florida were free since their last incarceration:
+
+```{r fig.align='center', fig.height=8, fig.width=8, code_folding = TRUE}
+ggplot(returners_time_free, aes(x = 1, y = TimeOut/365.25)) +
+  geom_sina(alpha = 0.5, position = 'dodge') +
+  ylab("Years Free") +
+  scale_y_continuous(breaks = seq(0, max(returners_time_free$TimeOut), by = 1),
+                     labels = function(x) ifelse(x %% 1 == 0, as.integer(x), ""),
+                     limits = c(0, max(returners_time_free$TimeOut/365.25))) +
+  theme(axis.text.x = element_blank()) +
+  geom_boxplot(data = returners_time_free, aes(x = 1, y = TimeOut/365.25), 
+               size = .75, outlier.shape = NA, color = 'hotpink', alpha = 0.1) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank()) +
+  labs(title = "Density of Years Free Before Returning to Prison")
+```
+
+Wherein we see that the vast majority of those who are currently incarcerated and had done time in Florida previously were not free for very long before their current commitment. 
+
 ```{r code_folding = TRUE}
-datatable(public, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+quartiles <- round(quantile(returners_time_free$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
+
+quartile_table <- data.frame(
+  "Quartile" = c("Q1", "Median (Q2)", "Q3"),  # Change the column name here
+  Years_Free = quartiles
+)
+
+kable(quartile_table) %>% 
+  kable_styling(latex_options = "hold_position")
+
 ```
 
 
-I have identified 4260 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration. The analysis will begin shortly.
+We often come across statistics that state "X amount of prisoners will return within 3 years". However, a more appropriate framing would be that among those currently incarcerated in Florida who have served time previously, a staggering quarter of them were returned to prison in less than 1.8 years after their most recent release. Half were not out longer than 3.2 years. Additionally, only 25% of them were able to stay out of prison for longer than 5.7 years.
+
+This subtle change in framing highlights the inefficiency of traditional carceral structures in "preventing recidivism" while maintaining proper responsibility attribution to the correctional agency.
+
+# Returns Less than 1 Year
+I have identified 4260 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration.
+
+```{r code_folding = TRUE}
+datatable(public, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
