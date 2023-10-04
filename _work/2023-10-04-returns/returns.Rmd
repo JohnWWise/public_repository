@@ -1,0 +1,14 @@
+---
+title: "FDOC Returns"
+description: |
+  This document is an ongoing investigation into the data available on individuals who have returned to prison. I choose not to use the term "recidivism" because it is often associated with a punitive and stigmatizing perspective on individuals who have been involved with the criminal legal system. The term implies a focus on reoffending and the idea of a "criminal" identity, rather than acknowledging the complex social, economic, and systemic factors at play.
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    df_print: paged
+---
+The Florida Department of Corrections makes its OBIS database accessible for public download [here](https://fdc.myflorida.com/pub/obis_request.html).
+
+This document is an ONGOING mining of that data. Keep an eye out for my newsletter (which doesn’t exist yet) for updates, or press f5 to refresh.
