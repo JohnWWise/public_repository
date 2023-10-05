@@ -35,8 +35,6 @@ set.seed(8675309)
   </li>
 </ul>
 
-Since my github respoitory is being finicky about large file sizes and the size of the fdoc file of all releases on record is quite large, we limit ourselves to the data on returns for those who are currently incarcerated. That is, we look at everyone who is currently incarcerated and retuned to prison within one year of thier most recent release.
-
 <ul>
     <li>
       <details>
