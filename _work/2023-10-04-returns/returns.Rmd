@@ -188,6 +188,8 @@ cat("p-value:", p_value, "\n")
 ```
 To translate, we have exceptionally compelling statistical evidence that shows a very strong correlation between the duration of incarceration and the likelihood of being re-incarcerated. Based on the experiences of currently incarceratd population of Florida prisons, each year spent behind bars is associated with a decrease of approximately 6 weeks in their expected time until re-incarceration.
 
+### Time Free
+
 ```{r code_folding = TRUE}
 quartile_table <- data.frame(
   "Quartile" = c("Q1", "Median (Q2)", "Q3"),
