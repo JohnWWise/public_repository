@@ -24,7 +24,9 @@ pkgs = c("readxl",
          "dplyr",
          "DT",
          "ggforce",
-         "kableExtra")
+         "kableExtra",
+         "viridis",
+         "boot")
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
@@ -54,7 +56,7 @@ first_timers <- Incarhist %>%
   count(DCNumber) %>%
   filter(n==1)
 ```
-Remove first-timers from analysis, filter for those out less than 1 year on most recent release
+Remove first-timers from analysis
 ```{r}
 returners <- anti_join(Incarhist, first_timers, by ='DCNumber')
 # grab the two most recent receipts of those who have returned
@@ -65,6 +67,13 @@ returners_current_and_last <- returners %>%
   filter(row_num <= 2) %>%
   select(-row_num)
 ```
+Calcualte time total time served for each person prior to most recent incarceration
+```{r}
+served_prior <- returners %>%
+  mutate(time_served = ifelse(!is.na(ReleaseDate), as.numeric(difftime(ReleaseDate, ReceiptDate, units = "days")), NA)) %>%
+  group_by(DCNumber) %>%
+  summarize(prev_TimeServed = sum(time_served, na.rm = TRUE))
+```
 Discovering the amount of time each person was free last time they were out
 ```{r}
 returners_time_free <- returners_current_and_last %>%
@@ -73,18 +82,21 @@ returners_time_free <- returners_current_and_last %>%
   filter(TimeOut >= 0) # that this is due to these individuals having missing most ReceiptDate for most recent conviction.
 # We omit these 7 observations for the purpose of this analysis
 ```
-Isolating those out less than one year on most recent release
+Determining how many times each person has been incarcerated
 ```{r}
-short_out <- returners_time_free %>%
-  filter(TimeOut <= 365)
+times_in <- returners %>%
+  group_by(DCNumber) %>%
+  summarize(times_in = n())
 ```
-Going back to fetch general information on those identified
+
+Going back to fetch general information on those identified, compiling with calculated values
 ```{r}
-current_incarcerated_returned_less_1year <- merge(Root, short_out, by = 'DCNumber')
+returners_a <- merge(merge(merge(Root, returners_time_free, by = 'DCNumber'), served_prior, by = 'DCNumber'), times_in, by = 'DCNumber')
 ```
-Removing DCNumbers and names before public display
+Removing outlier
 ```{r}
-public <- current_incarcerated_returned_less_1year %>% select(-DCNumber, -FirstName, -LastName, -MiddleName, -BirthDate, -NameSuffix)
+# Not sure why the FDOC has the individual with DC Number 872984 as initially coming to prison on 1901-01-01, but we will omit this individual from our analyses as well.
+returners_a <- returners_a[-which(returners_a['DCNumber']=='872984'),]
 ```
 
   </p>
@@ -95,13 +107,28 @@ public <- current_incarcerated_returned_less_1year %>% select(-DCNumber, -FirstN
 
 # Inital Look
 
-## Time Free Since Last Release
+```{r code_folding = TRUE}
+prop_returned <- round(dim(returners_a)[1]/dim(Root)[1],2)
+```
 
-To begin, we should examine the amount of time that those who are currently incarcerated in Florida were free since their last incarceration:
+Amazingly, a full `r prop_returned * 100`% of our currently incarceratd population has served time previously. FDOC likes returning customers, I've heard them say so myself.
+
+```{r code_folding = TRUE}
+mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/dim(Root)[1],2)
+```
+
+Indeed, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than 2 times before. What does this imply for the argument of incarceration as a deterrent?
+
+If you were to purchase an item from a store where the average item on the shelf had been returned at least twice, would it be reasonable to feel frustrated with *the item* if it later turns out to be faulty? Personally I just wouldn't shop there anymore.
+
+## Time Free Since Last Release
+Next, we should examine the amount of time that those who are currently incarcerated in Florida were free since their last incarceration:
 
 ```{r fig.align='center', fig.height=8, fig.width=8, code_folding = TRUE}
-ggplot(returners_time_free, aes(x = 1, y = TimeOut/365.25)) +
+quartiles <- round(quantile(returners_a$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
+ggplot(returners_a, aes(x = 1, y = TimeOut/365.25, col = (prev_TimeServed/365.25))) +
   geom_sina(alpha = 0.5, position = 'dodge') +
+  scale_color_viridis(name = "Previous Years Served", direction = -1, option = "D") +
   ylab("Years Free") +
   scale_y_continuous(breaks = seq(0, max(returners_time_free$TimeOut), by = 1),
                      labels = function(x) ifelse(x %% 1 == 0, as.integer(x), ""),
@@ -111,14 +138,59 @@ ggplot(returners_time_free, aes(x = 1, y = TimeOut/365.25)) +
                size = .75, outlier.shape = NA, color = 'hotpink', alpha = 0.1) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank()) +
-  labs(title = "Density of Years Free Before Returning to Prison")
+  labs(title = "Years Free Before Returning to Prison, Colored by Previous Fl. Time Served")
 ```
 
-Wherein we see that the vast majority of those who are currently incarcerated and had done time in Florida previously were not free for very long before their current commitment. 
+We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past were not able to remain free for long before being incarcerated again. This is evident from the darker points towards the bottom of the visual. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await. We continue to investigate.
+
+```{r fig.align = 'center', code_folding = TRUE}
+ggplot(returners_a, aes(x = prev_TimeServed/365.25, y = TimeOut/365.25)) +
+  geom_point(color = 'blue', alpha = 0.5, size = 3) +
+  geom_smooth(method = 'lm', color = 'red', se = FALSE) +
+  labs(title = "Correlation between Previous Time Served and Time Out",
+       x = "Previous Time Served (Years)",
+       y = "Time Out Bewteen Last Bid(Years)") + 
+  theme_minimal() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        plot.title = element_text(size = 16, hjust = 0.5),
+        legend.position = "none") 
+```
+
+And above we have additional visual evidence that the longer one spends incarcerated, the less one is able to avoid reincarceration.
+
+Let's apply statistical rigor to this matter.
 
 ```{r code_folding = TRUE}
-quartiles <- round(quantile(returners_time_free$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
+# Define the data for bootstrapping
+data_for_bootstrap <- data.frame(prev_TimeServed = returners_a$prev_TimeServed, TimeOut = returners_a$TimeOut)
 
+# Function to obtain the slope of the regression line from bootstrapped samples
+slope_fn <- function(data, indices) {
+  sample_data <- data[indices, ]
+  lm_result <- lm(TimeOut ~ prev_TimeServed, data = sample_data)
+  coef(lm_result)[2]  # Extract the slope coefficient
+}
+
+# Perform bootstrapping with 1000 resamples
+bootstrap_results <- boot(data_for_bootstrap, slope_fn, R = 1000)
+
+# Calculate the p-value from the bootstrapped distribution
+slope_estimate <- mean(bootstrap_results$t)
+slope_se <- sd(bootstrap_results$t)
+p_value <- 2 * min(sum(bootstrap_results$t <= 0), sum(bootstrap_results$t >= 0)) / length(bootstrap_results$t)
+```
+
+```{r}
+cat("Bootstrap Slope Estimate:", slope_estimate, "\n")
+cat("95% Confidence Interval for Slope:", quantile(bootstrap_results$t, c(0.025, 0.975)), "\n")
+cat("p-value:", p_value, "\n")
+```
+To translate, we have exceptionally compelling statistical evidence that shows a very strong correlation between the duration of incarceration and the likelihood of being re-incarcerated. Based on the experiences of currently incarceratd population of Florida prisons, each year spent behind bars is associated with a decrease of approximately 6 weeks in their expected time until re-incarceration.
+
+```{r code_folding = TRUE}
 quartile_table <- data.frame(
   "Quartile" = c("Q1", "Median (Q2)", "Q3"),
   Years_Free = quartiles
@@ -142,8 +214,10 @@ This subtle change in framing emphasizes the inefficiency of traditional carcera
 
 
 # Returns Less than 1 Year
+
+```{r Isolating those out less than one year on most recent release, code_folding = TRUE}
+short_out <- returners_time_free %>%
+  filter(TimeOut <= 365)
+```
 I have identified 4253 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration.
 
-```{r code_folding = TRUE}
-datatable(public, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
-```
