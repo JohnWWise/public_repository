@@ -26,7 +26,8 @@ pkgs = c("readxl",
          "ggforce",
          "kableExtra",
          "viridis",
-         "boot")
+         "boot",
+         "gridExtra")
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
@@ -122,24 +123,53 @@ If you were to purchase an item from a store where the average item on the shelf
 ## Time Free Since Last Release
 Next, we should examine the amount of time that those who are currently incarcerated in Florida were free since their last incarceration:
 
-```{r fig.align='center', fig.height=8, fig.width=8, code_folding = TRUE}
+```{r fig.align='center', fig.height=5, fig.width=10, code_folding = TRUE}
 quartiles <- round(quantile(returners_a$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
-ggplot(returners_a, aes(x = 1, y = TimeOut/365.25, col = (prev_TimeServed/365.25))) +
+
+# Define color palette, breaks, and labels
+color_palette <- c("#008080", "#336673" ,"#664C66", "#993359", "#CC194C", "#FF0040")
+breaks <- c(0, 1, 3, 5, 10, 25, 50)
+labels <- c("0-1 Years", "1-3 Years", "3-5 Years", "5-10 Years", "10-25 Years", "25-50 Years")
+
+# Create the 'prev_TimeServed_bins' column
+returners_a$prev_TimeServed_bins <- cut(returners_a$prev_TimeServed / 365.25,
+                                       breaks = breaks,
+                                       labels = labels,
+                                       include.lowest = TRUE)
+
+# Create the first plot (plota)
+plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeServed_bins, group = 1)) +
   geom_sina(alpha = 0.5, position = 'dodge') +
-  scale_color_viridis(name = "Previous Years Served", direction = -1, option = "D") +
+  scale_color_manual(values = color_palette, name = 'Served') +
   ylab("Years Free") +
-  scale_y_continuous(breaks = seq(0, max(returners_time_free$TimeOut), by = 1),
-                     labels = function(x) ifelse(x %% 1 == 0, as.integer(x), ""),
-                     limits = c(0, max(returners_time_free$TimeOut/365.25))) +
-  theme(axis.text.x = element_blank()) +
-  geom_boxplot(data = returners_time_free, aes(x = 1, y = TimeOut/365.25), 
-               size = .75, outlier.shape = NA, color = 'hotpink', alpha = 0.1) +
   theme_minimal() +
   theme(panel.grid.major.x = element_blank()) +
-  labs(title = "Years Free Before Returning to Prison, Colored by Previous Fl. Time Served")
+  labs(title = "Years Free, Colored by Previous Fl. Time Served")
+
+# Create the 'times_in_bins' column
+returners_a$times_in_bins <- cut(returners_a$times_in,
+                                 breaks = c(2, 3, 4, 6, 17),
+                                 labels = c("2 bids", "3 bids", "4-6 bids", "6-17 bids"),
+                                 include.lowest = TRUE)
+color_palette <- c("#008080", "#336673", "#CC194C", "#FF0040")
+# Create the second plot (plotb)
+plotb <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = times_in_bins, group = 1)) +
+  geom_sina(alpha = 0.5) +
+  scale_color_manual(values = color_palette, name = 'Number of Bids') +
+  ylab(NULL) +
+  theme_minimal() +
+  labs(title = "Years Free, Colored by Number of Incarcerations")
+
+# Customize plot margins for both plots
+plota <- plota + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
+plotb <- plotb + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
+
+# Arrange the plots using grid.arrange
+grid.arrange(plota, plotb, ncol = 2)
 ```
 
-We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past were not able to remain free for long before being incarcerated again. This is evident from the darker points towards the bottom of the visual. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await. We continue to investigate.
+We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the redder points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await. We continue to investigate.
+
 
 ```{r fig.align = 'center', code_folding = TRUE}
 ggplot(returners_a, aes(x = prev_TimeServed/365.25, y = TimeOut/365.25)) +
