@@ -249,5 +249,4 @@ This subtle change in framing emphasizes the inefficiency of traditional carcera
 short_out <- returners_time_free %>%
   filter(TimeOut <= 365)
 ```
-I have identified 4253 individuals (primary identification information of individuals removed by me for public display in this public display only) who are currently incarcerated and who had previously been incarcerated and were out for less than one year since their release from that previous incarceration.
 
