@@ -96,6 +96,19 @@ Removing outlier
 ```{r}
 # Not sure why the FDOC has the individual with DC Number 872984 as initially coming to prison on 1901-01-01, but we will omit this individual from our analyses as well.
 returners_a <- returners_a[-which(returners_a['DCNumber']=='872984'),]
+# Create the 'times_in_bins' column
+returners_a$times_in_bins <- cut(returners_a$times_in,
+                                 breaks = c(2, 3, 4, 6, 17),
+                                 labels = c("2 bids", "3 bids", "4-6 bids", "6-17 bids"),
+                                 include.lowest = TRUE)
+
+# Create the 'prev_TimeServed_bins' column
+breaks <- c(0, 1, 3, 5, 10, 25, 50)
+labels <- c("0-1 Years", "1-3 Years", "3-5 Years", "5-10 Years", "10-25 Years", "25-50 Years")
+returners_a$prev_TimeServed_bins <- cut(returners_a$prev_TimeServed / 365.25,
+                                       breaks = breaks,
+                                       labels = labels,
+                                       include.lowest = TRUE)
 ```
 
   </p>
@@ -108,13 +121,23 @@ returners_a <- returners_a[-which(returners_a['DCNumber']=='872984'),]
 
 ```{r code_folding = TRUE}
 prop_returned <- round(dim(returners_a)[1]/dim(Root)[1],2)
+mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/dim(Root)[1],2)
+```
+
+```{r fig.align = TRUE, code_folding = TRUE}
+new_data <- data.frame(times_in_bins = rep("First Bid", 44300))
+
+combined_data <- rbind(returners_a %>% select(times_in_bins), new_data)
+
+ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
+  geom_bar(width = 1, stat = "count") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("#008080", "#336673", "#664C66", "#993359", "#CC194C", "#FF0040")) +
+  theme_void() +  # Remove axis and grid lines
+  labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population")
 ```
 
 Amazingly, a full `r prop_returned * 100`% of our currently incarceratd population has served time previously. FDOC likes returning customers, I've heard them say so myself.
-
-```{r code_folding = TRUE}
-mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/dim(Root)[1],2)
-```
 
 Indeed, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than 2 times before. What does this imply for the argument of incarceration as a deterrent?
 
@@ -126,16 +149,9 @@ Next, we should examine the amount of time that those who are currently incarcer
 ```{r fig.align='center', fig.height=5, fig.width=10, code_folding = TRUE}
 quartiles <- round(quantile(returners_a$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
 
-# Define color palette, breaks, and labels
 color_palette <- c("#008080", "#336673" ,"#664C66", "#993359", "#CC194C", "#FF0040")
-breaks <- c(0, 1, 3, 5, 10, 25, 50)
-labels <- c("0-1 Years", "1-3 Years", "3-5 Years", "5-10 Years", "10-25 Years", "25-50 Years")
 
-# Create the 'prev_TimeServed_bins' column
-returners_a$prev_TimeServed_bins <- cut(returners_a$prev_TimeServed / 365.25,
-                                       breaks = breaks,
-                                       labels = labels,
-                                       include.lowest = TRUE)
+
 
 # Create the first plot (plota)
 plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeServed_bins, group = 1)) +
@@ -146,11 +162,7 @@ plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeS
   theme(panel.grid.major.x = element_blank()) +
   labs(title = "Years Free, Colored by Previous Fl. Time Served")
 
-# Create the 'times_in_bins' column
-returners_a$times_in_bins <- cut(returners_a$times_in,
-                                 breaks = c(2, 3, 4, 6, 17),
-                                 labels = c("2 bids", "3 bids", "4-6 bids", "6-17 bids"),
-                                 include.lowest = TRUE)
+
 color_palette <- c("#008080", "#336673", "#CC194C", "#FF0040")
 # Create the second plot (plotb)
 plotb <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = times_in_bins, group = 1)) +
