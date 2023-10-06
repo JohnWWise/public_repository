@@ -1,5 +1,5 @@
 ---
-title: "FDOC Reincarceration"
+title: "FDOC Returns to Incarceration"
 description: |
   This document is an ongoing investigation into the data available reincarcerations in Florida. I choose not to use the term "recidivism", as the term implies a focus on reoffending and the idea of a "criminal" identity, rather than acknowledging the complex social, economic, and systemic factors at play.
 output:
@@ -180,55 +180,7 @@ plotb <- plotb + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
 grid.arrange(plota, plotb, ncol = 2)
 ```
 
-We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the redder points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await. We continue to investigate.
-
-
-```{r fig.align = 'center', code_folding = TRUE}
-ggplot(returners_a, aes(x = prev_TimeServed/365.25, y = TimeOut/365.25)) +
-  geom_point(color = 'blue', alpha = 0.5, size = 3) +
-  geom_smooth(method = 'lm', color = 'red', se = FALSE) +
-  labs(title = "Correlation between Previous Time Served and Time Out",
-       x = "Previous Time Served (Years)",
-       y = "Time Out Bewteen Last Bid(Years)") + 
-  theme_minimal() +
-  theme(panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12),
-        plot.title = element_text(size = 16, hjust = 0.5),
-        legend.position = "none") 
-```
-
-And above we have additional visual evidence that the longer one spends incarcerated, the less one is able to avoid reincarceration.
-
-Let's apply statistical rigor to this matter.
-
-```{r code_folding = TRUE}
-# Define the data for bootstrapping
-data_for_bootstrap <- data.frame(prev_TimeServed = returners_a$prev_TimeServed, TimeOut = returners_a$TimeOut)
-
-# Function to obtain the slope of the regression line from bootstrapped samples
-slope_fn <- function(data, indices) {
-  sample_data <- data[indices, ]
-  lm_result <- lm(TimeOut ~ prev_TimeServed, data = sample_data)
-  coef(lm_result)[2]  # Extract the slope coefficient
-}
-
-# Perform bootstrapping with 1000 resamples
-bootstrap_results <- boot(data_for_bootstrap, slope_fn, R = 1000)
-
-# Calculate the p-value from the bootstrapped distribution
-slope_estimate <- mean(bootstrap_results$t)
-slope_se <- sd(bootstrap_results$t)
-p_value <- 2 * min(sum(bootstrap_results$t <= 0), sum(bootstrap_results$t >= 0)) / length(bootstrap_results$t)
-```
-
-```{r}
-cat("Bootstrap Slope Estimate:", slope_estimate, "\n")
-cat("95% Confidence Interval for Slope:", quantile(bootstrap_results$t, c(0.025, 0.975)), "\n")
-cat("p-value:", p_value, "\n")
-```
-To translate, we have exceptionally compelling statistical evidence that shows a very strong correlation between the duration of incarceration and the likelihood of being re-incarcerated. Based on the experiences of currently incarceratd population of Florida prisons, each year spent behind bars is associated with a decrease of approximately 6 weeks in their expected time until re-incarceration.
+We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the redder points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await.
 
 ### Time Free
 
