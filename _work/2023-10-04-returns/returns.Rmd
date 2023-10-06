@@ -118,7 +118,6 @@ returners_a$prev_TimeServed_bins <- cut(returners_a$prev_TimeServed / 365.25,
 
 
 # Inital Look
-
 ```{r code_folding = TRUE}
 prop_returned <- round(dim(returners_a)[1]/dim(Root)[1],2)
 mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/dim(Root)[1],2)
@@ -126,9 +125,7 @@ mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/
 
 ```{r fig.align = TRUE, code_folding = TRUE}
 new_data <- data.frame(times_in_bins = rep("First Bid", 44300))
-
 combined_data <- rbind(returners_a %>% select(times_in_bins), new_data)
-
 ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
   geom_bar(width = 1, stat = "count") +
   coord_polar("y", start = 0) +
@@ -158,8 +155,8 @@ plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeS
   geom_sina(alpha = 0.5, position = 'dodge') +
   scale_color_manual(values = color_palette, name = 'Served') +
   ylab("Years Free") +
-  theme_minimal() +
-  theme(panel.grid.major.x = element_blank()) +
+  theme_void() +  # Remove axis and grid lines
+  theme(axis.text.y = element_text()) +  # Keep y-axis labels
   labs(title = "Years Free, Colored by Previous Fl. Time Served")
 
 
@@ -169,7 +166,8 @@ plotb <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = times_in_b
   geom_sina(alpha = 0.5) +
   scale_color_manual(values = color_palette, name = 'Number of Bids') +
   ylab(NULL) +
-  theme_minimal() +
+  theme_void() +  # Remove axis and grid lines
+  theme(axis.text.y = element_text()) +  # Keep y-axis labels
   labs(title = "Years Free, Colored by Number of Incarcerations")
 
 # Customize plot margins for both plots
