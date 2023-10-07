@@ -1,0 +1,77 @@
+---
+title: "Remembering Kris"
+description: |
+  In this post, I remember my friend Kris Benson, who lost his life to suicide at Columba Correctional Institution's main unit during the COVID-19 pandemic.
+output:
+  distill::distill_article:
+---
+
+::: {.figure .first-image style="text-align: center; border: 3px solid black;"}
+<img src="/Users/johnwise/pubic_repository/images/Kevin_Kris.jpeg" alt="Kevin Cutss, left, Kris Benson, right. Family Day, Horizon Communities in Prison, 2014" width="80%"/>
+
+<p class="caption" style="text-align: center; margin-top: -0.5rem; margin-bottom: 0.5rem; font-size: smaller">
+
+Kevin Cuts, left, Kris Benson, right. Family Day, Horizon Communities in Prison, 2014
+
+</p>
+:::
+
+These are my friends, Kevin Cutts and Kris Benson. Kevin, who is on the left, is currently incarcerated. He went to prison at the age of 17 and remains there as a 46-year-old man. Unfortunately, Kris, on the right, died by suicide during an emergency evacuation at the beginning of the COVID-19 pandemic.
+
+Kris and I were friends for a long time before his passing. Kevin and I are still very close friends, and I often refer to him as my best friend. The three of us share many similarities - we are all intelligent but socially reserved, and we have spent decades in prison for similar charges and cases. I was incarcerated at 18 with a 22-year sentence, while Kevin and Kris were younger but received life sentences.
+
+However, life sentences for juveniles have been deemed unconstitutional. Therefore, from a moral standpoint, Kevin and Kris should be free men.
+
+Kevin is still facing legal obstacles in his pursuit of freedom, even though the US Supreme Court has recognized his right to be free. On the other hand, Kris had actually navigated through those challenges before his death. His juvenile life sentence had been reduced to a specific term of years, and he was only a year and a half away from being released from prison after serving 25 years (remember, he was only 17 when he was incarcerated!).
+
+I asked Kevin to describe Kris. Here are Kevin's words:
+
+<div style="background-color: lightblue; margin-left: 20px; padding: 10px;">
+  <p>Kris Benson was a good person. We met around 2009 and bonded over music, gaming, and simply being at a similar point in life. He was intelligent and honest. I know there were some drug demons in his past, but he had overcome them. He could have a temper when pressed, but he was generally an optimist and quite tolerant. Once, a book he wanted, the Dungeons and Dragons Spell Compendium, was rejected by the institution because it "contained spells that could be used against staff," listing page numbers and all. We got a huge laugh out of that, and he wrote a very patient explanation of games vs reality to the powers that be. He got the book a few days later.
+
+We both joined the Horizon program a few months apart. He went to the Faith-based, I to the Character-based. He really excelled there, soon becoming a well-respected counselor and mentor. He genuinely cared and wanted to help people. Whether through the word, by living an example with integrity, or by being present when someone needed him, many men benefited from having him in their lives.
+
+I know he loved his aunt. There was a cherished picture of her holding him as a young child that I drew a portrait of them from. He sent it to her.
+
+While our pasts weren't a topic we discussed much, I know he was truly remorseful and still a bit haunted by what happened. He was always working on himself. He worked out, took (and taught) a number of classes. He was careful of what he allowed into his mindset, filtering out violence and negativity, even in music and TV.
+
+He wasn't perfect, but he was becoming a better person every day.
+
+He was a great friend.
+
+I miss you, brother.</p>
+</div>
+
+I also deeply miss Kris. He was truly an amazing friend. Interestingly, I actually met Kris through the same Horizon program that Kevin mentioned. I was in and out of the Horizon program a few times as I passed through Tomoka CI, and Kris was our "Program Clerk" for the entire dorm until his passing.
+
+To provide some context, all of us in the Faith and Character-based Horizon program, which was a "residential therapeutic community," were housed together in the same dorm. Some of us were program "facilitators," responsible for administering the program, and Kris was our leader. He was undoubtedly the one in charge. As Kevin mentioned, Kris taught classes and his commitment to self-improvement earned him the respect of all of us.
+
+Everything changed inside when COVID struck.
+
+I cannot adequately express what that experience was like for all of us inside. We had no idea what was coming, but we knew that we were going to experience the worst of it, no matter what it was.
+
+And then it started. People in prison started getting sick. The facility I was at, Tomoka CI, was the first to have multiple people test positive. It happened fast. One minute they were telling us there was absolutely no COVID inside, and the next there were confirmed positive cases in EVERY DORM ON THE COMPOUND BUT OURS.
+
+They locked down the whole facility and ‘implemented quarantine’.
+
+Unbelievably, they then decided to load us - our whole dorm consisting of approximately 60 people - onto buses, with about 50 people per bus and very minimal air circulation. We were evacuated to another facility, Columbia Correctional Facility Main unit, which was approximately an hour and a half away. We had informed them that we were sick before they put us on the buses, but they conducted a sham 'screening' and still forced us onto the buses.
+
+Emergency evacuations in prisons are already traumatic experiences on their own. However, imagine being transferred from a facility with many confirmed active cases to a facility that has yet to report any. The reception we received and how we were treated, on top of already enduring the routine cruelties of the FDOC, added to our distress quite a lot.
+
+Frankly, they took 60 of us and locked us in a cinderblock room for about 60 days, from mid-March to May. The room had showers, a TV, and beds, but that was about it. They treated us awfully and spoke to us in a terrible manner.
+
+After about 30 days, they started allowing us to "go to recreation," which meant locking us in a cage about the size of a suburban backyard. The space was desolate, with only grass, dirt, and a fence. There were no bathrooms or water, just grass and dirt. They would leave us locked in there for about 2 hours at a time.
+
+If we wanted any time outside, that was the only option. We only had that after writing grievances to request it because they wanted to keep us locked in the concrete block indefinitely.
+
+However, the staff had a major problem when it came to us writing grievances. You see, we had "won" the right to what they called "rec". So, when they called us to go to rec early on Saturday or Sunday mornings and only 5-10 people took advantage of this "opportunity," the officers became angry.
+
+It was their anger that led to Kris's death. Later that afternoon, the officers entered.
+
+Kris was watching a movie on his tablet, Batman or something. His bunk was only one away from mine — maybe six feet. Captain Comacho came in and announced that since we wanted to report the lack of recreational time and we had won, we now had rec, and it was mandatory. We HAD to go outside to the cage or face punishment.
+
+Kris refused, but the rest of us went outside. As we were returning, we saw him being taken to confinement.
+
+Minutes later, we saw medical headed to the confinement unit, and an ambulance arrived as well.
+
+It wasn’t until the next day that we learned he had died. The officers told us he killed himself.
