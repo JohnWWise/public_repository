@@ -1,19 +1,89 @@
 ---
-title: "John's Resume"
+title: "John's Curriculum Vitae"
 description: |
-  Will write later
+  I am a motivated individual who is passionate about using data science to effectively communicate my experience of incarceration. I have experience in research, data analysis, and collaboration. Currently, I am actively seeking opportunities to apply my knowledge and skills in a professional setting. My ultimate goal is to work towards reducing or eliminating the practice of incarcerating individuals as a form of punishment for crime.
 date: "`r Sys.Date()`"
-output: distill::distill_article
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web. 
+# Education
 
-Learn more about using Distill for R Markdown at <https://rstudio.github.io/distill>.
+- **Indiana University East**
+    - Bachelor of Science in Data Science (Expected Graduation: Fall 2023)
+    - GPA: 3.934
+    - Relevant Courses: Calculus for Data Science, Database Applications, Linear Algebra, Information Representation, Data Mining, Cloud Computing for Data Science
+- **Transfer Credits**
+    - History, Philosophy, Computing, Statistics, Spanish, and more
 
+---
+
+# Professional Experience
+
+- **COVID Prison Stories Archive Project**
+    - Consultant and Researcher
+    - Helped develop surveys and gathered contact information for reentry organizations to facilitate former incarcerated individuals' experiences sharing.
+- **Community Spring 2021 Fellowship**
+    - Fellow (9 months)
+    - Worked alongside a cohort of peers to lead the Lighthouse Campaign focusing on Affordable Housing, including policy research, advocacy, public speaking, and community engagement.
+- **Education Access Partnership**
+    - Founder and Executive Director (May - September 2022)
+    - Established a nonprofit to enhance higher education opportunities for currently and formerly incarcerated individuals.
+
+---
+
+# Conferences and Engagements
+
+- **National Conference for Higher Education in Prison (2021, 2023)**
+    - Active participant, contributed to discussions on higher education accessibility for incarcerated individuals.
+- **2022 Reentry Summit, Palm Beach**
+    - Moderated a panel on Just Income GNV, supporting justice-impacted individuals.
+- **Santa Fe College's Free to Learn Initiative**
+    - Featured in podcast episodes and a live panel discussion on higher education opportunities for the incarcerated.
+
+---
+
+# Certifications
+
+- **Google (Coursera)**
+    - Data Analytics
+
+---
+
+# Internship Experience
+
+- **University of Utah Prison Education Project**
+    - Data Analyst Intern
+    - Evaluated and provided feedback on the Education Justice Tracker.
+- **Research on Data Production and Dissemination**
+    - Conducted research on data regarding incarceration and explored the importance of administrative data accessibility.
+
+---
+
+# Future Academic Pursuit
+
+- I am currently preparing applications for a PhD in Public Policy or Public Health program. My goal is to address the crucial issue of administrative data accessibility, as well as contribute to improving public health outcomes. By focusing on both public policy and public health, my goal is to understand and address the intricate relationship between administrative data and effective health policies, particularly within the framework of our society's carceral structures.
+
+---
+
+## Additional Information
+
+- Self-motivated learner who pursued mathematics independently while incarcerated, progressing from a 9th-grade level to advanced topics like topology and abstract algebra.
+- Active involvement as a GED instructor and certified Inmate Teaching Assistant.
+- Contributed to the Second Chance Pell program at Columbia CI and was involved with Stetson University's Community Education Project.
+- Committed to prison abolition and improving access to higher education for incarcerated individuals.
+
+---
+
+**References available upon request**
 
 
 

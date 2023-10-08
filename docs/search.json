@@ -28,7 +28,7 @@
       "title": "Written Works",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2023-10-07T13:15:58-04:00"
+      "last_modified": "2023-10-07T16:17:05-04:00"
     },
     {
       "path": "cv.html",
@@ -55,12 +55,12 @@
     },
     {
       "path": "resume.html",
-      "title": "John's Resume",
-      "description": "Will write later\n",
+      "title": "John's Curriculum Vitae",
+      "description": "I am a motivated individual who is passionate about using data science to effectively communicate my experience of incarceration. I have experience in research, data analysis, and collaboration. Currently, I am actively seeking opportunities to apply my knowledge and skills in a professional setting. My ultimate goal is to work towards reducing or eliminating the practice of incarcerating individuals as a form of punishment for crime.\n",
       "author": [],
       "date": "`r Sys.Date()`",
-      "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill for R Markdown at https://rstudio.github.io/distill.\n\n\n\n",
-      "last_modified": "2023-10-07T13:16:03-04:00"
+      "contents": "\n\nContents\nEducation\nProfessional Experience\nConferences and Engagements\nCertifications\nInternship Experience\nFuture Academic Pursuit\nAdditional Information\n\n\nEducation\nIndiana University East\nBachelor of Science in Data Science (Expected Graduation: Fall 2023)\nGPA: 3.934\nRelevant Courses: Calculus for Data Science, Database Applications, Linear Algebra, Information Representation, Data Mining, Cloud Computing for Data Science\n\nTransfer Credits\nHistory, Philosophy, Computing, Statistics, Spanish, and more\n\nProfessional Experience\nCOVID Prison Stories Archive Project\nConsultant and Researcher\nHelped develop surveys and gathered contact information for reentry organizations to facilitate former incarcerated individuals’ experiences sharing.\n\nCommunity Spring 2021 Fellowship\nFellow (9 months)\nWorked alongside a cohort of peers to lead the Lighthouse Campaign focusing on Affordable Housing, including policy research, advocacy, public speaking, and community engagement.\n\nEducation Access Partnership\nFounder and Executive Director (May - September 2022)\nEstablished a nonprofit to enhance higher education opportunities for currently and formerly incarcerated individuals.\n\nConferences and Engagements\nNational Conference for Higher Education in Prison (2021, 2023)\nActive participant, contributed to discussions on higher education accessibility for incarcerated individuals.\n\n2022 Reentry Summit, Palm Beach\nModerated a panel on Just Income GNV, supporting justice-impacted individuals.\n\nSanta Fe College’s Free to Learn Initiative\nFeatured in podcast episodes and a live panel discussion on higher education opportunities for the incarcerated.\n\nCertifications\nGoogle (Coursera)\nData Analytics\n\nInternship Experience\nUniversity of Utah Prison Education Project\nData Analyst Intern\nEvaluated and provided feedback on the Education Justice Tracker.\n\nResearch on Data Production and Dissemination\nConducted research on data regarding incarceration and explored the importance of administrative data accessibility.\n\nFuture Academic Pursuit\nI am currently preparing applications for a PhD in Public Policy or Public Health program. My goal is to address the crucial issue of administrative data accessibility, as well as contribute to improving public health outcomes. By focusing on both public policy and public health, my goal is to understand and address the intricate relationship between administrative data and effective health policies, particularly within the framework of our society’s carceral structures.\nAdditional Information\nSelf-motivated learner who pursued mathematics independently while incarcerated, progressing from a 9th-grade level to advanced topics like topology and abstract algebra.\nActive involvement as a GED instructor and certified Inmate Teaching Assistant.\nContributed to the Second Chance Pell program at Columbia CI and was involved with Stetson University’s Community Education Project.\nCommitted to prison abolition and improving access to higher education for incarcerated individuals.\nReferences available upon request\n\n\n\n",
+      "last_modified": "2023-10-08T13:33:39-04:00"
     },
     {
       "path": "testing_mortality.html",
