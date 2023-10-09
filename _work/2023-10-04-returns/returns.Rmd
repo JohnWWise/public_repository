@@ -22,11 +22,8 @@ This document is an ONGOING mining of that data. Keep an eye out for my newslett
 # Packages utilized:
 pkgs = c("readxl",
          "dplyr",
-         "DT",
          "ggforce",
          "kableExtra",
-         "viridis",
-         "boot",
          "gridExtra")
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
@@ -39,13 +36,17 @@ set.seed(8675309)
 <ul>
     <li>
       <details>
-        <summary>Importing Data, Identifying Population for Analysis</summary>
+        <summary>Importing Data, Preprocessing and Cleaning</summary>
         <p>
+Importing
 ```{r}
 base_dir <- "/Users/johnwise/Downloads"
 Root <- read_excel(paste0(base_dir, "/Inmate_Active_2023-10.XLSX"))
 Incarhist <- read_excel(paste0(base_dir, "/Inmate_Active_2023-10.XLSX"), sheet = 6)
-
+Offenses_CPS <- read_excel(paste0(base_dir, "/Inmate_Active_2023-10.XLSX"), sheet = 4)
+```
+Isolating first-timers
+```{r}
 first_timers <- Incarhist %>%
   arrange(DCNumber, desc(ReceiptDate)) %>%
   group_by(DCNumber) %>%
@@ -54,9 +55,7 @@ first_timers <- Incarhist %>%
   select(-row_num) %>%
   count(DCNumber) %>%
   filter(n==1)
-```
-Remove first-timers from analysis
-```{r}
+
 returners <- anti_join(Incarhist, first_timers, by ='DCNumber')
 # grab the two most recent receipts of those who have returned
 returners_current_and_last <- returners %>%
@@ -73,7 +72,7 @@ served_prior <- returners %>%
   group_by(DCNumber) %>%
   summarize(prev_TimeServed = sum(time_served, na.rm = TRUE))
 ```
-Discovering the amount of time each person was free last time they were out
+Discovering the amount of time each returned person was free last time they were out
 ```{r}
 returners_time_free <- returners_current_and_last %>%
   group_by(DCNumber) %>%
@@ -87,15 +86,16 @@ times_in <- returners %>%
   group_by(DCNumber) %>%
   summarize(times_in = n())
 ```
-
-Going back to fetch general information on those identified, compiling with calculated values
+Going back to fetch general information on those isolated, compiling with calculated values
 ```{r}
 returners_a <- merge(merge(merge(Root, returners_time_free, by = 'DCNumber'), served_prior, by = 'DCNumber'), times_in, by = 'DCNumber')
 ```
-Removing outlier
+Removing outlier, binning data
 ```{r}
-# Not sure why the FDOC has the individual with DC Number 872984 as initially coming to prison on 1901-01-01, but we will omit this individual from our analyses as well.
+# Not sure why the FDOC has the individual with DC Number 872984 as initially coming to prison on 1901-01-01, 
+#but we will omit this individual from our analyses as well.
 returners_a <- returners_a[-which(returners_a['DCNumber']=='872984'),]
+
 # Create the 'times_in_bins' column
 returners_a$times_in_bins <- cut(returners_a$times_in,
                                  breaks = c(2, 3, 4, 6, 17),
@@ -118,18 +118,16 @@ returners_a$prev_TimeServed_bins <- cut(returners_a$prev_TimeServed / 365.25,
 
 
 # Inital Look
-```{r code_folding = TRUE}
+```{r fig.align = 'center', code_folding = TRUE}
 prop_returned <- round(dim(returners_a)[1]/dim(Root)[1],2)
 mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/dim(Root)[1],2)
-```
 
-```{r fig.align = TRUE, code_folding = TRUE}
-new_data <- data.frame(times_in_bins = rep("First Bid", 44300))
+new_data <- data.frame(times_in_bins = rep("First Bid", dim(first_timers)[1]))
 combined_data <- rbind(returners_a %>% select(times_in_bins), new_data)
 ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
   geom_bar(width = 1, stat = "count") +
   coord_polar("y", start = 0) +
-  scale_fill_manual(values = c("#2c7bb6", "#abd9e9" ,"#ffffbf", "#fdae61", "#d7191c", "#7f3b00")) +
+  scale_fill_manual(values = c("#2c7bb6", "#abd9e9" ,"#ffffbf", "#fdae61", "#e6e6e6", "#7f3b00")) +
   theme_void() +  # Remove axis and grid lines
   labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population")
 ```
@@ -202,3 +200,18 @@ We frequently encounter statistics that state "X amount of Florida prisoners wil
 This subtle change in framing emphasizes the inefficiency of traditional carceral structures in preventing recidivism, while also highlighting the responsibility of the correctional agency. If the purpose of a sentence is to 'correct,' why do we frequently find the need to re-correct so soon?
 
 # Charges
+For each person who is currently incarcerated and has at least one prior incarceration, we have data on all adjudications for their current and past incarcerations.
+
+Regarding those currently incarcerated, we observe that they are serving time for a wide range of adjudication charges. There are 863 different charges for which these individuals are currently incarcerated.
+
+```{r}
+returners_hist <- merge(returners_a, Offenses_CPS, by = 'DCNumber')
+returners_hist$adjudicationcharge_descr <- as.factor(returners_hist$adjudicationcharge_descr)
+
+charges <- returners_hist %>%
+  group_by(adjudicationcharge_descr) %>%
+  summarize(charge_count = n()) %>%
+  arrange(desc(charge_count))
+charges
+```
+We actually need around 6-12 crime categories for our analysis. Therefore, my current task is to consolidate them into a smaller set of groups that we can work with. It's a tedious task that I've been procrastinating on, but I hope to complete it soon and continue with the analysis.
