@@ -129,7 +129,7 @@ combined_data <- rbind(returners_a %>% select(times_in_bins), new_data)
 ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
   geom_bar(width = 1, stat = "count") +
   coord_polar("y", start = 0) +
-  scale_fill_manual(values = c("#008080", "#336673", "#664C66", "#993359", "#CC194C", "#FF0040")) +
+  scale_fill_manual(values = c("#2c7bb6", "#abd9e9" ,"#ffffbf", "#fdae61", "#d7191c", "#7f3b00")) +
   theme_void() +  # Remove axis and grid lines
   labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population")
 ```
@@ -141,18 +141,19 @@ Indeed, the average number of times a person has been incarcerated across the en
 If you were to purchase an item from a store where the average item on the shelf had been returned at least twice, would it be reasonable to feel frustrated with *the item* if it later turns out to be faulty? Personally I just wouldn't shop there anymore.
 
 ## Time Free Since Last Release
-Next, we should examine the amount of time that those who are currently incarcerated in Florida were free since their last incarceration:
+Next, we should examine the amount of time that those who are currently incarcerated in Florida were free in between their current and their last incarceration:
 
 ```{r fig.align='center', fig.height=5, fig.width=10, code_folding = TRUE}
 quartiles <- round(quantile(returners_a$TimeOut, probs = c(0.25, 0.5, 0.75))/365.25, 1)
 
-color_palette <- c("#008080", "#336673" ,"#664C66", "#993359", "#CC194C", "#FF0040")
+color_palette <- c("#ffffff", "#e6e6e6", "#bfbfbf", "#808080", "#404040", "#000000")
 
 
 
 # Create the first plot (plota)
 plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeServed_bins, group = 1)) +
   geom_sina(alpha = 0.5, position = 'dodge') +
+  geom_violin(alpha = 0.1, color = "black") +
   scale_color_manual(values = color_palette, name = 'Served') +
   ylab("Years Free") +
   theme_void() +  # Remove axis and grid lines
@@ -160,10 +161,12 @@ plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeS
   labs(title = "Years Free, Colored by Previous Fl. Time Served")
 
 
-color_palette <- c("#008080", "#336673", "#CC194C", "#FF0040")
+color_palette <- c("#ffffff", "#e6e6e6", "#404040", "#000000")
+
 # Create the second plot (plotb)
 plotb <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = times_in_bins, group = 1)) +
   geom_sina(alpha = 0.5) +
+  geom_violin(alpha = 0.1, color = "black") +
   scale_color_manual(values = color_palette, name = 'Number of Bids') +
   ylab(NULL) +
   theme_void() +  # Remove axis and grid lines
@@ -178,7 +181,7 @@ plotb <- plotb + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
 grid.arrange(plota, plotb, ncol = 2)
 ```
 
-We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the redder points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await.
+We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the darker points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await.
 
 ### Time Free
 
@@ -198,17 +201,4 @@ We frequently encounter statistics that state "X amount of Florida prisoners wil
 
 This subtle change in framing emphasizes the inefficiency of traditional carceral structures in preventing recidivism, while also highlighting the responsibility of the correctional agency. If the purpose of a sentence is to 'correct,' why do we frequently find the need to re-correct so soon?
 
-
-## County of most Recent Commitment
-
-
-## Charges
-
-
-# Returns Less than 1 Year
-
-```{r Isolating those out less than one year on most recent release, code_folding = TRUE}
-short_out <- returners_time_free %>%
-  filter(TimeOut <= 365)
-```
-
+# Charges
