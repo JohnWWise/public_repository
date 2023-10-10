@@ -1,7 +1,7 @@
 ---
 title: "Investigation of FDOC Public 'Inmate Mortality Data'"
 description: |
-  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (NOTE, added natural deaths historical plot by facility for high-scoring facilites in groupings across space section)
+  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (NOTE, added Addendum)
 output:
   distill::distill_article:
     toc: true
@@ -829,4 +829,145 @@ mapping_naturals('2023-02-01')
 high_facilities_facet_plotter('2023-02-01', interesting, per_month_natural2)
 create_kable_table('2023-02-01')
 ```
+
+# Addendum
+
+The Florida Department of Corrections provides access to its OBIS database for public download [here](https://fdc.myflorida.com/pub/obis_request.html).
+
+This database is separate from the mortality lists utilized throughout this document. I will create a separate post for investigation of general OBIS data soon; however, I am including some data from it in this document to further our consideration of the FDOC's handling of what I believe to be accidental deaths from overdose.
+
+If you visit the OBIS database, you will find a set of tables that pertain to every person ever recorded as released from the FDOC.
+
+Interestingly, individuals who have died in the custody of the FDOC seem to have been ‘released’ in this manner, at least after approximately 1996.
+
+```{r code_folding = TRUE}
+x <- 10
+base_dir <- "/Users/johnwise/Downloads"
+# Data Import
+Root <- read_excel(paste0(base_dir, "/Inmate_Release (3).XLSX"))
+obis_deaths <- Root  %>% filter(releasedateflag_descr == 'deceased') %>% select(DCNumber, releasedateflag_descr, PrisonReleaseDate)
+obis_deaths %>%
+  head(x) %>%
+  kable(caption = paste("Omitting", dim(obis_deaths)[1]-x, "rows for display")) %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+ggplot(obis_deaths, aes(x = as.Date(PrisonReleaseDate))) + 
+  geom_bar(stat = "count", width = 30, fill = "steelblue") +  # Adjust the width as needed
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
+  labs(x = "Date of Prison Release", y = "Count", title = "Monthly Distribution of PrisonReleaseDate dates for persons coded 'deceased'") +
+  theme_minimal() +  # Use a minimal theme
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +  # Rotate x-axis labels for better readability
+  coord_cartesian(xlim = as.Date(c("1990-01-01", "2023-07-31")), ylim = c(0, 200))
+```
+
+Looks odd, right? Let's Zoom in.
+
+```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+ggplot(obis_deaths, aes(x = as.Date(PrisonReleaseDate))) + 
+  geom_bar(stat = "count", width = 30, fill = "steelblue") +  # Adjust the width as needed
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
+  labs(x = "Date of Prison Release", y = "Count", title = "PrisonReleaseDate dates for persons coded 'deceased', (2015-01-01 - 2023-07-31)") +
+  theme_minimal() +  # Use a minimal theme
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +  # Rotate x-axis labels for better readability
+  coord_cartesian(xlim = as.Date(c("2015-01-01", "2023-07-31")), ylim = c(0, 200))
+```
+
+Looks even more strange here, I'm going to zoom in some more -- the top of that big spike is just going to get cut off but we need to see more granular.
+
+```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+ggplot(obis_deaths, aes(x = as.Date(PrisonReleaseDate))) + 
+  geom_bar(stat = "count", width = 90, fill = "steelblue") +  # Adjust the width as needed
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
+  labs(x = "Date of Prison Release", y = "Count", title = "PrisonReleaseDate dates persons 'deceased', (2015-01-01 - 2023-07-31), ymax=25") +
+  theme_minimal() +  # Use a minimal theme
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +  # Rotate x-axis labels for better readability
+  coord_cartesian(xlim = as.Date(c("2016-06-01", "2023-07-31")), ylim = c(0, 25))
+```
+
+The spike and gap in the timeline of deaths stand out to me. These anomalies are clearly noticeable when compared to the list of deaths in the Inmate Mortality data used throughout the rest of this document.
+
+To further investigate this discrepancy, we will merge this peculiar dataset of PrisonReleaseDate dates with the aforementioned data. Then, we will calculate the differences in dates for each observation that matches by DCNumber.
+
+```{r code_folding = TRUE}
+# Calculating Date Differences
+data <- merge(deaths, obis_deaths, by = 'DCNumber') %>%
+  select(-Name, -releasedateflag_descr, -FACILITY_descriptionn) %>%
+  mutate(
+    Date_Death = as.Date(Date_Death),
+    PrisonReleaseDate = as.Date(PrisonReleaseDate),
+    Days_Between = as.numeric(PrisonReleaseDate - Date_Death)
+  ) %>%
+  select(Date_Death, PrisonReleaseDate, Days_Between, Manner_Death)
+data %>%
+  head(x) %>%
+  kable(caption = paste("Omitting", dim(data)[1]-x, "rows for display")) %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+point_size <- 3
+jitter_amount <- 25
+
+ggplot(data, aes(x = as.Date(Date_Death), y = as.Date(PrisonReleaseDate), color = Days_Between, shape = Manner_Death)) +
+  geom_point(size = point_size, position = position_jitter(width = jitter_amount, height = jitter_amount)) +
+  scale_color_gradient(low = "blue", high = "red", name = "Difference Dates, days") +
+  labs(x = "Date of Death", y = "Date of Prison Release", title = "Relationship between Date_Death and PrisonReleaseDate, observed FDOC Deaths") +
+  theme_minimal()
+```
+
+Zooming in to the interesting part!
+
+```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+point_size <- 3
+jitter_amount <- 90
+
+ggplot(data, aes(x = as.Date(Date_Death), y = as.Date(PrisonReleaseDate), color = Days_Between, shape = Manner_Death)) +
+  geom_point(size = point_size, position = position_jitter(width = jitter_amount, height = jitter_amount)) +
+  scale_color_gradient(low = "blue", high = "red", name = "Difference Dates, days") +
+  labs(x = "Date_Death", y = "Date of PrisonReleaseDate", title = "Relationship between Date_Death and PrisonReleaseDate, observed FDOC Deaths") +
+  scale_y_date(date_labels = "%Y", date_breaks = "6 months") +  # Include year on y-axis labels
+  theme_minimal() +
+  coord_cartesian(xlim = as.Date(c("2016-06-01", "2017-12-31")), ylim = as.Date(c("2020-06-01", "2020-12-31")))
+```
+
+What you see here is the same plot as above, but zoomed in on the red cluster. The points representing manners of death have been slightly separated to improve visibility.
+
+Explaining what it represents is more challenging and depends on how the FDOC uses PrisonReleaseDate for coding. My assumption is that it is a date that signifies when a person is legally 'released' in a specific way with a defined legal meaning.
+
+Based on the data, it appears that the FDOC intentionally delayed processing these death records. This delay is evident as the difference in dates for these observations is much larger compared to others (which have a difference of less than 90 days). Then, the FDOC processed their entire backlog in a single day, right in the midst of the pandemic.
+
+It seems that the processing of these individuals' paperwork was held for 3.5 years, presumably for a valid reason.
+
+```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+filtered_data <- data %>% filter(Days_Between > 90)
+p <- ggplot(filtered_data, aes(x = PrisonReleaseDate)) +
+  geom_histogram(fill = "blue", color = "black", bins = 30) +
+  labs(
+    title = "PrisonReleaseDate for those 'released' more than 90 days after Date_Death",
+    x = "Prison Release Date",
+    y = "Frequency"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+# Calculate the count of observations on a specific date
+count_date <- filtered_data %>%
+  group_by(PrisonReleaseDate) %>%
+  summarise(count = n())
+
+annotation_date <- as.Date("2020-09-30")
+count_for_annotation <- count_date %>%
+  filter(PrisonReleaseDate == annotation_date) %>%
+  pull(count)
+p + 
+  annotate("text", x = annotation_date-910, y = 198, label = paste("September 30, 2020:", count_for_annotation, "PrisonReleaseDate deaths"), vjust = 1.5)
+```
+
+My point is that I need more data.
+
 
