@@ -24,7 +24,8 @@ pkgs = c("readxl",
          "dplyr",
          "ggforce",
          "kableExtra",
-         "gridExtra")
+         "gridExtra",
+         "DT")
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
@@ -216,7 +217,11 @@ charges
 ```
 We actually need around 6-12 crime categories for our analysis. Therefore, my current task is to consolidate them into a smaller set of groups that we can work with. It's a tedious task that I've been procrastinating on, but I hope to complete it soon and continue with the analysis.
 
-# Forming Categories
+<ul>
+    <li>
+      <details>
+        <summary>Forming Categories</summary>
+        <p>
 ### Burglary and Theft
 ```{r code_folding = TRUE}
 burglary_theft_keywords <- c(
@@ -808,8 +813,17 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "PRAC.HEALTH CARE"
                   )
 ```
+  </p>
+  </details>
+  </li>
+</ul>
 
-```{r code_folding = TRUE}
+<ul>
+    <li>
+      <details>
+        <summary>Mapping to Formed Categories</summary>
+        <p>
+```{r}
 category_mapping <- list(
   "Burglary and Theft" = burglary_theft_keywords,
   "Drug Offenses" = drug_offenses_keywords,
@@ -822,9 +836,7 @@ category_mapping <- list(
   "Other" = other_crimes,
   "Probation/Parole Crimes" = probation_crimes,
   "Abuse/Neglect Crimes" = abuse_neglect_crimes)
-```
 
-```{r code_folding = TRUE}
 returners_hist$crime_category <- NA
 # Loop through categories and apply rules
 for (category in names(category_mapping)) {
@@ -832,8 +844,76 @@ for (category in names(category_mapping)) {
   returners_hist$crime_category[grepl(paste(keywords, collapse = "|"), returners_hist$adjudicationcharge_desc, ignore.case = TRUE)] <- category
 }
 ```
+  </p>
+  </details>
+  </li>
+</ul>
+
 
 Okay did it today this is first pass on proportions of *current charges* of those who are currently incarcerated and have been incarcerated once before -- please understand that the work I did today needs double and triple-checked, and that I need to additionally do more work to allow a crime to fit into multiple categories, perhaps. Need to think about that more first, tbh. Anyhow, first pass on charges looks like this:
+
+<ul>
+    <li>
+      <details>
+        <summary>View Crime Category Mappings</summary>
+        <p>
+        
+### Burglary and Theft
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Burglary and Theft")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+### Drug Offenses
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Drug Offenses")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### Violent Crimes
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Violent Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### Sex Crimes
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Sex Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### Crimes of Incarceration
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Crimes of Incarceration")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### Property Crimes
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Property Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### White-Collar and Fraud
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="White-Collar and Fraud")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+### Motor Vechile Crimes
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Motor Vechile Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+### Probation Violation/Parole Violation
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Probation/Parole Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### Abuse/Neglect
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Abuse/Neglect Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+### Other Crimes
+```{r code_folding = TRUE}
+datatable(unique(returners_hist %>% filter(crime_category=="Other")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+        
+  </p>
+  </details>
+  </li>
+</ul>
 
 ```{r}
 returners_hist$crime_category <- as.factor(returners_hist$crime_category)
