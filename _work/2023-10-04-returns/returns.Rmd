@@ -1,7 +1,7 @@
 ---
 title: "FDOC Returns to Incarceration"
 description: |
-  This document is an ongoing investigation into the data available returns to incarceraton in Florida. I choose not to use the term "recidivism", as the term implies a focus on reoffending and the idea of a "criminal" identity, rather than acknowledging the complex social, economic, and systemic factors at play.
+  This document presents an ongoing investigation into the data related to incarceration in Florida. I have intentionally chosen not to use the term "recidivism" because it implies a narrow focus on reoffending and reinforces the notion of a fixed "criminal" identity.
 output:
   distill::distill_article:
     toc: true
@@ -11,7 +11,7 @@ output:
 ---
 The Florida Department of Corrections makes its OBIS database accessible for public download [here](https://fdc.myflorida.com/pub/obis_request.html).
 
-This document is an ONGOING mining of that data. Keep an eye out for my newsletter (which doesn’t exist yet) for updates, or press f5 to refresh.
+This document is an ongoing mining of that data. Keep an eye out for my newsletter (which doesn't exist yet) for updates, or press F5 to refresh.
 
 <ul>
     <li>
@@ -66,7 +66,7 @@ returners_current_and_last <- returners %>%
   filter(row_num <= 2) %>%
   select(-row_num)
 ```
-Calcualte time total time served for each person prior to most recent incarceration
+Calculate total time served for each person prior to most recent incarceration
 ```{r}
 served_prior <- returners %>%
   mutate(time_served = ifelse(!is.na(ReleaseDate), as.numeric(difftime(ReleaseDate, ReceiptDate, units = "days")), NA)) %>%
@@ -133,13 +133,12 @@ ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
   labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population")
 ```
 
-Amazingly, a full `r prop_returned * 100`% of our currently incarceratd population has served time previously. FDOC likes returning customers, I've heard them say so myself.
-
-Indeed, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than 2 times before. What does this imply for the argument of incarceration as a deterrent?
-
-If you were to purchase an item from a store where the average item on the shelf had been returned at least twice, would it be reasonable to feel frustrated with *the item* if it later turns out to be faulty? Personally I just wouldn't shop there anymore.
+Amazingly, a full `r prop_returned * 100`% of our currently incarcerated population has served time previously. FDOC likes returning customers; I've heard them say so myself.
+Indeed, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than twice before. What does this imply for the argument of incarceration as a deterrent?
+If you were to purchase an item from a store where the average item on the shelf had been returned at least twice, would it be reasonable to feel frustrated with *the item* if it later turns out to be faulty? Personally, I just wouldn't shop there anymore.
 
 ## Time Free Since Last Release
+
 Next, we should examine the amount of time that those who are currently incarcerated in Florida were free in between their current and their last incarceration:
 
 ```{r fig.align='center', fig.height=5, fig.width=10, code_folding = TRUE}
@@ -157,7 +156,7 @@ plota <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = prev_TimeS
   ylab("Years Free") +
   theme_void() +  # Remove axis and grid lines
   theme(axis.text.y = element_text()) +  # Keep y-axis labels
-  labs(title = "Years Free, Colored by Previous Fl. Time Served")
+  labs(title = "Years Free, Shaded by Previous Fl. Time Served")
 
 
 color_palette <- c("#ffffff", "#e6e6e6", "#404040", "#000000")
@@ -170,7 +169,7 @@ plotb <- ggplot(returners_a, aes(x = 1, y = TimeOut / 365.25, color = times_in_b
   ylab(NULL) +
   theme_void() +  # Remove axis and grid lines
   theme(axis.text.y = element_text()) +  # Keep y-axis labels
-  labs(title = "Years Free, Colored by Number of Incarcerations")
+  labs(title = "Years Free, Shaded by Number of Incarcerations")
 
 # Customize plot margins for both plots
 plota <- plota + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
@@ -180,7 +179,7 @@ plotb <- plotb + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
 grid.arrange(plota, plotb, ncol = 2)
 ```
 
-We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the darker points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, the assumption being that with effective correctional measures the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we here see evidence that the *longer one is inside the less equipped one is* to navigate the obstacles which await.
+We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the darker points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, as the assumption is that with effective correctional measures, the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we see evidence here that the *longer one is inside, the less equipped one is* to navigate the obstacles that await.
 
 ### Time Free
 
@@ -197,12 +196,11 @@ kable(quartile_table) %>%
 
 
 We frequently encounter statistics that state "X amount of Florida prisoners will return within 5 years." However, a more appropriate way to present this information is to focus on the current incarcerated population in Florida who have served time before. Shockingly, a quarter of them were returned to prison in less than 1.8 years after their most recent release, while half of them were not out longer than 3.2 years. Moreover, only 25% of them managed to stay out of prison for more than 5.7 years.
-
-This subtle change in framing emphasizes the inefficiency of traditional carceral structures in preventing recidivism, while also highlighting the responsibility of the correctional agency. If the purpose of a sentence is to 'correct,' why do we frequently find the need to re-correct so soon?
+This subtle change in framing emphasizes the inefficiency of traditional carceral structures in preventing recidivism while also highlighting the responsibility of the correctional agency. If the purpose of a sentence is to 'correct,' why do we frequently find the need to re-correct so soon?
 
 # Charges
-For each person who is currently incarcerated and has at least one prior incarceration, we have data on all adjudications for their current and past incarcerations.
 
+For each person who is currently incarcerated and has at least one prior incarceration, we have data on all adjudications for their current and past incarcerations.
 Regarding those currently incarcerated, we observe that they are serving time for a wide range of adjudication charges. There are 863 different charges for which these individuals are currently incarcerated.
 
 ```{r}
@@ -215,7 +213,7 @@ charges <- returners_hist %>%
   arrange(desc(charge_count))
 charges
 ```
-We actually need around 6-12 crime categories for our analysis. Therefore, my current task is to consolidate them into a smaller set of groups that we can work with. It's a tedious task that I've been procrastinating on, but I hope to complete it soon and continue with the analysis.
+We need approximately 6-12 crime categories for our analysis. Currently, my task is to consolidate them into a smaller set of groups that we can work with. Although it's a tedious task that I've been procrastinating on, I hope to complete it soon and continue with the analysis.
 
 <ul>
     <li>
@@ -253,11 +251,15 @@ burglary_theft_keywords <- c(
 ```{r code_folding = TRUE}
 drug_offenses_keywords <- c(
   "DRUG",
+  "BARBITURATE-POSSESS",
   "NARCOTIC",
   "COCAINE",
   "COC.",
+  "MANUFAC. POSS W",
   "MARIJUANA",
+  "IMIT.CON.SUBS.",
   "HEROIN",
+  "GHB",
   "10GR.HER.SCH.I",
   "SCH I & II",
   "MINOR-BATHSALTS",
@@ -290,7 +292,6 @@ drug_offenses_keywords <- c(
   "DRUGS",
   "SALE MAR.ETC",
   "SELL/ETC/COC/HER/1K",
-  "POSS",
   "AMPHETAMINE-PUR/POSS/W/INT",
   "AMPHETAMINE-POSSESS",
   "AMPHETAMINE",
@@ -493,7 +494,9 @@ incarceration_related_crimes <- c(
   "OFFICIAL/EMPLOYEE",
   "MISD. TO FEL.BY GANG MEMBR",
   "BENEFIT GANG",
-  "PREVIOUS CONVICT"
+  "PREVIOUS CONVICT",
+  "VLNT.CAREER CRIM.POSS.GUN",
+  "CONTRAB."
 )
 ```
 
@@ -640,7 +643,10 @@ white_collar_fraud_crimes <- c(
   "UNLAWFUL COMPENSATION",
   "BUY,SELL VESSEL W/ALT.NUM.",
   "CREATE FALSE",
-  "DEAL.INS.NO CERTIF/AUTH."
+  "DEAL.INS.NO CERTIF/AUTH.",
+  "POSS PRSNL ID INF 5+ PERSONS",
+  "UNAUTH POSS/USE OF DL/ID",
+  "POSS PRSNL ID"
 )
 ```
 ### Motor Vechile Crimes
@@ -707,6 +713,8 @@ abuse_neglect_crimes <- c(
 ### Other Crimes
 ```{r code_folding = TRUE}
 other_crimes <- c("CARRYING CONCEALED FIREARM",
+                  "LIQUOR-POSSESSION BY MINOR",
+                  "POSSES VEH W/ILL LIC PLATE",
                   "POSS/USE HOX BMB-FLNY/ATT.",
                   "FLEE LEO/NO REGARD",
                   "OBSTRUCT",
@@ -810,7 +818,24 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "CONCEAL WPN NOT GUN-MISD.",
                   "bigamy",
                   "UNLICENSED PAWN BROKER",
-                  "PRAC.HEALTH CARE"
+                  "PRAC.HEALTH CARE",
+                  "POSS CONC HANDCUFF KEY",
+                  "POSS.5 OR MORE DEVICES",
+                  "POSS.WPN.SCH/EVENT/BUS/STOP",
+                  "WEAP.W/IN",
+                  "INCENDIARY DEVICE-POSSESS",
+                  "POSS/DISCH/MAKE DESTR. DEVICE",
+                  "POSS.MANUF.FIRE BOMB",
+                  "POSSESS WEAPON SCHOOL",
+                  "POSS.FIREARM AT SCHOOL",
+                  "PAR.AUTH.LET MINOR",
+                  "HOAX BOMB",
+                  "POSS.ELEC.WPN",
+                  "POSSESS FIREARM WHEN PROHIB",
+                  "ILGL.VEH.FUEL TRNSPRT",
+                  "POSSES.FIREARM",
+                  "TURTL/NEST/ETC",
+                  "VEST"
                   )
 ```
   </p>
@@ -857,6 +882,12 @@ Okay did it today this is first pass on proportions of *current charges* of thos
       <details>
         <summary>View Crime Category Mappings</summary>
         <p>
+
+```{r}
+#unmapped
+unique(returners_hist[which(is.na(returners_hist$crime_category)),]$adjudicationcharge_descr)
+```
+
         
 ### Burglary and Theft
 ```{r code_folding = TRUE}

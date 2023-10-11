@@ -926,7 +926,7 @@ jitter_amount <- 90
 ggplot(data, aes(x = as.Date(Date_Death), y = as.Date(PrisonReleaseDate), color = Days_Between, shape = Manner_Death)) +
   geom_point(size = point_size, position = position_jitter(width = jitter_amount, height = jitter_amount)) +
   scale_color_gradient(low = "blue", high = "red", name = "Difference Dates, days") +
-  labs(x = "Date_Death", y = "Date of PrisonReleaseDate", title = "Relationship between Date_Death and PrisonReleaseDate, observed FDOC Deaths") +
+  labs(x = "DateDeath", y = "Date of PrisonReleaseDate", title = "Relationship between Date_Death and PrisonReleaseDate, observed FDOC Deaths") +
   scale_y_date(date_labels = "%Y", date_breaks = "6 months") +  # Include year on y-axis labels
   theme_minimal() +
   coord_cartesian(xlim = as.Date(c("2016-06-01", "2017-12-31")), ylim = as.Date(c("2020-06-01", "2020-12-31")))
