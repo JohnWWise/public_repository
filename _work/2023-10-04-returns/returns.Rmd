@@ -182,10 +182,10 @@ plota <- plota + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
 plotb <- plotb + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
 
 # Arrange the plots using grid.arrange
-grid.arrange(plota, plotb, ncol = 2)
+grid.arrange(plota, plotb, ncol = 2, top = "Respite Amidst Most Recent Incarcerations, Current FDOC Population")
 ```
 
-We can observe that the majority of individuals who are currently incarcerated in Florida, and who have a previous history of incarceration, did not have a significant period of freedom before their current imprisonment. Interestingly, we also notice a pattern where individuals who had served long sentences in the past or multiple sentences were not able to remain free for long before being incarcerated again. This is evident from the darker points towards the bottom of the visuals. This result may be surprising to those unfamiliar with the experience of being incarcerated, as the assumption is that with effective correctional measures, the longer one serves inside or the more times one is sentenced to prison, the more equipped they would be to stay out longer and remain free. I don't expect many to be surprised, however, that we see evidence here that the *longer one is inside, the less equipped one is* to navigate the obstacles that await.
+It is evident from the visuals that a majority of individuals currently incarcerated in Florida with a history of previous FDOC incarceration did not have a significant period of freedom before their current imprisonment. Interestingly, there is also a pattern where individuals who had served long sentences in the past or multiple sentences were unable to remain free for long before being incarcerated again. These patterns are shown by the darker points towards the bottom of the visuals. While one might (naively) expect that spending more time in prison or having multiple sentences would make individuals better equipped to stay out longer and remain free, it is not surprising to see evidence here that the longer someone is inside, the *less* equipped they are to navigate the challenges after release.
 
 ### Time Free
 
@@ -201,8 +201,11 @@ kable(quartile_table) %>%
 ```
 
 
-We frequently encounter statistics that state "X amount of Florida prisoners will return within 5 years." However, a more appropriate way to present this information is to focus on the current incarcerated population in Florida who have served time before. Shockingly, a quarter of them were returned to prison in less than 1.8 years after their most recent release, while half of them were not out longer than 3.2 years. Moreover, only 25% of them managed to stay out of prison for more than 5.7 years.
-This subtle change in framing emphasizes the inefficiency of traditional carceral structures in preventing recidivism while also highlighting the responsibility of the correctional agency. If the purpose of a sentence is to 'correct,' why do we frequently find the need to re-correct so soon?
+For individuals who are currently incarcerated and have previously served time in Florida, a quarter of them were returned to prison in less than 1.8 years after their most recent release, while half of them were not out longer than 3.2 years. Furthermore, only 25% of them managed to stay out of prison for more than 5.7 years.
+
+It is clear that many people are going back to prison very quickly, which raises concerns.
+
+Think about this, though: Having 3.2 years of freedom is actually enough time for someone to regain some responsibility and dignity -- it is already difficult to regain these once(or maybe for the first time), but to only have a fleeting taste of them? I do not know that I could recover from something like that.
 
 # Charges
 
@@ -219,7 +222,7 @@ charges <- returners_hist %>%
   arrange(desc(charge_count))
 charges
 ```
-We need approximately 6-12 crime categories for our analysis. Currently, my task is to consolidate them into a smaller set of groups that we can work with. Although it's a tedious task that I've been procrastinating on, I hope to complete it soon and continue with the analysis.
+
 
 <ul>
     <li>
@@ -881,7 +884,7 @@ for (category in names(category_mapping)) {
 </ul>
 
 
-Okay did it today this is first pass on proportions of *current charges* of those who are currently incarcerated and have been incarcerated once before -- please understand that the work I did today needs double and triple-checked, and that I need to additionally do more work to allow a crime to fit into multiple categories, perhaps. Need to think about that more first, tbh. Anyhow, first pass on charges looks like this:
+
 
 <ul>
     <li>
@@ -961,4 +964,4 @@ rounded_percentages <- round(category_percentages, 2)
 print(rounded_percentages)
 ```
 
-I think the biggest problem with it right now is that I have many crimes coded as crimes of incarceration which should be more properly coded as Probation/Parole Violations (not crimes need to fix that too). Errors like that need to be sorted, it all needs double-checked, and then I need to validate the code once the data has been totally properly cleaned. Lots of work still, but this is a start.
+**crime categories are under active review and adjustment -- many crimes are still coded incorrectly please have no faith in the valididty of the final table presented just above**
