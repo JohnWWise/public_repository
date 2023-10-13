@@ -1,7 +1,7 @@
 ---
 title: "FDOC Returns to Incarceration"
 description: |
-  This document presents an ongoing investigation into the data related to incarceration in Florida. I have intentionally chosen not to use the term "recidivism" because it implies a narrow focus on reoffending and reinforces the notion of a fixed "criminal" identity.
+  This document presents an ongoing investigation into returns to incarceration in Florida.
 output:
   distill::distill_article:
     toc: true
@@ -133,9 +133,15 @@ ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
   labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population")
 ```
 
-Amazingly, a full `r prop_returned * 100`% of our currently incarcerated population has served time previously. FDOC likes returning customers; I've heard them say so myself.
-Indeed, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than twice before. What does this imply for the argument of incarceration as a deterrent?
-If you were to purchase an item from a store where the average item on the shelf had been returned at least twice, would it be reasonable to feel frustrated with *the item* if it later turns out to be faulty? Personally, I just wouldn't shop there anymore.
+Amazingly, a full `r prop_returned * 100`% of our currently incarcerated population has served time previously. The Florida Department of Corrections (FDOC) seems to appreciate repeat customers; I've heard them say so myself.
+Furthermore, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than twice before.
+What does this information imply about the argument for incarceration as a deterrent?
+
+Regarding the argument on incarceration as a deterrent, I pose this question: How many crimes has the threat of incarceration prevented YOU from committing?
+
+If your answer is "none," then you are likely in the majority. 
+
+If your response is "none, but I'm not a criminal," then it is worth reflecting on the following: Who are the criminals? What do they look like? Where do they come from? Which neighborhoods do they reside in? How comfortable are you with your answers?
 
 ## Time Free Since Last Release
 
