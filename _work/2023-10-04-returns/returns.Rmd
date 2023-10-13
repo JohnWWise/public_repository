@@ -185,7 +185,7 @@ plotb <- plotb + theme(plot.margin = margin(0, 0, 0, 0, unit = "pt"))
 grid.arrange(plota, plotb, ncol = 2, top = "Respite Amidst Most Recent Incarcerations, Current FDOC Population")
 ```
 
-It is evident from the visuals that a majority of individuals currently incarcerated in Florida with a history of previous FDOC incarceration did not have a significant period of freedom before their current imprisonment. Interestingly, there is also a pattern where individuals who had served long sentences in the past or multiple sentences were unable to remain free for long before being incarcerated again. These patterns are shown by the darker points towards the bottom of the visuals. While one might (naively) expect that spending more time in prison or having multiple sentences would make individuals better equipped to stay out longer and remain free, it is not surprising to see evidence here that the longer someone is inside, the *less* equipped they are to navigate the challenges after release.
+It is evident from the visuals that a majority of individuals currently incarcerated in Florida with a history of previous FDOC incarceration did not have a significant period of freedom before their current imprisonment. Interestingly, there is also a pattern where individuals who had served long sentences in the past or multiple sentences were unable to remain free for long before being incarcerated again. These patterns are shown by the darker points towards the bottom of the visuals. While one might (naively) expect that spending more time in prison or having multiple sentences would make individuals better equipped to stay out longer and remain free, in reality it is not surprising to see evidence here that the longer someone is inside, the *less* equipped they are to navigate the challenges after release.
 
 ### Time Free
 
@@ -205,7 +205,7 @@ For individuals who are currently incarcerated and have previously served time i
 
 It is clear that many people are going back to prison very quickly, which raises concerns.
 
-Think about this, though: Having 3.2 years of freedom is actually enough time for someone to regain some responsibility and dignity -- it is already difficult to regain these once(or maybe for the first time), but to only have a fleeting taste of them? I do not know that I could recover from something like that.
+Think about this, however: having 3.2 years of freedom is actually enough time for someone to regain some responsibilities and dignity -- it is already difficult to regain these once (or maybe gain them for the first time), but to only have a fleeting taste of them? I do not know that I could recover from something like that.
 
 # Charges
 
