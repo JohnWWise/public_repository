@@ -25,7 +25,8 @@ pkgs = c("readxl",
          "ggforce",
          "kableExtra",
          "gridExtra",
-         "DT")
+         "DT",
+         "tidyr")
 inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
@@ -123,18 +124,19 @@ returners_a$prev_TimeServed_bins <- cut(returners_a$prev_TimeServed / 365.25,
 prop_returned <- round(dim(returners_a)[1]/dim(Root)[1],2)
 mean_incarcerations <- round((sum(returners_a$times_in) + dim(first_timers)[1])/dim(Root)[1],2)
 
-new_data <- data.frame(times_in_bins = rep("First Bid", dim(first_timers)[1]))
+new_data <- data.frame(times_in_bins = rep("First FDOC Commitment", dim(first_timers)[1]))
 combined_data <- rbind(returners_a %>% select(times_in_bins), new_data)
 ggplot(combined_data, aes(x = "", fill = times_in_bins)) +
   geom_bar(width = 1, stat = "count") +
   coord_polar("y", start = 0) +
   scale_fill_manual(values = c("#2c7bb6", "#abd9e9" ,"#ffffbf", "#fdae61", "#e6e6e6", "#7f3b00")) +
   theme_void() +  # Remove axis and grid lines
-  labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population")
+  labs(title = "Times Incarcerated, Currently Incarcerated FDOC Population", fill = "Times FDOC Incarcerated")
 ```
 
 Amazingly, a full `r prop_returned * 100`% of our currently incarcerated population has served time previously. The Florida Department of Corrections (FDOC) seems to appreciate repeat customers; I've heard them say so myself.
 Furthermore, the average number of times a person has been incarcerated across the entire population is `r mean_incarcerations`. In other words, the average person currently incarcerated in FDOC has been incarcerated more than twice before.
+
 What does this information imply about the argument for incarceration as a deterrent?
 
 Regarding the argument on incarceration as a deterrent, I pose this question: How many crimes has the threat of incarceration prevented YOU from committing?
@@ -229,7 +231,7 @@ charges
       <details>
         <summary>Forming Categories</summary>
         <p>
-### Burglary and Theft
+### Burglary, Theft, and Property Crimes
 ```{r code_folding = TRUE}
 burglary_theft_keywords <- c(
   "BURGLARY",
@@ -253,7 +255,55 @@ burglary_theft_keywords <- c(
   "PURSE",
   "STOLEN VEHICLE",
   "GT",
-  "BURG.-STRUCT"
+  "BURG.-STRUCT",
+  "ARSON",
+  "VANDALISM",
+  "TRESPASSING",
+  "SHOPLIFTING",
+  "MOTOR VEHICLE THEFT",
+  "LARCENY",
+  "VEHICLE THEFT/ILLEGAL USE",
+  "CRIMINAL DAMAGE TO PROPERTY",
+  "RECEIVING STOLEN PROPERTY",
+  "BURGLARY OF A VEHICLE",
+  "PETTY THEFT",
+  "OFFERS FOR SALE",
+  "GRAND THEFT",
+  "IDENTITY THEFT",
+  "EMBEZZLEMENT",
+  "FRAUD",
+  "FORGERY",
+  "OBTAIN GOODS",
+  "CREDIT CARD FRAUD",
+  "CHECK FRAUD",
+  "MAIL THEFT",
+  "BICYCLE THEFT",
+  "SHOPPING CART THEFT",
+  "VEHICLE PARTS THEFT",
+  "BUILDING BREAKING AND ENTERING",
+  "CRIMINAL TRESPASS",
+  "CRIMINAL MISCHIEF",
+  "GRAFFITI",
+  "INT./RECKLESS BURN LAND",
+  "CRIMINAL TAMPERING",
+  "ARSON OF A VEHICLE",
+  "LOOTING",
+  "HOME INVASION",
+  "EXTORTION",
+  "STOLEN PROPERTY TRAFFICKING",
+  "PROPERTY DAMAGE",
+  "VANDALISM OF GOVERNMENT PROPERTY",
+  "PROPERTY",
+  "SNATCH",
+  "DAMAGE PROPERTY-OTHER",
+  "FALSE APPL./STATE.",
+  "CHOP SHOP",
+  "STOLEN CARGO",
+  "METAL RECYCLER",
+  "ARSON, PROPERTY DEFRAUD",
+  "GRAND THEFT MOTOR VEHICLE",
+  "POSSESS STOLEN VEHICLE",
+  "STOLEN VEHICLE - OTHER"
 )
 ```
 ### Drug Offenses
@@ -312,6 +362,7 @@ drug_offenses_keywords <- c(
   "OPIUM",
   "POS PLAC MAN SUB/MINOR EXIST",
   "S/M/D",
+  "SALE OF COUNTERFEIT DRUGS",
   "MARIJ",
   "DEAL DRGS",
   "DEAL/ETC.MAJR.DRG",
@@ -345,8 +396,9 @@ violent_crimes_keywords <- c(
   "DOMESTIC VIOLENCE",
   "CARJACKING",
   "ARMED ROBBERY",
+  "DISCHARGE F/A FR.VEHICLE W/I 1",
   "AGGRAVATED BATTERY",
-  "AGGRAVATED RAPE",
+  "VEHICLE HOMCID-NO AID/INFO",
   "AGGRAVATED SEXUAL ASSAULT",
   "AGGRAVATED DOMESTIC VIOLENCE",
   "AGGRAVATED CARJACKING",
@@ -386,7 +438,13 @@ violent_crimes_keywords <- c(
   "DISCHARGE F/A FR.VEHICLE W/I 1",
   "MANSL",
   "DOM VIO",
-  "BOD.INJ./NOT"
+  "BOD.INJ./NOT",
+  "BRAND CHILD - TRAFFICKING",
+  "FALSE IMPRISON MINOR AGA.WILL",
+  "FORCIBLE PURSE SNATCHING",
+  "SUDDEN SNATCH NO WEAPON",
+  "SUDDEN SNATCH F/A OR DW",
+  "HOMICIDE NEGLIG MANSL VEH"
 )
 ```
 
@@ -433,6 +491,7 @@ sex_crimes_keywords <- c(
   "FORCED SEXUAL SERVITUDE",
   "MOLEST",
   "L/L",
+  "SEX ASSLT - CARNAL ABUSE",
   "PROV.OBSCENE MAT.MINOR",
   "L&L",
   "IMPREG.GRL",
@@ -445,11 +504,13 @@ sex_crimes_keywords <- c(
   "LEWD",
   "TFK:LABOR",
   "LURE CHILD",
-  "MINOR SX MATERIAL"
+  "MINOR SX MATERIAL",
+  "L&L BATT FORCE/ENTICE ABUSE",
+  "SEX BAT/COERCES BY THREAT"
 )
 ```
 
-### Crimes of Incarceration
+### Crimes of Incarceration and Criminal Identity
 ```{r code_folding = TRUE}
 incarceration_related_crimes <- c(
   "ESCAPE",
@@ -466,7 +527,6 @@ incarceration_related_crimes <- c(
   "INMATE MUTINY",
   "LEO",
   "FAIL.TO",
-  "PRISON",
   "UNAUTH. COMP. ACCESS",
   "STAFF-ON-INMATE ASSAULT",
   "STAFF INVOLVEMENT IN CONTRABAND SMUGGLING",
@@ -491,12 +551,14 @@ incarceration_related_crimes <- c(
   "REGISTR.VIOL.",
   "DAMAGE ELEC.MONITOR.EQUIP.",
   "RIOT",
+  "PRISONER",
   "2-WAY COMM.",
   "CORRECTION STAFF",
   "RESIST.LEO",
   "NOTIF.SHERIFF",
   "BRING INTO STA/CONTR SUBST",
   "EXCON",
+  "CELL PHONE IN PRISON",
   "DETAINEE",
   "GANG MEMBERSHIP",
   "RE SX.OFNDR.",
@@ -505,63 +567,23 @@ incarceration_related_crimes <- c(
   "BENEFIT GANG",
   "PREVIOUS CONVICT",
   "VLNT.CAREER CRIM.POSS.GUN",
-  "CONTRAB."
+  "CONTRAB.",
+  "ASSAULT BY INM W/N CO FACILITY",
+  "BATTERY ON DETENT.FAC.STAFF",
+  "BATTERY OF HRS EMPLOYEE",
+  "BATT. RYCE FACILITY STAFF",
+  "AGG.BATT. RYCE FAC. STAFF",
+  "SEX PRED, TRANS RES NO REP",
+  "SEX OFF, TRANS NO REP"
 )
 ```
 
-### Property Crimes
-```{r code_folding = TRUE}
-property_crimes <- c(
-  "ARSON",
-  "VANDALISM",
-  "TRESPASSING",
-  "SHOPLIFTING",
-  "MOTOR VEHICLE THEFT",
-  "LARCENY",
-  "CRIMINAL DAMAGE TO PROPERTY",
-  "RECEIVING STOLEN PROPERTY",
-  "BURGLARY OF A VEHICLE",
-  "PETTY THEFT",
-  "OFFERS FOR SALE",
-  "GRAND THEFT",
-  "IDENTITY THEFT",
-  "EMBEZZLEMENT",
-  "FRAUD",
-  "FORGERY",
-  "OBTAIN GOODS",
-  "CREDIT CARD FRAUD",
-  "CHECK FRAUD",
-  "MAIL THEFT",
-  "BICYCLE THEFT",
-  "SHOPPING CART THEFT",
-  "VEHICLE PARTS THEFT",
-  "BUILDING BREAKING AND ENTERING",
-  "CRIMINAL TRESPASS",
-  "CRIMINAL MISCHIEF",
-  "GRAFFITI",
-  "INT./RECKLESS BURN LAND",
-  "CRIMINAL TAMPERING",
-  "ARSON OF A VEHICLE",
-  "LOOTING",
-  "HOME INVASION",
-  "EXTORTION",
-  "STOLEN PROPERTY TRAFFICKING",
-  "PROPERTY DAMAGE",
-  "VANDALISM OF GOVERNMENT PROPERTY",
-  "PROPERTY",
-  "SNATCH",
-  "DAMAGE PROPERTY-OTHER",
-  "FALSE APPL./STATE.",
-  "CHOP SHOP",
-  "STOLEN CARGO",
-  "METAL RECYCLER"
-)
-```
 
 ### White-Collar and Fraud
 ```{r code_folding = TRUE}
 white_collar_fraud_crimes <- c(
   "EMBEZZLEMENT",
+  "EXTORTION",
   "FRAUD",
   "FORGERY",
   "CREDIT CARD FRAUD",
@@ -615,6 +637,7 @@ white_collar_fraud_crimes <- c(
   "FALSE STATMT",
   "CONSUMER FRAUD",
   "PYRAMID SCHEMES",
+  "BURGL AUTHORIZED EMER VEHICLE",
   "INTELLECTUAL PROPERTY FRAUD",
   "FORGED",
   "FALS INF. TO",
@@ -655,7 +678,18 @@ white_collar_fraud_crimes <- c(
   "DEAL.INS.NO CERTIF/AUTH.",
   "POSS PRSNL ID INF 5+ PERSONS",
   "UNAUTH POSS/USE OF DL/ID",
-  "POSS PRSNL ID"
+  "POSS PRSNL ID",
+  "TRAFF CRED CARDS 5-14",
+  "TRAFF CRED CARDS 15-49",
+  "S/M/D STOLEN ETC.DL/IDFACT",
+  "FALSE APPL./STATE. RE:DL",
+  "PASS TITLE ON STOLEN VEHICLE",
+  "STAGE CRASH FOR INS. CLAIM",
+  "CHECKS AND DRAFTS VIOLATIONS",
+  "DRUG ABUSE-FRAUD MATERIAL",
+  "ILLEGAL LIC PLATE",
+  "STAGE CRASH FOR INS. CLAIM",
+  "DISCLOSE/OBTAIN CRASH INFO"
 )
 ```
 ### Motor Vechile Crimes
@@ -665,16 +699,12 @@ traffic_crimes <- c(
   "DRIV.W/O",
   "DRV",
   "TAG-MISD.",
-  "VEHICLE",
   "DUI",
-  "CRASH",
   "HIT AND RUN",
   "RECKLESS DRIVING",
   "DRUNK DRIVING (DUI/DWI)",
   "DRIVING WITHOUT A LICENSE",
   "DRIVING WITH A SUSPENDED LICENSE",
-  "FAILURE TO STOP AT A STOP SIGN",
-  "FAILURE TO YIELD THE RIGHT OF WAY",
   "RUNNING A RED LIGHT",
   "DRIVING WITHOUT INSURANCE",
   "LEAVING THE SCENE OF AN ACCIDENT (HIT AND RUN)",
@@ -686,10 +716,13 @@ traffic_crimes <- c(
   "UNAUTH USE",
   "DWLSR",
   "DRIVE-BODILY",
-  "ILLEGAL LIC PLATE",
   "LEAVE ACCIDENT",
   "DRIVE",
-  "BOATING"
+  "BOATING",
+  "TRAFFIC OFFENSE",
+  "LEAVE CRASH",
+  "LVE CRASH"
+  
   )
 ```
 ### Probation Violation/Parole Violation
@@ -702,19 +735,30 @@ probation_crimes <- c(
   "Supervised release",
   "Probation breach",
   "Parole breach",
-  "violation",
+  "MISC VIOLATIONS",
   'FAIL RPT.NONMOVE',
-  "ELEC. MON. DEVICE"
+  "ELEC. MON. DEVICE",
+  "DAMAGE ELEC.MONITOR.EQUIP",
+  "CONDIT RELEASE VIOLATION",
+  "SUPERVISION VIOLATION"
 )
 ```
 
 ### Abuse/Neglect
 ```{r code_folding = TRUE}
 abuse_neglect_crimes <- c(
-  "Abuse",
-  "neglect",
+  "CHILD ABUSE-NEGLECT",
+  "ABUSE CHILD-INJURY",
   "ABUSE-NEGLECT",
-  "NEGLCT"
+  "NEGLCT",
+  "CHILD ABUSE",
+  "ALS.IMP. V<13/AGG.CHLD ABUSE",
+  "ABUSE CHILD",
+  "BUSE ELDER/DISABLD-INJURY",
+  "CHILD NEGLECT",
+  "NEGLECT CHILD",
+  "AGG.ABUSE",
+  "ABUSE ELDER/DISABLD"
 )
 
 ```
@@ -777,7 +821,6 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "MPERSON LEO COM. OF FEL",
                   "DEPRIVE OFFR OF PROTECT.",
                   "THREATS",
-                  "THREAT",
                   "CONTEMPT",
                   "STORES HAZAR WASTE",
                   "INTERFERS W/CUSTODY PARENT/GUA",
@@ -788,6 +831,7 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "INJ/KILL PD/FD/SAR ANIMAL",
                   "FALSE REPORT/ FAILURE MAKE REP",
                   "CONC.CRIME",
+                  "THREAT TO BOMB",
                   "CONSERVATION-OTHER",
                   "USE/CONCEAL/ATT.WPN-FELNY",
                   "INTRNET/F.S.",
@@ -844,7 +888,12 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "ILGL.VEH.FUEL TRNSPRT",
                   "POSSES.FIREARM",
                   "TURTL/NEST/ETC",
-                  "VEST"
+                  "VEST",
+                  "HIV-POSITIVE HAS SEX",
+                  "CRIMINAL MISCHIEF-MISD",
+                  "POSSESSION OF STOLEN EXPLOSIVE",
+                  "AIM LASER AT DRIVER/PILOT",
+                  "HIV-POS.HAS SEX 2+ VIOLATIONS"
                   )
 ```
   </p>
@@ -859,16 +908,15 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
         <p>
 ```{r}
 category_mapping <- list(
-  "Burglary and Theft" = burglary_theft_keywords,
+  "Burglary, Theft, Property Crimes" = burglary_theft_keywords,
   "Drug Offenses" = drug_offenses_keywords,
   "Violent Crimes" = violent_crimes_keywords,
   "Sex Crimes" = sex_crimes_keywords,
-  "Crimes of Incarceration" = incarceration_related_crimes,
-  "Property Crimes" = property_crimes,
+  "Crimes of Incarceration/Criminal Identity" = incarceration_related_crimes,
   "White-Collar and Fraud" = white_collar_fraud_crimes,
   "Motor Vechile Crimes" = traffic_crimes,
   "Other" = other_crimes,
-  "Probation/Parole Crimes" = probation_crimes,
+  "Probation/Parole Violations" = probation_crimes,
   "Abuse/Neglect Crimes" = abuse_neglect_crimes)
 
 returners_hist$crime_category <- NA
@@ -900,7 +948,7 @@ unique(returners_hist[which(is.na(returners_hist$crime_category)),]$adjudication
         
 ### Burglary and Theft
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Burglary and Theft")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(returners_hist %>% filter(crime_category=="Burglary, Theft, Property Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 ### Drug Offenses
 ```{r code_folding = TRUE}
@@ -919,12 +967,7 @@ datatable(unique(returners_hist %>% filter(crime_category=="Sex Crimes")%>% sele
 
 ### Crimes of Incarceration
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Crimes of Incarceration")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
-```
-
-### Property Crimes
-```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Property Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(returners_hist %>% filter(crime_category=="Crimes of Incarceration/Criminal Identity")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### White-Collar and Fraud
@@ -937,7 +980,7 @@ datatable(unique(returners_hist %>% filter(crime_category=="Motor Vechile Crimes
 ```
 ### Probation Violation/Parole Violation
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Probation/Parole Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(returners_hist %>% filter(crime_category=="Probation/Parole Violations")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Abuse/Neglect
@@ -955,6 +998,7 @@ datatable(unique(returners_hist %>% filter(crime_category=="Other")%>% select(ad
   </li>
 </ul>
 
+### Proportions of Charges (not persons)
 ```{r}
 returners_hist$crime_category <- as.factor(returners_hist$crime_category)
 category_counts <- summary(returners_hist$crime_category)
@@ -964,4 +1008,42 @@ rounded_percentages <- round(category_percentages, 2)
 print(rounded_percentages)
 ```
 
-**crime categories are under active review and adjustment -- many crimes are still coded incorrectly please have no faith in the valididty of the final table presented just above**
+Categorizing crimes in this manner is a highly laborious task. I had to make numerous decisions regarding the classification of crimes which often felt arbitrary even to myself. It is important to note that there are many other equally valid, and possibly even superior, crime categorization schemas. Furthermore, please be aware that crime categories are actively being reviewed and adjusted. If you come across any errors or inconsistencies, or would like have an alternate schema considered, please contact me.
+
+I do not like how low the Probation/Parole Violations seem to be, seems to be an error almost, so the next step is to investigate that surprising result throughly.
+
+```{r}
+wrk <- returners_hist %>% select(DCNumber, crime_category)
+result <- wrk %>% 
+  group_by(DCNumber) %>% 
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+```
+
+```{r}
+result <- result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+```
+
+Here we have my first pass at establishing the proportions of currently incarcerated returning persons assocated with each crime category.
+
+```{r}
+result_df <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(result)[-1]
+for (category in categories) {
+  num_associated_rows <- result %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(result), 2)
+  result_df <- rbind(result_df, data.frame(Category = category, Proportion = proportion))
+}
+print(result_df)
+```
+In the analysis, it is observed that among the individuals currently incarcerated in FDOC who have previously served time in FDOC, 54% have at least one Burglary, Theft, or Property crime associated with their current incarceration, while 42% have been associated with at least one crime from the violent crime category, and so on. The proportions sum to greater than 100 because many individuals are associated with multiple crime categories.
+
+I really suggest that someone double-check the crime categorizations for accuracy. If these results are indeed true, they are quite shocking.
+
+
