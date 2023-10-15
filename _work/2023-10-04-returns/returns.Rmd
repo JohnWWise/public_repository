@@ -1044,6 +1044,6 @@ print(result_df)
 ```
 In the analysis, it is observed that among the individuals currently incarcerated in FDOC who have previously served time in FDOC, 54% have at least one Burglary, Theft, or Property crime associated with their current incarceration, while 42% have been associated with at least one crime from the violent crime category, and so on. The proportions sum to greater than 100 because many individuals are associated with multiple crime categories.
 
-I really suggest that someone double-check the crime categorizations for accuracy. If these results are indeed true, they are quite shocking.
+I believe the count for Probation/Parole Violations is shockingly low because the FDOC may classify individuals who are currently incarcerated and have violated their probation/parole as adjudicated under the charge for which they were originally sentenced to probation. If this is the case, and I have not simply misclassified a probation/parole violation as a different crime, it will make our analysis more challenging and limited in scope. I am currently investigating the situation and exploring potential ways to address this issue.
 
 
