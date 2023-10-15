@@ -921,10 +921,11 @@ Zooming in to the interesting part!
 
 ```{r fig.align='center', warning=FALSE, code_folding=TRUE}
 point_size <- 3
-jitter_amount <- 90
+x_jitter_amount <- 1450
+y_jitter_amount <- 20
 
 ggplot(data, aes(x = as.Date(Date_Death), y = as.Date(PrisonReleaseDate), color = Days_Between, shape = Manner_Death)) +
-  geom_point(size = point_size, position = position_jitter(width = jitter_amount, height = jitter_amount)) +
+  geom_point(size = point_size, position = position_jitterdodge(jitter.width = x_jitter_amount, jitter.height = y_jitter_amount)) +
   scale_color_gradient(low = "blue", high = "red", name = "Difference Dates, days") +
   labs(x = "DateDeath", y = "Date of PrisonReleaseDate", title = "Relationship between Date_Death and PrisonReleaseDate, observed FDOC Deaths") +
   scale_y_date(date_labels = "%Y", date_breaks = "6 months") +  # Include year on y-axis labels
