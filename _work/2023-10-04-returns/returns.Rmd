@@ -231,6 +231,7 @@ Regarding those currently incarcerated, we observe that they are serving time fo
 datatable(unique(charges), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
+In order to proceed, I had to reduce these 790 categories to something workable, I needed more general categories of crimes -- drug crimes, violent crimes, etc. Categorizing crimes is a time-consuming process that requires making multiple classification decisions. These decisions can sometimes seem subjective, even to the person making them. It is important to acknowledge that there are alternative crime categorization systems that may be equally or more effective. I encourage everyone to review the crime categorizations by clicking the disclosure triangle icon next to "View Crime Category Mappings". If any errors or inconsistencies are found, or if you wish to suggest an alternative classification framework, please don't hesitate to contact me.
 
 <ul>
     <li>
@@ -1038,11 +1039,6 @@ datatable(unique(returners_hist %>% filter(crime_category=="Abuse/Neglect Crimes
 ```{r code_folding = TRUE}
 datatable(unique(returners_hist %>% filter(crime_category=="Other")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
-        
-  </p>
-  </details>
-  </li>
-</ul>
 
 ### Proportions of Charges (not persons)
 ```{r code_folding=TRUE}
@@ -1055,9 +1051,11 @@ kable(rounded_percentages,
       col.names = c("Percentage of Current Crimes for those with Repeat Commitments by Crime Category")) %>% 
   kable_styling(latex_options = "hold_position")
 ```
-Categorizing crimes in this way is a time-consuming task that required me to make numerous decisions regarding their classification. These decisions often felt arbitrary, even to myself. It is important to understand that there are many other valid crime categorization systems that may be equally or even more effective. Additionally, please note that crime categories are constantly being reviewed and adjusted.
+  </p>
+  </details>
+  </li>
+</ul>
 
-I encourage everyone to click the disclosure triangle icon next to "View Crime Category Mappings" to review the decisions I have made. If you identify any errors or inconsistencies, or if you would like to propose an alternative system, please contact me.
 
 ### Proportions of Persons Associated with Charges
 <ul>
@@ -1097,7 +1095,7 @@ for (category in categories) {
   </li>
 </ul>
 
-```{r}
+```{r code_folding = TRUE}
 kable(result_df, 
       col.names = c("Crime Category", "Percentage of FDOC Currently Incarcerated Persons with Repeat Commitments Associated with each Crime Category")) %>% 
   kable_styling(latex_options = "hold_position")
@@ -1105,7 +1103,8 @@ kable(result_df,
 
 In the analysis, it is observed that among the individuals currently incarcerated in FDOC who have previously served time in FDOC, 32% have at least one Burglary, Theft, or Property crime associated with their current incarceration, while 44% have been associated with at least one crime from the violent crime category, and so on. The proportions sum to greater than 100 because many individuals are associated with multiple crime categories.
 
-While I initially intended to analyze probation/parole violations among individuals currently incarcerated with a previous history of incarceration using this data, it is not currently possible to conduct a straightforward analysis. This is because the Florida Department of Corrections categorizes individuals who are currently incarcerated and have violated their probation/parole under the charge for which they were originally sentenced to probation.
+### Aside: Limitation Caused by Poor Data Coding -- Probation/Parole/Conditional Release Violations
+While I initially intended to analyze probation/parole violations among individuals currently incarcerated with a previous history of incarceration using this data, it is not currently possible to conduct a straightforward analysis. This is because the Florida Department of Corrections categorizes individuals who are currently incarcerated and have violated their probation/parole under the charge for which they were originally sentenced to probation or parole.
 
 For instance, let's consider the following record, with all identifying information censored. This person was initially incarcerated in 1961 for an unspecified sexual battery crime and received a life sentence. It is important to note that the meaning of a life sentence in 1961 differed significantly from its present-day interpretation. They were released on parole in 1967. After 17 years of freedom, they were arrested in Orange County. Although they were not apparently convicted of a new crime, their detainment resulted in the revocation of their parole, and they have been in prison ever since.
 
@@ -1121,3 +1120,5 @@ Figure 1: Source: <a href="https://fdc.myflorida.com/">Screenshot 2023-10-16 at 
 
 However, the FDOC incorrectly lists this person as currently in prison for the 1961 unspecified sexual battery offense. There are several issues with this, the most significant being that it is not true. This person is NOT in prison for any form of sexual battery, but rather is still ensnared in the legal fallout from the 1961 conviction -- after 17 years of freedom, these are differnt things, certainly.
 
+# Next Steps
+If you happened to notice that the percentages in the table above have noticeably shifted today, Monday the 16th of October, it's because I realized today that I was using the past conviction history of those who are currently back in FDOC, instead of looking at the crimes associated with their current incarceration. I have corrected this mistake (and also combined the sparse category of probation/parole violation convictions into crimes of incarceration and criminal identity). What is really exciting is that the numbers did noticeably shift after the correction. The next step is to explore that more explicitly — to examine how the proportions shift across the populations of individuals in prison for their first, second, third, etc., prison stays.
