@@ -13,23 +13,18 @@ To begin, I invite you to listen to the entire series. I was one of many formerl
 </a>
 :::
 
-# Episode 1:
-<section>
 In these episodes, I discuss my journey towards higher education while being in prison. I share my experiences of participating in the Florida Gateway College program at Columbia Correctional Institution and The Community Education Project at Tomoka Correctional Institution. I highlight the importance of higher education for incarcerated individuals and also address the challenges that formerly incarcerated individuals face when trying to find and enroll in college courses after their release.
 
-<audio controls>
-  <source source="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://freetolearn.buzzsprout.com/1871917/12397041" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-</section>
+<section>
+# Episode 1:
+In this coversation, I discuss the importance of education, the programs available in prison, and the obstacles faced in pursuing higher education.
+
+<a href="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://freetolearn.buzzsprout.com/1871917/12397041" target="_blank" rel="noopener noreferrer">Episode 1</a>
 
 # Episode 2:
-<section>
-<audio controls>
-  <source source="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://freetolearn.buzzsprout.com/1871917/12397224" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-</section>
+In this episode I discuss the importance of education. I also highlight the support I received from mentors and instructors who understood the impact of incarceration on my educational journey. I open up about my motivation, study habits, and the valuable skills I am gaining through my data science program.
+
+<a href="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://freetolearn.buzzsprout.com/1871917/12397224" target="_blank" rel="noopener noreferrer">Episode 2</a>
 
 # After the Panel
 During the symposium, I had the privilege of participating in a panel discussion on higher education for individuals currently incarcerated. However, the presence of Mr. Patrick Mahooney, the Director of Programs at the Florida Department of Corrections, significantly diminished the experience and quality of the panel. He accurately represented the style, aims, and interests of the Florida prison system, which was unfortunate.
