@@ -18,7 +18,7 @@ To begin, I invite you to listen to the entire series. I was one of many formerl
 In these episodes, I discuss my journey towards higher education while being in prison. I share my experiences of participating in the Florida Gateway College program at Columbia Correctional Institution and The Community Education Project at Tomoka Correctional Institution. I highlight the importance of higher education for incarcerated individuals and also address the challenges that formerly incarcerated individuals face when trying to find and enroll in college courses after their release.
 
 <audio controls>
-  <source source="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://www.buzzsprout.com/1871917.js?artist=Santa+Fe+College+-+Free+to+Learn&container_id=buzzsprout-large-player-artist-santa-fe-college-free-to-learn-tags-free-to-learn&player=large&tags=free+to+learn&tags=free+to+learn#" type="audio/mpeg">
+  <source source="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://freetolearn.buzzsprout.com/1871917/12397041" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 </section>
@@ -26,7 +26,7 @@ In these episodes, I discuss my journey towards higher education while being in 
 # Episode 2:
 <section>
 <audio controls>
-  <source source="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://www.buzzsprout.com/1871917.js?artist=Santa+Fe+College+-+Free+to+Learn&container_id=buzzsprout-large-player-artist-santa-fe-college-free-to-learn-tags-free-to-learn&player=large&tags=free+to+learn&tags=free+to+learn#" type="audio/mpeg">
+  <source source="https://www.buzzsprout.com/1871917?artist=Santa+Fe+College+-+Free+to+Learn&client_source=large_player&iframe=true&referrer=https://freetolearn.buzzsprout.com/1871917/12397224" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 </section>
