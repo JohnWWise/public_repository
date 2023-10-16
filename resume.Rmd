@@ -42,11 +42,11 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Conferences and Engagements
 
-- **National Conference for Higher Education in Prison (2021, 2023)**
+- **National Conference for Higher Education in Prison (Denver Co. 2021, Atlanta GA 2023)**
     - Active participant, contributed to discussions on higher education accessibility for incarcerated individuals.
-- **2022 Reentry Summit, Palm Beach**
+- **2022 Reentry Summit Palm Beach Florida, October 5-7, 2022**
     - Moderated a panel on Just Income GNV, supporting justice-impacted individuals.
-- **Santa Fe College's Free to Learn Initiative**
+- **Santa Fe College's Free to Learn Initiative Gainesville Florida, April 14 2022**
     - Featured in podcast episodes and a live panel discussion on higher education opportunities for the incarcerated.
 
 ---
