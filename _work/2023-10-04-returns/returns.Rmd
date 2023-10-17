@@ -1326,18 +1326,36 @@ pros_across_times <- cbind(ordered_first_timers,
                            ordered_fourth_timers[2],
                            ordered_fifth_timers[2],
                            ordered_six_more_timers[2])
-new_column_names <- c("Crime Category", "First Commit.", "Second Commit.", "Third Commit.", "Fourth Commit.", "Fifth Commit.", "Sixth Commit.")
+new_column_names <- c("Crime Category", "First Commit.", "Second Commit.", "Third Commit.", "Fourth Commit.", "Fifth Commit.", "Sixth+ Commit.")
 names(pros_across_times) <- new_column_names
 ```
 
 ## Proportions of Crime Category by Number of Prison Commitments, Currently Incarcerated FDOC
+
+```{r warning = FALSE, code_folding = TRUE, fig.align='center', fig.height=8, fig.width=16}
+# Pivot the data
+data_long <- pros_across_times %>%
+  pivot_longer(cols = -`Crime Category`, names_to = "Commit", values_to = "Value")
+
+# Define the custom order for Commit
+custom_order <- c("First Commit.", "Second Commit.", "Third Commit.", "Fourth Commit.", "Fifth Commit.", "Sixth+ Commit.")
+
+# Apply the custom order to the Commit variable
+data_long$Commit <- factor(data_long$Commit, levels = custom_order)
+
+# Create the ggplot
+ggplot(data_long, aes(x = Commit, y = Value, color = `Crime Category`, 
+                      group = `Crime Category`, linetype = `Crime Category`)) +
+  geom_line(linewidth = 2) +
+  geom_point(aes(shape = `Crime Category`), size = 3.5) +
+  labs(x = "Commitment", y = "Percent", title = "Percent Currently Associated with Crime Category Across Number of FDOC Stays") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
 ```{r code_folding = TRUE}
 kable(pros_across_times) %>% 
   kable_styling(latex_options = "hold_position")
 ```
 
 Okay, so among those currently incarcerated for their first commitment, 4.6% of them have Abuse/Neglect crimes associated with their current incarceration. However, this percentage drops to 2.2% for those serving time for their second incarceration. Furthermore, we see a further decrease to 1.9% across the population of those who are serving their third sentence in FDOC, and so on.
-
-Today was a lot of work. I'm taking the rest of the day off and will work on making this information more easily understandable later.
-
-
