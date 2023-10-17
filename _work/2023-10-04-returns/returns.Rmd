@@ -221,17 +221,23 @@ charges <- returners_hist %>%
   group_by(adjudicationcharge_descr) %>%
   summarize(charge_count = n()) %>%
   arrange(desc(charge_count))
+
+raw_charges <- rbind(Offenses_CPS %>% select(adjudicationcharge_descr), Offenses_PRPR %>% select(adjudicationcharge_descr))
+raw_charges$adjudicationcharge_descr <- as.factor(raw_charges$adjudicationcharge_descr)
+charges_counts <- raw_charges %>%
+  group_by(adjudicationcharge_descr) %>%
+  summarize(charge_count = n()) %>%
+  arrange(desc(charge_count))
 ```
 
-For each person who is currently incarcerated and has at least one prior incarceration, we have data on all adjudications for their current and past incarcerations.
 
-Regarding those currently incarcerated, we observe that they are serving time for a wide range of adjudication charges. There are 790 different charges for which these individuals are currently incarcerated.
+Currently incarcerated individuals are associated with 1,124 different charges across all past and current incarcerations.
 
 ```{r code_folding = TRUE}
-datatable(unique(charges), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
-In order to proceed, I had to reduce these 790 categories to something workable, I needed more general categories of crimes -- drug crimes, violent crimes, etc. Categorizing crimes is a time-consuming process that requires making multiple classification decisions. These decisions can sometimes seem subjective, even to the person making them. It is important to acknowledge that there are alternative crime categorization systems that may be equally or more effective. I encourage everyone to review the crime categorizations by clicking the disclosure triangle icon next to "View Crime Category Mappings". If any errors or inconsistencies are found, or if you wish to suggest an alternative classification framework, please don't hesitate to contact me.
+In order to proceed, I had to reduce these 1,124 categories to something workable, I needed more general categories of crimes -- drug crimes, violent crimes, etc. Categorizing crimes is a time-consuming process that requires making multiple classification decisions. These decisions can sometimes seem subjective, even to the person making them. It is important to acknowledge that there are alternative crime categorization systems that may be equally or more effective. I encourage everyone to review the crime categorizations by clicking the disclosure triangle icon next to "View Crime Category Mappings". If any errors or inconsistencies are found, or if you wish to suggest an alternative classification framework, please don't hesitate to contact me.
 
 <ul>
     <li>
@@ -327,6 +333,7 @@ drug_offenses_keywords <- c(
   "SCH I & II",
   "MINOR-BATHSALTS",
   "METHAMPHETAMINE",
+  "TABLETING MACHINE",
   "PRESCRIPTION FRAUD",
   "DRUG PARAPHERNALIA",
   "CONTROLLED SUBSTANCE",
@@ -387,6 +394,7 @@ drug_offenses_keywords <- c(
 violent_crimes_keywords <- c(
   "HOMICIDE",
   "MURDER",
+  "HOMCID-NO",
   "CARJACK",
   "MANSLAUGHTER",
   "ASSAULT",
@@ -513,7 +521,7 @@ sex_crimes_keywords <- c(
   "MINOR SX MATERIAL",
   "L&L BATT FORCE/ENTICE ABUSE",
   "SEX BAT/COERCES BY THREAT",
-  "VID VOYEUR-CHLD<16"
+  "VID VOYEUR"
 )
 ```
 
@@ -533,6 +541,8 @@ incarceration_related_crimes <- c(
   "CONTRABAND TRAFFICKING",
   "INMATE MUTINY",
   "LEO",
+  "PAROLE VIOLATION",
+  "DEL.FA PERSON PROHIB.POSS",
   "FAIL.TO",
   "CONTRA JUV FACILITY",
   "UNAUTH. COMP. ACCESS",
@@ -722,7 +732,17 @@ white_collar_fraud_crimes <- c(
   "EMP - CONSTR.POSSESS CB",
   "MARINE LIFE VIO",
   "GIVE CLD TO UNAUTH.PERSON",
-  "DIST HARM MAT"
+  "AGG. WHITE COLLAR CRIME",
+  "FALSE DOC/OWN FIN LOSS",
+  "TRANS>20K<100K",
+  "FALSE DOCNUMENTS",
+  "INSUR.AGNT",
+  "MEDICAID PRVDR",
+  "TRANS>300<20K",
+  "EMBEZZLE-BUSINESS",
+  "FAIL RE ESCROW",
+  "PROCURE TITLE",
+  "LABEL TAMPERING"
 )
 ```
 ### Motor Vechile Crimes
@@ -761,19 +781,6 @@ traffic_crimes <- c(
   
   )
 ```
-### Probation Violation/Parole Violation
-```{r code_folding = TRUE}
-probation_crimes <- c(
-  "MISC VIOLATIONS",
-  'FAIL RPT.NONMOVE',
-  "ELEC. MON. DEVICE",
-  "DAMAGE ELEC.MONITOR.EQUIP",
-  "CONDIT RELEASE VIOLATION",
-  "SUPERVISION VIOLATION",
-  "WIRETAP-FAILURE TO REPORT",
-  "COMPLY PSIA"
-)
-```
 
 ### Abuse/Neglect
 ```{r code_folding = TRUE}
@@ -789,7 +796,12 @@ abuse_neglect_crimes <- c(
   "CHILD NEGLECT",
   "NEGLECT CHILD",
   "AGG.ABUSE",
-  "ABUSE ELDER"
+  "ABUSE ELDER",
+  "DEPRIVE VIC MED/COND WORSENS",
+  "FALSIFY CARE RCRD",
+  "FAMILY OFFENSE-OTHER",
+  "LEAVE CHILD IN CAR",
+  "GUARDIAN SELLS CHILD"
 )
 
 ```
@@ -803,8 +815,13 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "POSS/USE HOX BMB-FLNY/ATT.",
                   "FLEE LEO/NO REGARD",
                   "FILE FALSE DOC PUB",
+                  "OBSCENE MATERIAL-DISTRIB",
+                  "OFFICIAL MISCONDUCT",
+                  "ENG. INS. ACT. NO LICENSE",
+                  "MAIMS ANIMAL",
                   "FAILS GIVE NOTICE/SPILL",
                   "WIRE COMM.OBT'D UNLAWFULLY",
+                  "OFF BY AUTH FIG AGAINST STU",
                   "WIT.ACPT.BRIBE,FALSE TEST",
                   "ROVIDE FALSE REPORT STD",
                   "POSS.SELL,INSTALL AIRBAG",
@@ -812,11 +829,13 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "TAB MACHINE, ILLEG. KNOWLEDGE",
                   "IMPRSN.LEO",
                   "PRESCRIBER",
+                  "BOILER RM.SALES O/50,000",
                   "$ TRANSMITTER >$100K",
                   "FAILED TO RETURN",
                   "WILLFUL FLEE/ELUDE LEO",
                   "EAPON OFFENSE-OTHER",
                   "DISCH.DESTR.DEVICE",
+                  "COMMIT 815.06(3)(B)",
                   "USE HOAX WEAP MASS DEST",
                   "POSSESS ILLEGAL WEAPON",
                   "MISD. TO FEL. W/PREJUDICE", #I don't know what this is
@@ -848,6 +867,7 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "THREATENS",
                   "SHOOT/THROW MISSILE",
                   "PERJURY",
+                  "DIST HARM MAT",
                   "DIRECT PERSON TO DISC. F/A FR.",
                   "ACCESSORY",
                   "AGG.STALK",
@@ -870,12 +890,16 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "STORES HAZAR WASTE",
                   "INTERFERS W/CUSTODY PARENT/GUA",
                   "PUBLIC PEACE",
+                  "UNLAWFUL ACCESS STORED COMMUN.",
                   "KEEP FIREFIGHTER FROM DUTY",
                   "LIVE OFF PROSTIT.EARN",
                   "INTERFERS W/CUSTODY CHILD",
                   "INJ/KILL PD/FD/SAR ANIMAL",
                   "FALSE REPORT/ FAILURE MAKE REP",
                   "CONC.CRIME",
+                  "UNLICENSED CARDROOM",
+                  "WILLFULLY MODIFY COMPUTER",
+                  "DIST MAT OF MINOR/HARMFL ACT",
                   "EMP - TRANSMIT CB",
                   "THREAT PUB OFF W DEATH 2ND+",
                   "THREAT TO BOMB",
@@ -883,6 +907,7 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "USE/CONCEAL/ATT.WPN-FELNY",
                   "INTRNET/F.S.",
                   "TORTURES ANIMAL",
+                  "DISRUPTION OF GOVERN OPERATION",
                   "IMPERSONATE",
                   "FALS.RPRT",
                   'PAR.PERM',
@@ -945,7 +970,19 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "AIM LASER AT DRIVER/PILOT",
                   "HIV-POS.HAS SEX 2+ VIOLATIONS",
                   "EVIDENCE-DESTROYING",
-                  "ABUSE OF HUMAN CORPSE"
+                  "ABUSE OF HUMAN CORPSE",
+                  "USE PUB.RECRD-FACIL.FLNY",
+                  "815",
+                  "POSS.ALCOHOL",
+                  "BUMPSTOCK",
+                  "815.06(3)(A)",
+                  "DISCLOSE COMM. INFO CRIM. INV",
+                  "EMP - CB CELL PHONE",
+                  "EMP - CB CONTROL SUB",
+                  "SELL/DEL/POSS/INT.SEL CLD",
+                  "STALKING - MISD",
+                  "DRUNKENNESS",
+                  "FALSE FIRE ALARM"
                   )
 ```
   </p>
@@ -970,12 +1007,13 @@ category_mapping <- list(
   "Other" = other_crimes,
   "Abuse/Neglect Crimes" = abuse_neglect_crimes)
 
-returners_hist$crime_category <- NA
+charges_counts$crime_category <- NA
 # Loop through categories and apply rules
 for (category in names(category_mapping)) {
   keywords <- category_mapping[[category]]
-  returners_hist$crime_category[grepl(paste(keywords, collapse = "|"), returners_hist$adjudicationcharge_desc, ignore.case = TRUE)] <- category
+  charges_counts$crime_category[grepl(paste(keywords, collapse = "|"), charges_counts$adjudicationcharge_descr, ignore.case = TRUE)] <- category
 }
+charges_categories <- charges_counts %>% select(-2)
 ```
   </p>
   </details>
@@ -993,115 +1031,92 @@ for (category in names(category_mapping)) {
 
 ```{r include = FALSE}
 #unmapped
-#unique(returners_hist[which(is.na(returners_hist$crime_category)),]$adjudicationcharge_descr)
+#unique(charges_counts[which(is.na(charges_counts$crime_category)),]$adjudicationcharge_descr)
 ```
 
         
 ### Burglary, Theft, and Property Crimes
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Burglary, Theft, Property Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Burglary, Theft, Property Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 ### Drug Offenses
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Drug Offenses")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Drug Offenses")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Violent Crimes
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Violent Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Violent Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Sex Crimes
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Sex Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Sex Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Crimes of Incarceration
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Crimes of Incarceration/Criminal Identity")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Crimes of Incarceration/Criminal Identity")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### White-Collar and Fraud
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="White-Collar and Fraud")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="White-Collar and Fraud")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 ### Motor Vechile Crimes
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Motor Vechile Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Motor Vechile Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Abuse/Neglect
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Abuse/Neglect Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Abuse/Neglect Crimes")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Other Crimes
 ```{r code_folding = TRUE}
-datatable(unique(returners_hist %>% filter(crime_category=="Other")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+datatable(unique(charges_counts %>% filter(crime_category=="Other")%>% select(adjudicationcharge_descr)), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
 ### Proportions of Charges (not persons)
 ```{r code_folding=TRUE}
-returners_hist$crime_category <- as.factor(returners_hist$crime_category)
-category_counts <- summary(returners_hist$crime_category)
+charges_counts$crime_category <- as.factor(charges_counts$crime_category)
+category_counts <- summary(charges_counts$crime_category)
 total_entries <- sum(category_counts)
 category_percentages <- (category_counts / total_entries) * 100
 rounded_percentages <- as.data.frame(round(category_percentages, 1))
 kable(rounded_percentages, 
-      col.names = c("Percentage of Current Crimes for those with Repeat Commitments by Crime Category")) %>% 
+      col.names = c("Percentage of Crimes Associated with Currently Incarcerated Persons, FDOC")) %>% 
   kable_styling(latex_options = "hold_position")
 ```
-  </p>
-  </details>
-  </li>
-</ul>
 
-
-### Proportions of Persons Associated with Charges
-<ul>
-    <li>
-      <details>
-        <summary>Coding Work for Determining Proportions of Persons Associated with Charges</summary>
-        <p>
+###Finding top three within each category 
 ```{r}
-wrk <- returners_hist %>% select(DCNumber, crime_category)
-result <- wrk %>% 
-  group_by(DCNumber) %>% 
-  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
-  select(-crime_category) %>%
-  unique()
+crimes_categories <- charges_counts %>%
+  group_by(crime_category) %>%
+  # Arrange by charge_count in descending order within each group
+  arrange(desc(charge_count)) %>%
+  # Take the top 3 rows within each group
+  slice(1:3) %>%
+  # Select the columns you want to display
+  select(crime_category, adjudicationcharge_descr, charge_count)
+
+result <- crimes_categories %>%
+     group_by(crime_category) %>%
+     summarize(
+         Top_3_counts = paste(adjudicationcharge_descr, charge_count, sep = ", ", collapse = '; ')
+     )
 ```
 
-```{r}
-result <- result %>%
-  separate_rows(crimes_categories, sep = "; ") %>%
-  count(DCNumber, crimes_categories) %>%
-  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
-```
-
-```{r}
-result_df <- data.frame(Category = character(0), Proportion = numeric(0))
-categories <- colnames(result)[-1]
-for (category in categories) {
-  num_associated_rows <- result %>%
-    filter(get(category) > 0) %>%
-    nrow()
-  proportion <- round(num_associated_rows / nrow(result), 3)
-  result_df <- rbind(result_df, data.frame(Category = category, Percent = proportion * 100))
-}
-```
   </p>
   </details>
   </li>
 </ul>
 
 ```{r code_folding = TRUE}
-kable(result_df, 
-      col.names = c("Crime Category", "Percentage of FDOC Currently Incarcerated Persons with Repeat Commitments Associated with each Crime Category")) %>% 
+kable(result) %>% 
   kable_styling(latex_options = "hold_position")
 ```
-
-In the analysis, it is observed that among the individuals currently incarcerated in FDOC who have previously served time in FDOC, 32% have at least one Burglary, Theft, or Property crime associated with their current incarceration, while 44% have been associated with at least one crime from the violent crime category, and so on. The proportions sum to greater than 100 because many individuals are associated with multiple crime categories.
 
 ### Aside: Limitation Caused by Poor Data Coding -- Probation/Parole/Conditional Release Violations
 While I initially intended to analyze probation/parole violations among individuals currently incarcerated with a previous history of incarceration using this data, it is not currently possible to conduct a straightforward analysis. This is because the Florida Department of Corrections categorizes individuals who are currently incarcerated and have violated their probation/parole under the charge for which they were originally sentenced to probation or parole.
@@ -1118,7 +1133,211 @@ Figure 1: Source: <a href="https://fdc.myflorida.com/">Screenshot 2023-10-16 at 
 </p>
 :::
 
-However, the FDOC incorrectly lists this person as currently in prison for the 1961 unspecified sexual battery offense. There are several issues with this, the most significant being that it is not true. This person is NOT in prison for any form of sexual battery, but rather is still ensnared in the legal fallout from the 1961 conviction -- after 17 years of freedom, these are differnt things, certainly.
+However, the FDOC incorrectly lists this person as currently in prison for the 1961 unspecified sexual battery offense. There are several issues with this, the most significant being that it is not true. This person is NOT in prison for any form of sexual battery, but rather is still ensnared in the legal fallout from the 1961 conviction -- after 17 years of freedom, these are different things, certainly.
 
-# Next Steps
-If you happened to notice that the percentages in the table above have noticeably shifted today, Monday the 16th of October, it's because I realized today that I was using the past conviction history of those who are currently back in FDOC, instead of looking at the crimes associated with their current incarceration. I have corrected this mistake (and also combined the sparse category of probation/parole violation convictions into crimes of incarceration and criminal identity). What is really exciting is that the numbers did noticeably shift after the correction. The next step is to explore that more explicitly — to examine how the proportions shift across the populations of individuals in prison for their first, second, third, etc., prison stays.
+### Proportions of Persons Associated with Charges
+<ul>
+    <li>
+      <details>
+        <summary>Coding Work for Determining Proportions of Persons Associated with Charges</summary>
+        <p>
+### First Timers
+```{r}
+fist_timers_crimes <- merge(first_timers[,1], Offenses_CPS %>% select(DCNumber, adjudicationcharge_descr), by = 'DCNumber')
+first_timers_cats <- merge(fist_timers_crimes, crimes_categories, by = 'adjudicationcharge_descr') %>% select(DCNumber, crime_category)
+
+first_time_result <- first_timers_cats %>% 
+  group_by(DCNumber) %>% 
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+
+first_time_result_counts <- first_time_result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+
+result_first_timers <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(first_time_result_counts)[-1]
+for (category in categories) {
+  num_associated_rows <- first_time_result_counts %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(first_time_result_counts), 3)
+  result_first_timers <- rbind(result_first_timers, data.frame(Category = category, Percent = proportion * 100))
+}
+```
+
+### Second Timers
+```{r}
+second_timers <- times_in %>% filter(times_in==2)
+second_timers_crimes <- merge(second_timers[,1], Offenses_CPS %>% select(DCNumber, adjudicationcharge_descr), by = 'DCNumber')
+second_timers_cats <- merge(second_timers_crimes, crimes_categories, by = 'adjudicationcharge_descr') %>% select(DCNumber, crime_category)
+
+second_time_result <- second_timers_cats %>% 
+  group_by(DCNumber) %>% 
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+
+second_time_result_counts <- second_time_result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+
+result_second_timers <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(second_time_result_counts)[-1]
+for (category in categories) {
+  num_associated_rows <- second_time_result_counts %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(second_time_result_counts), 3)
+  result_second_timers <- rbind(result_second_timers, data.frame(Category = category, Percent = proportion * 100))
+}
+```
+
+### Third Timers
+```{r}
+third_timers <- times_in %>% filter(times_in==3)
+third_timers_crimes <- merge(third_timers[,1], Offenses_CPS %>% select(DCNumber, adjudicationcharge_descr), by = 'DCNumber')
+third_timers_cats <- merge(third_timers_crimes, crimes_categories, by = 'adjudicationcharge_descr') %>% select(DCNumber, crime_category)
+
+third_time_result <- third_timers_cats %>% 
+  group_by(DCNumber) %>% 
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+
+third_time_result_counts <- third_time_result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+
+result_third_timers <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(third_time_result_counts)[-1]
+for (category in categories) {
+  num_associated_rows <- third_time_result_counts %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(third_time_result_counts), 3)
+  result_third_timers <- rbind(result_third_timers, data.frame(Category = category, Percent = proportion * 100))
+}
+```
+
+### Fourth Tiemrs
+```{r}
+fourth_timers <- times_in %>% filter(times_in == 4)
+fourth_timers_crimes <- merge(fourth_timers[, 1], Offenses_CPS %>% select(DCNumber, adjudicationcharge_descr), by = 'DCNumber')
+fourth_timers_cats <- merge(fourth_timers_crimes, crimes_categories, by = 'adjudicationcharge_descr') %>% select(DCNumber, crime_category)
+
+fourth_time_result <- fourth_timers_cats %>%
+  group_by(DCNumber) %>%
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+
+fourth_time_result_counts <- fourth_time_result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+
+result_fourth_timers <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(fourth_time_result_counts)[-1]
+for (category in categories) {
+  num_associated_rows <- fourth_time_result_counts %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(fourth_time_result_counts), 3)
+  result_fourth_timers <- rbind(result_fourth_timers, data.frame(Category = category, Percent = proportion * 100))
+}
+```
+
+### Fifth Timers
+```{r}
+fifth_timers <- times_in %>% filter(times_in == 5)
+fifth_timers_crimes <- merge(fifth_timers[, 1], Offenses_CPS %>% select(DCNumber, adjudicationcharge_descr), by = 'DCNumber')
+fifth_timers_cats <- merge(fifth_timers_crimes, crimes_categories, by = 'adjudicationcharge_descr') %>% select(DCNumber, crime_category)
+
+fifth_time_result <- fifth_timers_cats %>%
+  group_by(DCNumber) %>%
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+
+fifth_time_result_counts <- fifth_time_result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+
+result_fifth_timers <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(fifth_time_result_counts)[-1]
+for (category in categories) {
+  num_associated_rows <- fifth_time_result_counts %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(fifth_time_result_counts), 3)
+  result_fifth_timers <- rbind(result_fifth_timers, data.frame(Category = category, Percent = proportion * 100))
+}
+```
+
+### Six or More
+```{r}
+six_or_more_timers <- times_in %>% filter(times_in >= 6)
+six_or_more_timers_crimes <- merge(six_or_more_timers[, 1], Offenses_CPS %>% select(DCNumber, adjudicationcharge_descr), by = 'DCNumber')
+six_or_more_timers_cats <- merge(six_or_more_timers_crimes, crimes_categories, by = 'adjudicationcharge_descr') %>% select(DCNumber, crime_category)
+
+six_or_more_time_result <- six_or_more_timers_cats %>%
+  group_by(DCNumber) %>%
+  mutate(crimes_categories = paste(crime_category, collapse = "; ")) %>%
+  select(-crime_category) %>%
+  unique()
+
+six_or_more_time_result_counts <- six_or_more_time_result %>%
+  separate_rows(crimes_categories, sep = "; ") %>%
+  count(DCNumber, crimes_categories) %>%
+  pivot_wider(names_from = crimes_categories, values_from = n, values_fill = 0)
+
+result_six_or_more_timers <- data.frame(Category = character(0), Proportion = numeric(0))
+categories <- colnames(six_or_more_time_result_counts)[-1]
+for (category in categories) {
+  num_associated_rows <- six_or_more_time_result_counts %>%
+    filter(get(category) > 0) %>%
+    nrow()
+  proportion <- round(num_associated_rows / nrow(six_or_more_time_result_counts), 3)
+  result_six_or_more_timers <- rbind(result_six_or_more_timers, data.frame(Category = category, Percent = proportion * 100))
+}
+```
+
+  </p>
+  </details>
+  </li>
+</ul>
+
+```{r code_folding = TRUE}
+ordered_first_timers <- result_first_timers %>% arrange(Category)
+ordered_second_timers <- result_second_timers %>% arrange(Category)
+ordered_third_timers <- result_third_timers %>% arrange(Category)
+ordered_fourth_timers <- result_fourth_timers %>% arrange(Category)
+ordered_fifth_timers <- result_fifth_timers %>% arrange(Category)
+ordered_six_more_timers <- result_six_or_more_timers %>% arrange(Category)
+pros_across_times <- cbind(ordered_first_timers,
+                           ordered_second_timers[2],
+                           ordered_third_timers[2],
+                           ordered_fourth_timers[2],
+                           ordered_fifth_timers[2],
+                           ordered_six_more_timers[2])
+new_column_names <- c("Crime Category", "First Commit.", "Second Commit.", "Third Commit.", "Fourth Commit.", "Fifth Commit.", "Sixth Commit.")
+names(pros_across_times) <- new_column_names
+```
+
+## Proportions of Crime Category by Number of Prison Commitments, Currently Incarcerated FDOC
+```{r code_folding = TRUE}
+kable(pros_across_times) %>% 
+  kable_styling(latex_options = "hold_position")
+```
+
+Okay, so among those currently incarcerated for their first commitment, 4.6% of them have Abuse/Neglect crimes associated with their current incarceration. However, this percentage drops to 2.2% for those serving time for their second incarceration. Furthermore, we see a further decrease to 1.9% across the population of those who are serving their third sentence in FDOC, and so on.
+
+Today was a lot of work. I'm taking the rest of the day off and will work on making this information more easily understandable later.
+
+
