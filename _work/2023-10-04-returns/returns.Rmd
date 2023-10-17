@@ -365,7 +365,6 @@ drug_offenses_keywords <- c(
   "AMPHETAMINE-PUR/POSS/W/INT",
   "AMPHETAMINE-POSSESS",
   "AMPHETAMINE",
-  "TRAFF",
   "BARBITUATE",
   "CONTR.SUBST.",
   "CON.SUBST.",
@@ -385,7 +384,54 @@ drug_offenses_keywords <- c(
   "MARIJ/LSD-SALE/DEL.TO",
   "DIST.OF NIT.OX.",
   "INJECT/INHALE",
-  "ETC.MINR.DRG NEAR ALF"
+  "ETC.MINR.DRG NEAR ALF",
+  "TRAFF AMPH. 14-U/28 GRAMS",
+  "TRAFF AMPH. 28-U/200 GR",
+  "TRAFF HER.ETC 28G-U/30 KG",
+  "TRAFF HER.,ETC.14-U/28 GR",
+  "TRAFFICK IN FENTANYL 4-13G",
+  "POSS PLACE TRAFF/MAN SUBST",
+  "TRAFF AMPH 200 GR OR MORE",
+  "TRAFF OXYCODONE 7 - LT 14G",
+  "TRAFFICK IN FENTANYL 14-27G",
+  "TRAFF CANN 25-U/2000 LBS",
+  "TRAFFICK IN FENTANYL 28+G",
+  "TRAFF OXYCODONE 14 - LT 25G",
+  "TRAFF OXYCOD 25 - LT 100G",
+  "TRAFF HYDROCODONE 14 - LT 28G",
+  "TRAFF.LSD 1- U/5 GR",
+  "TRAFF HYDROCODONE 28 - LT 50G",
+  "TRAFFICK IN SYN CAN 280-499G",
+  "TRAFF OXYCOD 100G - LT 30KG",
+  "TRAFFICKING IN CANNIBIS",
+  "TRAFF HYDROC 200G - LT 30KG",
+  "TRAFF IN SYN CAN 1000G-30KG",
+  "TRAFF HYDROC 50 - LT 200G",
+  "TRAFF.1,4 BD 10+ KG",
+  "TRAFF.1,4-BD 1- U/5 KG",
+  "TRAFFICK IN CLD $25K+",
+  "TRAFF.LSD 7+ GR",
+  "TRAFFICK IN SYN CAN 500-999G",
+  "TRAFF HYDROC 300G - LT 30KG",
+  "TRAFF.GBL 1- U/5 KG",
+  "TRAFF CANN.2000-U/10,000",
+  "TRAFF HYDROCODONE 100- LT 300G",
+  "TRAFF HYDROCODONE50 - LT 100G",
+  "TRAFF IN SYN CAN 30KG+",
+  "TRAFF PCP 28-U/200 GRAMS",
+  "TRAFF PCP 200-U/400 GRAMS",
+  "TRAFF CANN 10000 LBS/MORE",
+  "TRAFF HER,ETC 30-LT 60K.",
+  "TRAFF.1,4 BD 5- U/10 KG",
+  "TRAFF.GBL 10+ KG",
+  "TRAFF.GBL 5-U/10 KG",
+  "TRAFF.LSD 5 -U/7 GR",
+  "FENTANYL",
+  "BD 10+ KG",
+  "TRAFFICK IN CLD",
+  "TRAFF.LSD",
+  "RAFF.GBL",
+  "TRAFF.1"
 )
 ```
 
@@ -458,7 +504,8 @@ violent_crimes_keywords <- c(
   "SUDDEN SNATCH F/A OR DW",
   "HOMICIDE NEGLIG MANSL VEH",
   "HUMAN SMUGGLING",
-  "ILLEGAL OBT.LABOR W/FORCE"
+  "ILLEGAL OBT.LABOR W/FORCE",
+  "VIOLENT"
 )
 ```
 
@@ -742,7 +789,9 @@ white_collar_fraud_crimes <- c(
   "EMBEZZLE-BUSINESS",
   "FAIL RE ESCROW",
   "PROCURE TITLE",
-  "LABEL TAMPERING"
+  "LABEL TAMPERING",
+  "TRAFFICK-FINANCIAL",
+  "CRED CARDS"
 )
 ```
 ### Motor Vechile Crimes
@@ -778,7 +827,6 @@ traffic_crimes <- c(
   "TRAFFIC OFFENSE",
   "LEAVE CRASH",
   "LVE CRASH"
-  
   )
 ```
 
@@ -939,7 +987,7 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "DISCHARGING MACHINE GUN",
                   "WEAPON OFFENSE",
                   "FAIL GET FL. WC POLICY",
-                  "W/MASK",
+                  "TRAFFICKING:LABOR",
                   "POISON FOOD OR WATER",
                   "SHOOT/THROW OBJ.OCC.VEH.",
                   "BAIL BONDSMAN VIOL.",
@@ -982,7 +1030,8 @@ other_crimes <- c("CARRYING CONCEALED FIREARM",
                   "SELL/DEL/POSS/INT.SEL CLD",
                   "STALKING - MISD",
                   "DRUNKENNESS",
-                  "FALSE FIRE ALARM"
+                  "FALSE FIRE ALARM",
+                  "MISD. TO FEL."
                   )
 ```
   </p>
@@ -1350,7 +1399,8 @@ ggplot(data_long, aes(x = Commit, y = Value, color = `Crime Category`,
   geom_point(aes(shape = `Crime Category`), size = 3.5) +
   labs(x = "Commitment", y = "Percent", title = "Percent Currently Associated with Crime Category Across Number of FDOC Stays") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(legend.position = "bottom")
 ```
 
 ```{r code_folding = TRUE}
