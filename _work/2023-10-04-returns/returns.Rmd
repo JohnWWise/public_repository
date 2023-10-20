@@ -1409,3 +1409,6 @@ kable(pros_across_times) %>%
 ```
 
 Okay, so among those currently incarcerated for their first commitment, 4.5% of them have Abuse/Neglect crimes associated with their current incarceration. However, this percentage drops to 2.1% for those serving time for their second incarceration. Furthermore, we see a further decrease to 1.9% across the population of those who are serving their third sentence in FDOC, and so on.
+
+# Next Steps:
+There are MANY different -- and novel -- directions I can take this. However, I need to spend some time refining and working out issues in the crime categorization mappings above before these categories can be relied upon for any heavy work.
