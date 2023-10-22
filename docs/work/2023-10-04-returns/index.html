@@ -94,8 +94,8 @@ code span.wa { color: #5e5e5e; font-style: italic; }
 
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2023-10-21"/>
-<meta property="article:created" itemprop="dateCreated" content="2023-10-21"/>
+<meta property="article:published" itemprop="datePublished" content="2023-10-22"/>
+<meta property="article:created" itemprop="dateCreated" content="2023-10-22"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
 <meta property="og:title" content="John Wise&#39;s Public Repository: FDOC Returns to Incarceration"/>
@@ -113,7 +113,7 @@ code span.wa { color: #5e5e5e; font-style: italic; }
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","date"]}},"value":[{"type":"character","attributes":{},"value":["FDOC Returns to Incarceration"]},{"type":"character","attributes":{},"value":["This document presents an ongoing investigation into returns to incarceration in Florida."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth","df_print"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]},{"type":"character","attributes":{},"value":["paged"]}]}]},{"type":"character","attributes":{},"value":["2023-10-21"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","date"]}},"value":[{"type":"character","attributes":{},"value":["FDOC Returns to Incarceration"]},{"type":"character","attributes":{},"value":["This document presents an ongoing investigation into returns to incarceration in Florida."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_float","toc_depth","df_print"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]},{"type":"character","attributes":{},"value":["paged"]}]}]},{"type":"character","attributes":{},"value":["2023-10-22"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -6111,7 +6111,7 @@ distill-header .nav a {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"FDOC Returns to Incarceration","description":"This document presents an ongoing investigation into returns to incarceration in Florida.","authors":[],"publishedDate":"2023-10-21T00:00:00.000-04:00"}
+{"title":"FDOC Returns to Incarceration","description":"This document presents an ongoing investigation into returns to incarceration in Florida.","authors":[],"publishedDate":"2023-10-22T00:00:00.000-04:00"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -6170,6 +6170,7 @@ About
 <ul>
 <li><a href="#proportions-of-crime-category-by-number-of-prison-commitments-currently-incarcerated-fdoc" id="toc-proportions-of-crime-category-by-number-of-prison-commitments-currently-incarcerated-fdoc">Proportions of Crime Category by Number of Prison Commitments, Currently Incarcerated FDOC</a></li>
 </ul></li>
+<li><a href="#next-steps" id="toc-next-steps">Next Steps</a></li>
 </ul>
 </nav>
 </div>
@@ -8577,7 +8578,10 @@ White-Collar and Fraud
 Show code
 </summary>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">mannkendall_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pros_across_times</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, MARGIN<span class="op">=</span><span class="fl">1</span>, FUN<span class="op">=</span><span class="va">MannKendall</span><span class="op">)</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># I&#39;m running a Mann-Kendall test for trends, really I should prob run a chi squared, but I don&#39;t know how to account</span></span>
+<span><span class="co"># for the overlaping crime categories (rape, for example, is both a sex and violent crime) - Mann-Kendall should suffice</span></span>
+<span><span class="co"># our investigation, however.</span></span>
+<span><span class="va">mannkendall_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">pros_across_times</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span><span class="op">]</span>, MARGIN<span class="op">=</span><span class="fl">1</span>, FUN<span class="op">=</span><span class="va">MannKendall</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add the results as a new column to the data frame</span></span>
 <span><span class="va">pros_across_times</span><span class="op">$</span><span class="va">tau</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">mannkendall_results</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">tau</span><span class="op">)</span></span>
@@ -8662,14 +8666,19 @@ Violent Crimes
 </tbody>
 </table>
 </div>
-<p>We do have strong statistical evidence that indicates a trend of decreasing Abuse/Neglect Crimes, Sex Crimes, and Violent Crimes. We also see in increase in the proportion of Burglary, Theft, Property Crimes, as well as Druf Offenses. I have a lot to say specifically about these trends.</p>
+<p>We do have strong statistical evidence that indicates a trend of decreasing Abuse/Neglect Crimes, Sex Crimes, and Violent Crimes. We also see in increase in the proportion of Burglary, Theft, Property Crimes, as well as Druf Offenses.</p>
 <p>Here are my thoughts summarized, with a statistical investigation to follow up within the week (hopefully tomorrow, depending on my cat):</p>
 <ul>
 <li>The decline in Abuse/Neglect Crimes across incarcerations suggests an increased stigma associated with multiple incarcerations. Individuals who are frequently in and out of prison are becoming less trusted over time.</li>
-<li>The rate of sex crimes decreases significantly between the first and second prison stays, but then stabilizes. This can be attributed to the aggressive prosecution of individuals involved in the possession of child pornography, as most of those who serve time for this offense quickly learn to avoid further police entrapment. I will soon provide data from our dataset to support this statement.</li>
+<li>The proportion of persons associated with sex crimes decreases significantly between the first and second prison stays but then stabilizes. Initially, it was thought that this decrease could be attributed to the aggressive prosecution of individuals involved in the possession of child pornography. However, further investigation indicates that this may not be the case. Further investigation is required.</li>
 <li>Violent crimes decrease over multiple incarcerations simply because multiple incarcerations are correlated with age. As people grow older, they tend to become less violent in general.</li>
 <li>The proportions of Drug Offenses, as well as Burglary, Theft, and Property Crimes, increase over time because prison negatively impacts individuals and makes them more desperate.</li>
 </ul>
+<h1 id="next-steps">Next Steps</h1>
+<p>In a similar manner to how I presented a table and graph displaying proportions of crime categories across succeeding incarcerations, I can create a table for individual crime adjudications showing statistically significant trends based on the number of incarcerations.</p>
+<p>Following that, I will analyze correlations and relationships among multiple incarcerations per individual —I will compare the current charges of individuals currently incarcerated with their charges of previous incarcerations.</p>
+<p>Finally, I will examine this data based on the county of last conviction.</p>
+<p>I anticipate identifying further analysis opportunities as I complete these tasks.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
@@ -8687,7 +8696,7 @@ Violent Crimes
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <!--radix_placeholder_navigation_after_body--><html><body>
 <div class="distill-site-nav distill-site-footer">
-<p>Late Updated 2023-10-21 by John Wise; "Top Bunk - Version 1.0.2f"</p>
+<p>Late Updated 2023-10-22 by John Wise; "Top Bunk - Version 1.0.2f"</p>
 <p>"While there is a lower class, I am in it, and while there is a
 criminal element I am of it, and while there is a soul in prison, I am
 not free." -- <a href="https://en.wikipedia.org/wiki/Eugene_V._Debs">Eugene V. Debs</a>,
