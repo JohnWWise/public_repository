@@ -239,7 +239,7 @@ Currently incarcerated individuals are associated with 1,124 different charges a
 datatable(unique(charges_counts), options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 ```
 
-In order to proceed, I had to reduce these 1,124 categories to something workable, I needed more general categories of crimes -- drug crimes, violent crimes, etc. Categorizing crimes is a time-consuming process that requires making multiple classification decisions. I encourage everyone to review the crime categorizations by clicking the disclosure triangle icon next to "View Crime Category Mappings". If any errors or inconsistencies are found, or if you wish to suggest an alternative classification framework, please don't hesitate to contact me.
+In order to proceed, I had to reduce these 1,124 categories to something workable, I needed more general categories of crimes -- drug crimes, violent crimes, etc. Categorizing crimes is a time-consuming process that requires making multiple classification decisions, so I encourage everyone to review the crime categorizations by clicking the disclosure triangle icon next to "View Crime Category Mappings". If any errors or inconsistencies are found, or if you wish to suggest an alternative classification framework, please don't hesitate to contact me.
 
 <ul>
     <li>
@@ -1735,14 +1735,12 @@ kable(pros_across_times) %>%
 
 Okay, so among those currently incarcerated for their first commitment, 4.6% of them have Abuse/Neglect crimes associated with their current incarceration. However, this percentage drops to 2.2% for those serving time for their second incarceration. Furthermore, we see a further decrease to 1.9% across the population of those who are serving their third sentence in FDOC, and so on.
 
-I have a lot to say about these results.
 
-Correlation is not causation, of course. However, let's start by discussing the crime categories that exhibit a statistically significant trend.
 
 ```{r code_folding = TRUE}
 # I'm running a Mann-Kendall test for trends, really I should prob run a chi squared, but I don't know how to account
 # for the overlaping crime categories (rape, for example, is both a sex and violent crime) - Mann-Kendall should suffice
-# our investigation, however.
+# our investigation, however. If you feel that chi squared or another test is needed then reach out and we'll make it happen.
 mannkendall_results <- apply(pros_across_times[,-1], MARGIN=1, FUN=MannKendall)
 
 # Add the results as a new column to the data frame
@@ -1755,19 +1753,12 @@ kable(sigs_across_times) %>%
   kable_styling(latex_options = "hold_position")
 ```
 
-We do have strong statistical evidence that indicates a trend of decreasing Abuse/Neglect Crimes, Sex Crimes, and Violent Crimes. We also see in increase in the proportion of Burglary, Theft, Property Crimes, as well as Druf Offenses.
-
-Here are my thoughts summarized, with a statistical investigation to follow up within the week (hopefully tomorrow, depending on my cat):
-
-- The decline in Abuse/Neglect Crimes across incarcerations suggests an increased stigma associated with multiple incarcerations. Individuals who are frequently in and out of prison are becoming less trusted over time.
-- The proportion of persons associated with sex crimes decreases significantly between the first and second prison stays but then stabilizes. Initially, it was thought that this decrease could be attributed to the aggressive prosecution of individuals involved in the possession of child pornography. However, further investigation indicates that this may not be the case. Further investigation is required.
-- Violent crimes decrease over multiple incarcerations simply because multiple incarcerations are correlated with age. As people grow older, they tend to become less violent in general.
-- The proportions of Drug Offenses, as well as Burglary, Theft, and Property Crimes, increase over time because prison negatively impacts individuals and makes them more desperate.
+We do have strong statistical evidence that indicates a trend of decreasing Abuse/Neglect Crimes, Sex Crimes, and Violent Crimes. We also see in increase in the percentage of Burglary, Theft, Property Crimes, as well as Drug Offenses.
 
 # Next Steps
-In a similar manner to how I presented a table and graph displaying proportions of crime categories across succeeding  incarcerations, I can create a table for individual crime adjudications showing statistically significant trends based on the number of incarcerations.
+I can create a table for individual crime adjudications, similar to how I presented a table and graph displaying proportions of crime categories across successive incarcerations. This table would show statistically significant trends based on the number of incarcerations. However, conducting this analysis poses a challenge due to the large number of potential adjudications. To mitigate the risk of type 1 errors, I am currently exploring more conservative tests that can be applied, in addition to the Mann-Kendall test.
 
-Following that, I will analyze correlations and relationships among multiple incarcerations per individual —I will compare the current charges of individuals currently incarcerated with their charges of previous incarcerations.
+Following that, I will analyze correlations and relationships among multiple incarcerations *per individual* — I will compare the current charges of individuals currently incarcerated with their charges of previous incarcerations.
 
 Finally, I will examine this data based on the county of last conviction. 
 
