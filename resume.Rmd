@@ -1,7 +1,7 @@
 ---
 title: "John's Curriculum Vitae"
 description: |
-  I am a motivated individual who is passionate about using data science to effectively communicate my experience of incarceration. I have experience in research, data analysis, and collaboration. Currently, I am actively seeking opportunities to apply my knowledge and skills in a professional setting. My ultimate goal is to work towards reducing or eliminating the practice of incarcerating individuals as a form of punishment for crime.
+  I am currently preparing applications for a PhD program in Public Health. My goal is to understand and address the complex relationship between public access to administrative data and effective health policies within the context of our society's correctional structures.
 date: "`r Sys.Date()`"
 output:
   distill::distill_article:
@@ -16,75 +16,68 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Education
-
 - **Indiana University East**
-    - Bachelor of Science in Data Science (Expected Graduation: Fall 2023)
-    - GPA: 3.934
-    - Relevant Courses: Calculus for Data Science, Database Applications, Linear Algebra, Information Representation, Data Mining, Cloud Computing for Data Science
-- **Transfer Credits**
-    - History, Philosophy, Computing, Statistics, Spanish, and more
+  - Bachelor of Science in Data Science (Expected Graduation: December 2023)
+  - GPA: 3.934
+  - Relevant Courses: Calculus for Data Science, Database Applications, Linear Algebra, Information Representation, Data Mining, Cloud Computing for Data Science
+  - Transfer Credits
+  - History, Philosophy, Computing, Statistics, Spanish, and more
 
 ---
 
 # Professional Experience
 
+- **Certified Inmate Teaching Assistant**
+  - Developed and implemented lesson plans, delivered classroom lectures, graded assignments, and provided individual tutoring to GED test takers (2013-2021)
 - **COVID Prison Stories Archive Project**
-    - Consultant and Researcher
-    - Helped develop surveys and gathered contact information for reentry organizations to facilitate former incarcerated individuals' experiences sharing.
+  - Consultant and Researcher (May 2021 - August 2021)
+  - Helped develop surveys and gathered contact information for reentry organizations to facilitate former incarcerated individuals' experiences sharing.
 - **Community Spring 2021 Fellowship**
-    - Fellow (9 months)
-    - Worked alongside a cohort of peers to lead the Lighthouse Campaign focusing on Affordable Housing, including policy research, advocacy, public speaking, and community engagement.
+  - Fellow (9 months)
+  - Worked alongside a cohort of peers to lead the Lighthouse Campaign focusing on Affordable Housing, including policy research, advocacy, public speaking, and community engagement.
 - **Education Access Partnership**
-    - Founder and Executive Director (May - September 2022)
-    - Established a nonprofit to enhance higher education opportunities for currently and formerly incarcerated individuals.
+  - Founder and Executive Director (May - September 2022)
+  - Established a nonprofit to enhance higher education opportunities for currently and formerly incarcerated individuals.
 
 ---
 
-# Conferences and Engagements
+# Confrences and Engagements
 
 - **National Conference for Higher Education in Prison (Denver Co. 2021, Atlanta GA 2023)**
-    - Active participant, contributed to discussions on higher education accessibility for incarcerated individuals.
-- **2022 Reentry Summit Palm Beach Florida, October 5-7, 2022**
-    - Moderated a panel on Just Income GNV, supporting justice-impacted individuals.
-- **Santa Fe College's Free to Learn Initiative Gainesville Florida, April 14 2022**
-    - Featured in podcast episodes and a live panel discussion on higher education opportunities for the incarcerated.
+  - Active participant, contributed to discussions on higher education accessibility for incarcerated individuals.
+- **Reentry Summit Palm Beach Florida, October 5-7, 2022**
+  - Moderated a panel on Just Income GNV, supporting justice-impacted individuals.
+- **Bennington College's Prison Education Initiative Think Tank, Bennington Vermont, October 21-22 2022**
+  - Actively participated in a two-day think tank on providing higher education in prison for individuals serving life sentences.
+- **Santa Fe College's Free to Learn Symposium, Gainesville Florida, April 14 2022**
+  - Featured in podcast episodes and a live panel discussion on higher education opportunities for the incarcerated.
+- **Cornell University’s Prison Education Program 2023 Symposium on Baccalaureate Education in Prison, Ithaca New York, June 15-17, 2023**
+  - Participated in a panel discussion focused on the Education Justice Tracker, an application developed at Cornell University to assist higher education in prison programs in managing and administering their programs effectively.
 
 ---
 
 # Certifications
-
 - **Google (Coursera)**
-    - Data Analytics
+  - Data Analytics
 
 ---
 
 # Internship Experience
 
-- **University of Utah Prison Education Project**
-    - Data Analyst Intern
-    - Evaluated and provided feedback on the Education Justice Tracker.
-- **Research on Data Production and Dissemination**
-    - Conducted research on data regarding incarceration and explored the importance of administrative data accessibility.
+- **University of Utah Prison Education Project (May 2023 - August 2023)**
+  - Evaluated and provided feedback on the Education Justice Tracker.
+  - Conducted research on data regarding incarceration and explored the importance of administrative data accessibility.
 
 ---
 
-# Future Academic Pursuit
+# Service
 
-- I am currently preparing applications for a PhD in Public Policy or Public Health program. My goal is to address the crucial issue of administrative data accessibility, as well as contribute to improving public health outcomes. By focusing on both public policy and public health, my goal is to understand and address the intricate relationship between administrative data and effective health policies, particularly within the framework of our society's carceral structures.
-
----
-
-## Additional Information
-
-- Self-motivated learner who pursued mathematics independently while incarcerated, progressing from a 9th-grade level to advanced topics like topology and abstract algebra.
-- Active involvement as a GED instructor and certified Inmate Teaching Assistant.
-- Contributed to the Second Chance Pell program at Columbia CI and was involved with Stetson University's Community Education Project.
-- Committed to prison abolition and improving access to higher education for incarcerated individuals.
+- **Santa Fe College (SF) Free to Learn Advisory Board Member**
+  - Provide support and guidance to SF faculty and administrators working on the Free to Learn initiative, which aims to increase public understanding of incarceration in Florida, advocate for current and formerly incarcerated individuals, and address the obstacles they face in accessing education and resources for successful re-entry into the community.
 
 ---
 
-**References available upon request**
-
+References available upon request
 
 
 
