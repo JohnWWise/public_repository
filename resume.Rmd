@@ -20,8 +20,7 @@ knitr::opts_chunk$set(echo = FALSE)
   - Bachelor of Science in Data Science (Expected Graduation: December 2023)
   - GPA: 3.934
   - Relevant Courses: Calculus for Data Science, Database Applications, Linear Algebra, Information Representation, Data Mining, Cloud Computing for Data Science
-  - Transfer Credits
-  - History, Philosophy, Computing, Statistics, Spanish, and more
+  - Transfer Credits: History, Philosophy, Computing, Statistics, Spanish, and more
 
 ---
 
@@ -38,6 +37,8 @@ knitr::opts_chunk$set(echo = FALSE)
 - **Education Access Partnership**
   - Founder and Executive Director (May - September 2022)
   - Established a nonprofit to enhance higher education opportunities for currently and formerly incarcerated individuals.
+- **Center for Public Opinion Research (CPOR) at Stetson University (October 2023 - Present)**
+  - Help to package and interpret data collected by CPOR and help prepare reports that can be shared with other higher education in prison programs in Florida.
 
 ---
 
