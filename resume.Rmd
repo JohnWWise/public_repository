@@ -1,7 +1,7 @@
 ---
 title: "John's Curriculum Vitae"
 description: |
-  I am currently preparing applications for a PhD program in Public Health. My goal is to understand and address the complex relationship between public access to administrative data and effective health policies within the context of our society's correctional structures.
+  I am currently preparing applications for a PhD program in Public Health. My goal is to understand and address the complex relationship between public access to administrative data and effective health policies within the context of our society's carceral structures.
 date: "`r Sys.Date()`"
 output:
   distill::distill_article:
