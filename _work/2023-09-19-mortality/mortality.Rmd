@@ -1,7 +1,7 @@
 ---
 title: "Investigation of FDOC Public 'Inmate Mortality Data'"
 description: |
-  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (NOTE, added Addendum)
+  The Florida Department of Corrections hosts a webpage called "Inmate Mortality" on their website; this document is an ONGOING mining of that data. (Status: Ready for Review)
 output:
   distill::distill_article:
     toc: true
@@ -346,6 +346,8 @@ Synthetic cannabinoids, also known as Spice or K2, are human-made chemicals desi
 I'm talking about individuals having seizures on the sidewalks while nurses fail to respond. I'm talking about people lying in piles on the bathroom floor, hidden from sight alongside toilets so that they can smoke, unconscious, and covered in vomit. I'm talking about individuals screaming and thrashing, restrained and tied to their beds, and I'm talking about this happening consistently throughout the day, every day, all over the FDOC.
 
 I used to be addicted to that stuff myself. While I was incarcerated I smoked pot, but if someone in FDOC fails a urine test for THC they would face 60 days of confinement, 180 days of loss of gain time, and a 1-year suspension of visitation rights. So when k2 (synthetic marijuana) entered the prison system, it seemed like a miracle because we could get high without worrying about failing a urine test. Initially, actual k2 and synthetic marijuana were being smuggled in. But as the trend caught on and the underground economy developed, the chemical compounds in the "spice" started to change significantly. I believe I was the first person at the facility I was in to have a seizure (also known as "twack out") and spend the night at an outside hospital, but I wasn't the last. The chemicals just kept getting more dangerous, and likely still are.
+
+These are the words of my currently incarcerated friend, John Kingham:
 
 <div style="background-color: lightblue; margin-left: 20px; padding: 10px;">
 <p>The first wave of the synthetics hit Hardee and FDOC around 2010, and consisted of constantly changing batches of K2. The attraction was that it wouldn't by show up on piss tests, and that still applies, but over the years any number of new recipes have come and gone, many of them lethal. The infamous Yellow Jacket was exactly that: potpourri sprayed with Black Flag Yellow Jacket and Wasp Spray. It was insanely addictive, wrecked one's digestion, and was easy to make.</p>
