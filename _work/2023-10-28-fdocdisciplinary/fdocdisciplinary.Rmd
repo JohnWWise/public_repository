@@ -1,0 +1,115 @@
+---
+title: "FDOC Disciplinary Data"
+description: |
+  This document presents an ongoing investigation into the data available through the FDLE on FDOC Disciplinary actions.(Investigation begun 2023-10-28, it's still in very rough form)
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    df_print: paged
+---
+
+```{r libraries and seed, echo=TRUE}
+# Packages utilized:
+pkgs = c("tidyverse")
+inst = lapply(pkgs, library, character.only = TRUE)
+set.seed(8675309)
+```
+Data is from here: https://www.fdle.state.fl.us/CJAB/CJDT
+Thank you Max at Community Spring for bringing it to my attention.
+
+Importing Data
+
+```{r code_folding = TRUE}
+root <- read.csv("~/pubic_preclean/Incarcerationsupervision_00000.csv") %>%
+  select("INCARCERATION_SUPERVISION_ID","RACE_CODE","SEX_CODE","ETHNICITY_CODE","INMATE_AGE","AGENCY_NAME")
+
+disc <- read.csv("~/pubic_preclean/IncarcerationSupervisionDisciplinary_00000.csv") %>%
+  select("INCARCERATION_SUPERVISION_ID",'INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC',"INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC")
+```
+
+cleaning data
+
+```{r code_folding = TRUE}
+root$RACE_CODE <- as.factor(root$RACE_CODE)
+root$SEX_CODE <- as.factor(root$SEX_CODE)
+root$ETHNICITY_CODE <- as.factor(root$ETHNICITY_CODE)
+root$AGENCY_NAME <- as.factor(root$AGENCY_NAME)
+
+disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC <- as.factor(disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC)
+disc$INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC <- as.factor(disc$INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC)
+```
+
+
+```{r fig.align= 'center', fig.height=4, fig.width=8, code_folding = TRUE}
+ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, function(x) length(x)))) +
+  geom_bar() +
+  geom_text(aes(label = after_stat(count)), stat = "count", size =3.25, hjust = 1.5, color = "white") +
+  coord_flip() +
+  xlab("FDOC Disciplinary Actions") + 
+  ylab("Count of Active FDOC Disciplinary Action") +
+  scale_y_discrete(labels = scales::label_number(scale = 1)) +
+  ggtitle("Disciplinary Action Levied") +
+  labs(caption = "Figure 1")
+```
+Counting actions taken in response to disciplinary charges, *not persons*. Many people are charged with multiple charges. Furthermore, persons are often subjected to multiple disciplinary actions for a single offense (it is common to lose gain time in addition to going to the box when one goes to be box, for example)
+
+```{r fig.align= 'center', fig.height=13, fig.width=18, code_folding = TRUE}
+ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)))) +
+  geom_bar() +
+  geom_text(aes(label = after_stat(count)), stat = "count", size =3.25, hjust = 1.5, color = "white") +
+  coord_flip() +
+  xlab("FDOC Disciplinary Actions") + 
+  ylab("Count of Active FDOC Disciplinary Action") +
+  scale_y_discrete(labels = scales::label_number(scale = 1)) +
+  ggtitle("Disciplinary Charge Levied") +
+  labs(caption = "Figure 2")
+```
+
+
+```{r code_folding = TRUE}
+pivot_disc <- disc %>%
+  group_by(INCARCERATION_SUPERVISION_ID, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC) %>%
+  summarize(count = n()) %>%
+  pivot_wider(names_from = INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, values_from = count, values_fill = 0)
+disc_actions <- disc %>%
+  select(INCARCERATION_SUPERVISION_ID, INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC) %>%
+  unique()  %>%
+  group_by(INCARCERATION_SUPERVISION_ID, INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC) %>%
+  summarize(count = n()) %>%
+  pivot_wider(names_from = INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, values_from = count, values_fill = 0)
+
+c_disc <- merge(pivot_disc, disc_actions, by = 'INCARCERATION_SUPERVISION_ID')
+```
+Okay now we have tidy by person data.
+
+```{r code_folding = TRUE}
+charges <- colSums(c_disc[, 2:105] > 0)
+consequences <-  colSums(c_disc[, 106:120] > 0)
+conf <- c_disc %>%
+  filter(`Disciplinary Confinement` > 0)
+```
+
+```{r fig.align='center', fig.height=15, fig.width = 10, code_folding = TRUE}
+conf_charges <- colSums(conf[, 2:105] > 0)
+charge_data <- data.frame(
+  charge = names(conf_charges),
+  count = conf_charges
+)
+ggplot(charge_data, aes(x = reorder(charge, count), y = count)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = count), hjust = 1.2, size = 3.25, color = "white") +
+  coord_flip() +
+  xlab("FDOC Disciplinary Charges") +
+  ylab("Count") +
+  scale_y_continuous(labels = scales::label_number(scale = 1)) +
+  ggtitle("Count the number of persons associated with each charge among those incarcerated by FDOC who have experienced disciplinary confinement.") +
+  labs(caption = "Figure 2") +
+  theme_minimal()
+```
+That is, among those currently incarcerated, 24822 have done confinement time for Disobeying a Verbal or Written Order, 16597 have done confinement time for disrespect of persons in authority, etc.
+
+# Next Steps
+
+This is messy. I will clean it a lot and offer explaination soon, then there is still much to explore -- what charges always result in confinement? What is the racial composition of those doing confinement time for various charges? What does it look like by facility, etc?
