@@ -41,6 +41,49 @@ disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC <- as.factor(disc$INCARCERATION
 disc$INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC <- as.factor(disc$INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC)
 ```
 
+```{r fig.align= 'center', fig.height=5, fig.width=20, code_folding = TRUE, out.width='100%', fig.asp=1}
+fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
+fill_order <- rev(fill_order)
+disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC <- factor(
+  disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, 
+  levels = fill_order, ordered = TRUE
+)
+
+ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC)) +
+  geom_bar() +
+  scale_fill_manual(values = c(
+    "Disciplinary Confinement" = "#015F97", "Loss of Gain Time" = "#E47237",
+    "Cashless Canteen Denial" = "#DDB835", "Privilege Suspension - Other" = "#3F8A24",
+    "Verbal Reprimand" = "#F0EADC", "Loss of Future Gain Time" = "#C84F68",
+    "Disciplinary Squad" = "#99C285", "Extra Duty" = "#7C3655",
+    "Restitution Payment" = "#5D395F", "Alternative Housing" = "#ADA193",
+    "Privilege Suspension - Mail, Visitation" = "#627F7B", "Privilege Suspension - Visitation" = "#DDAC6D",
+    "Privilege Suspension - Mail" = "#3F8A24", "Restricted Labor Squad" = "#8D422F",
+    "Disciplinary Confinement Part Time" = "black"
+  )) +
+  xlab("Count of Active FDOC Disciplinary Action") +
+  ylab("Count") +
+  ggtitle("Disciplinary Violation Allegations Levied Against Currently Incarcerated FDOC Population, Colored by Disciplinary Outcome") +
+  labs(caption = "Figure 1") +
+  theme_minimal() +
+  coord_flip() +
+  theme(
+    axis.text.y = element_text(hjust = 1, vjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "right",
+    plot.background = element_rect(fill = "#ECE5D8"),
+    panel.grid.major = element_line(color = "gray", linewidth = 0.2),
+    panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
+  )
+```
+
+
+The plot above displays the counts of rule violation accusations made by FDOC staff against currently incarcerated individuals in the Florida Department of Corrections, and it uses different colors to represent the outcomes of the disciplinary process. Please zoom in or open the image in a new tab to view it properly, as getting the display size right is still outside my html coding skill.
+
+It is important to note that the plot shows the count of rule violations themselves, not the count of individuals who have been charged or faced consequences for these actions. It is common for individuals to be charged with multiple violations for a single action. For example, throwing a tray to the ground can result in charges of both disorderly conduct and destruction of state property. In such cases, a person could expect to be confined for 30 days and lose 30 days of previously-earned gain time, in addition to losing the opportunity to gain gain time while in confinement over the next 30 days.
+
+This plot provides valuable information. However, it's important to consider that when looking at the incidence of outcomes among individuals charged with rule violations, the results may look different. For example, it is likely that nearly 100% of those actually incarcerated (currently this data still includes those on parole, etc.) who have been accused of 'disorderly conduct' have ended up in confinement with that charge. The presence of multiple disorderly conduct charges and the concurrent punishments (such as loss of gain time) during confinement is here obscuring (hard to believe, right?) the true measure of reliance that FDOC has on confinement.
+
 
 ```{r fig.align= 'center', fig.height=4, fig.width=8, code_folding = TRUE}
 ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, function(x) length(x)))) +
@@ -51,21 +94,9 @@ ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, INCARC
   ylab("Count of Active FDOC Disciplinary Action") +
   scale_y_discrete(labels = scales::label_number(scale = 1)) +
   ggtitle("Disciplinary Action Levied") +
-  labs(caption = "Figure 1")
-```
-Counting actions taken in response to disciplinary charges, *not persons*. Many people are charged with multiple charges. Furthermore, persons are often subjected to multiple disciplinary actions for a single offense (it is common to lose gain time in addition to going to the box when one goes to be box, for example)
-
-```{r fig.align= 'center', fig.height=13, fig.width=18, code_folding = TRUE}
-ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)))) +
-  geom_bar() +
-  geom_text(aes(label = after_stat(count)), stat = "count", size =3.25, hjust = 1.5, color = "white") +
-  coord_flip() +
-  xlab("FDOC Disciplinary Actions") + 
-  ylab("Count of Active FDOC Disciplinary Action") +
-  scale_y_discrete(labels = scales::label_number(scale = 1)) +
-  ggtitle("Disciplinary Charge Levied") +
   labs(caption = "Figure 2")
 ```
+
 
 
 ```{r code_folding = TRUE}
