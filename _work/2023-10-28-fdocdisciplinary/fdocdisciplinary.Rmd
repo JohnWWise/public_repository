@@ -153,7 +153,7 @@ numeric_cols <- sapply(c_disc, is.numeric)
 c_disc[, numeric_cols] <- lapply(c_disc[, numeric_cols], function(x) ifelse(is.na(x), 0, ifelse(x > 0, 1, 0)))
 c_disc$RACE_CODE <- as.factor(c_disc$RACE_CODE)
 
-r_disc <- unique(merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), disc, by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID"))
+r_disc <- merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), disc, by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID")
 ```
 
   </p>
@@ -181,7 +181,12 @@ ggplot(r_disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, I
   )
 ```
 
-Unknown? How is it possible to have such a large number of individuals with an unknown race facing disciplinary action? I need to investigate this further. The proportions of black and white individuals appear to be too symmetrical compared to what I know about the FDOC's confinement population. Additionally, the FDOC does not have nearly as many individuals coded as unknown in other available data. To be honest, it seems like someone may have substituted ‘black’ individuals with ‘unknown’s. I will search for evidence and examine this more closely.
+Fixed the error with all the unknowns. Was a coding issue.
+
+```{r}
+summary(r_disc)
+```
+
 
 # Next Steps
 
