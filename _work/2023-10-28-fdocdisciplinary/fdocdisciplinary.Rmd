@@ -107,7 +107,7 @@ p1 <- ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DES
   )) +
   xlab("Count of Active FDOC Disciplinary Action") +
   ylab("Count") +
-  ggtitle("Disciplinary Violation Allegations Levied Against Currently Incarcerated FDOC Population, Colored by Disciplinary Outcome") +
+  ggtitle("Disciplinary Violation Allegations Against FDOC Population Feb 2022- Sep 2023, Colored by Outcome") +
   labs(caption = "Figure 1") +
   theme_minimal() +
   coord_flip() +
@@ -170,5 +170,137 @@ ggplot(r_disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, I
 
 # Collapsing Rule Violations into Categories
 
-
 Processing the 104 individual rule violations can be overwhelming. It would be more useful to categorize them into a smaller number of categories. For instance, violations such as 'disobeying a verbal or written order', 'disrespect of someone in authority', and 'disorderly conduct' could be categorized under 'officer got mad', along with many others. I will make the rule violation categories now.
+
+Please excuse the dust below, I will clean it up later.
+
+```{r}
+violations_survival <- c(
+"Posession/manufacture of weapons, ammunition or explosives",
+"Gang-related activities",
+"Posession of unauthorized beverages",
+"Theft of property under $50 in value",
+"Bartering with others",
+"Attempt or conspire to commit crime or violate rules",
+"Manufacture of drugs or unauthorized beverages",
+"Unauthorized/illegal financial transaction",
+"Posession of items facilitating unauthorized/illegal financial transaction",
+"Posession of negotiables in unauthorized amounts, forms or location",
+"Trafficking in drugs or unauthorized beverages",
+"Sex acts or unauthorized physical contact involving inmates",
+"Posession of stolen property",
+"Theft of property exceeding $50 in value",
+"Unauthorized physical contact involving non-inmates",
+"Loaning or borrowing money or other valuables",
+"Gambling or possession of gambling paraphernalia",
+"Fraud or attempted fraud",
+"Bribery or attempted bribery",
+"Extortion or attempted extortion",
+"Self-Mutilation",
+"Unauthorized contact in behalf of another inmate",
+"Making purchase or contract without approval",
+"Consume Intoxicants",
+"Tattooing, branding or body art including piercing",
+"manufacture of weapons",
+"unauthorized beverages",
+"Theft of property",
+"Possession of negotiables",
+"stolen property",
+"Canteen Shortage"
+)
+```
+
+```{r}
+drugs <- c("Possession of narcotics/unauthorized drugs and paraphernalia", "Use of unauthorized drugs", "Possession of aromat")
+```
+
+```{r}
+officer_angry <- c("Disobeying verbal or written order", "Creating, participating in or inciting a minor disturbance", "Participating in riots, strikes, mutinous acts or disturbances", "Disorderly conduct", "Disrespect persons of authority", "Refusing to work or participate in mandatory programs", "Disobeying institutional regulations", "Inciting riots, strikes, mutinous acts or disturbances", "Insufficient work", "Wasting State or another property", "Feigning illness or malingering")
+```
+
+```{r}
+prison_problem <- c("Being in unauthorized area", "Unauthorized absence from assigned area", "Possession of escape paraphernalia", "Unauthorized possession/use of communication device/technology", "Visiting regulation violations", "Possession of tobacco-related product by non-death row or non-community release inmate", "Telephone regulation violations", "Introduction of any contraband", "Personal or business relationship with staff member or volunteer", "Missing count", "Mail regulation violations", "Use of Alcohol", "Possession of unauthorized clothing or linen", "Escape or escape attempt", "Failure to proceed to/from designated area", "Possession of tobacco-related product by death row inmate")
+```
+
+```{r}
+violence <- c("Aggravated battery or attempted on correctional officer", "Battery or attempted battery on an inmate", "Aggravated battery or attempted on inmate", "Fighting", "Assault or attempted assault on a correctional officer", "Battery or attempted battery on correctional officer", "Arson or attempted arson", "Assault or attempted assault on an inmate", "Aggravated assault or attempted on inmate", "Battery or attempted battery on staff other than correctional officer", "Aggravated assault or attempted on correctional officer", "Robbery or attempted robbery", "Aggravated battery or attempted on staff other than correctional officer", "Other assault/battery or attempted", "Assault or attempted assault on staff other than correctional officer", "Assault/battery or attempted with deadly weapon", "Battery or attempted on other than staff or inmates", "Assault or attempted assault on other than staff/inmates", "Aggravated assault or attempted on staff other than correctional officer", "Aggravated battery or attempted not on staff/inmates")
+```
+
+```{r}
+misc_rand <- c("Unauthorized use or tampering with computer or office equipment", "Spoken, written or gestured threats", "Destruction of State or another property", "Failure to comply with count procedures", "Tampering/defeating/depriving staff of security device", "Possession of gang-related paraphernalia or material", "Altering/defacing State or another property", "Failure to maintain acceptable hygiene/appearance of housing", "Possession or transfer of other contraband", "Misuse of State or another property", "Lying to staff or falsifying records", "Possession of unauthorized or altered identification", "Refusing to submit to substance abuse testing", "Tampering/defeating any fire or other safety device", "Failure to maintain personal hygiene/appearance", "Tampering/damaging electronic monitoring equipment", "Canteen Shortage over $50", "Failure to deposit earnings", "Destruction of State or another property by gross negligence", "Presenting false testimony or information", "Frivolous, malicious, false information presented to court", "Breaking and entering or attempt", "Canteen Shortage under $50", "Deviating from approved plan", "False property lien", "Failure to remain within designated area of release plan")
+```
+
+```{r}
+sex_related <- c("Lewd or lascivious exhibition", "Obscene or profane act, gesture or statement", "Sexual battery or attempted")
+```
+
+
+```{r}
+category_mapping <- list(
+  "Surviving Prison" = violations_survival,
+  "Drug Violations" = drugs,
+  "Officer Got Angry" = officer_angry,
+  "Only a Problem in Prison" = prison_problem,
+  "Act of Violence" = violence,
+  "Misc/Add-On" = misc_rand,
+  "Sex Related" = sex_related)
+
+# Create a new column for crime categories and initialize it as an empty list
+disc$violation_category <- vector('list', length(disc$INCARCERATION_SUPERVISION_ID))
+
+
+# Loop through categories and apply rules
+for (category in names(category_mapping)) {
+  keywords <- category_mapping[[category]]
+  matching_indices <- grepl(paste(keywords, collapse = "|"), disc$INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, ignore.case = TRUE)
+  
+# Append the category to the matching entries (instead of overwriting)
+disc$violation_category[matching_indices] <- lapply(disc$violation_category[matching_indices], function(x) c(x, category))
+}
+
+# If a crime doesn't match any category, set it to "Other"
+disc$violation_category[sapply(disc$violation_category, length) == 0] <- "Other"
+```
+
+
+```{r fig.width= 17, fig.height=8}
+
+fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
+
+disc %>%
+  mutate(violation_category = unlist(violation_category)) %>%
+  ggplot(aes(x = reorder(violation_category, violation_category, function(x) length(x)), fill = INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC)) +
+  geom_bar() +
+  scale_fill_manual(values = c(
+    "Disciplinary Confinement" = "#015F97", "Loss of Gain Time" = "#E47237",
+    "Cashless Canteen Denial" = "#DDB835", "Privilege Suspension - Other" = "#3F8A24",
+    "Verbal Reprimand" = "#F0EADC", "Loss of Future Gain Time" = "#000000",
+    "Disciplinary Squad" = "#99C285", "Extra Duty" = "#7C3655",
+    "Restitution Payment" = "#5D395F", "Alternative Housing" = "#DF678C",
+    "Privilege Suspension - Mail, Visitation" = "#627F7B", "Privilege Suspension - Visitation" = "#DDAC6D",
+    "Privilege Suspension - Mail" = "#3F8A24", "Restricted Labor Squad" = "#8D422F",
+    "Disciplinary Confinement Part Time" = "#FED95D"
+  )) +
+  xlab("Categories of Rule Violation") +
+  ylab("Count") +
+  ggtitle("Categories of Disciplinary Violation Allegations Against FDOC Population Feb 2022- Sep 2023, Colored by Outcome") +
+  labs(caption = "Figure 3") +
+  theme_minimal() +
+  coord_flip() +
+  theme(
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 8.5),  # Make y-axis text bold
+    axis.title = element_text(face = "bold"),  # Make axis titles bold
+    legend.title = element_text(face = "bold"),  # Make legend title bold
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold"),  # Make plot title bold
+    plot.caption = element_text(face = "bold"),  # Make caption bold
+    axis.text.x = element_text(size = 8), # Adjust x-axis label size
+    plot.background = element_rect(fill = "#ECE5D8"),
+    panel.grid.major = element_line(color = "gray", linewidth = 0.2),
+    panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
+  )
+
+
+ggsave('catted_outcomes_violations.png')
+```
+
