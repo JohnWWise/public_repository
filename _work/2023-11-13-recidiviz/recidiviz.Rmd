@@ -1,0 +1,33 @@
+---
+title: "On Recidiviz"
+description: |
+  My argument and proposed solution
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    df_print: paged
+---
+
+As an organization involved in the criminal justice system, Recidiviz faces complex ethical considerations that require careful examination. Several potential ethical concerns surround Recidiviz's activities, particularly regarding their provision of logistical support to corrections agencies. These concerns emphasize the need for immediate action to cease all such support and prioritize ethical principles.
+
+One significant concern is the potential for bias and fairness issues in using data collected from carceral structures. Decision-making processes based on biased data perpetuate existing inequalities within the criminal justice system, undermining the pursuit of justice and fairness.
+
+Another ethical concern arises from Recidiviz's dual role as both a provider of logistical support and data services. This conflict of interest introduces paramount ethical concerns, as it creates a risk of data manipulation to further their own initiatives, compromising data accuracy and objectivity. To maintain integrity, Recidiviz should prioritize unbiased data provision, ensuring that their actions are driven solely by the best interests of incarcerated individuals.
+
+Lastly, the impact on incarcerated individuals must be considered. While Recidiviz's services may aim to improve the prison system and the lives of those inside it, it is crucial to assess whether their support inadvertently perpetuates issues such as mass incarceration or neglect of prisoners' rights. Ceasing all logistical support would provide an opportunity for critical evaluation and reassessment of the potential consequences of Recidiviz's actions.
+
+To address these ethical concerns, a potential solution is for Recidiviz to shift their approach. Instead of making deals for data, Recidiviz could advocate for and demand access to the metadata structures of all prison systems. This approach would ensure transparency and allow for the collection of unbiased data to drive meaningful change in the criminal justice system.
+
+By having access to metadata structures, Recidiviz can work towards dismantling biases and ensuring fairness in decision-making processes. It would also eliminate the conflict of interest that arises from providing logistical support while offering data services. This shift would prioritize the best interests of incarcerated individuals and promote integrity in all aspects of Recidiviz's work.
+
+Furthermore, this proposed solution would enable Recidiviz to assess the impact of their actions on incarcerated individuals more accurately. It would provide an opportunity for critical evaluation and reassessment of potential consequences, ultimately leading to a more just and equitable prison system.
+
+By demanding access to metadata structures instead of making data deals, Recidiviz can take a significant step towards addressing the ethical concerns raised and actively contribute to a fairer and more just criminal justice system.
+
+If Recidiviz does not address the ethical concerns raised and continues to engage in activities that compromise ethical principles, they will face legal consequences. Nonprofit organizations are expected to uphold ethical standards and act in the best interests of the public. Engaging in clear ethical violations, such the present conflict of interest will result in legal action and lawsuits.
+
+If taken to court, Recidiviz will be required to cease their activities and operations that violate ethical principles. Legal authorities will intervene to ensure compliance and protect the rights of incarcerated individuals. As a nonprofit organization, Recidiviz has a responsibility to act ethically, and failure to do so will have serious repercussions on their reputation, credibility, and legal standing.
+
+It is crucial for Recidiviz to address these ethical concerns promptly, reassess their practices, and take necessary actions to align their activities with ethical standards. By doing so, Recidiviz can demonstrate their commitment to the values of fairness, justice, and integrity, and contribute to a more equitable criminal justice system.
