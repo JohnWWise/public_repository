@@ -85,7 +85,7 @@ Unfortunately, it appears that the records for disciplinary actions only span a 
 
 # Rule Violation Allegations
 
-```{r fig.align= 'center', fig.height=4, fig.width=16, code_folding = TRUE, out.width='100%', fig.asp=1}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
 # All this is for figure 1
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 fill_order <- rev(fill_order)
@@ -93,7 +93,7 @@ disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC <- factor(
   disc$INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC, 
   levels = fill_order, ordered = TRUE
 )
-p1 <- ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC)) +
+ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC)) +
   geom_bar() +
   scale_fill_manual(values = c(
     "Disciplinary Confinement" = "#015F97", "Loss of Gain Time" = "#E47237",
@@ -112,19 +112,15 @@ p1 <- ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DES
   theme_minimal() +
   coord_flip() +
   theme(
-    axis.text.y = element_text(hjust = 1, vjust = 0.5),
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face="bold"),
     legend.title = element_blank(),
     legend.position = "bottom",
     plot.background = element_rect(fill = "#ECE5D8"),
     panel.grid.major = element_line(color = "gray", linewidth = 0.2),
     panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
   )
-ggsave('actions_by_outcomes.png')
 ```
 
-<div style="width: 100%; overflow: hidden;">
-  <img src="/Users/johnwise/pubic_repository/_work/2023-10-28-fdocdisciplinary/actions_by_outcomes.png" style="width: 100%; height: auto; object-fit: cover;">
-</div>
 
 
 
@@ -148,31 +144,15 @@ r_disc <- merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), disc, 
   </li>
 </ul>
 
-```{r fig.align= 'center', fig.height=4, fig.width=16, code_folding = TRUE, out.width='100%', fig.asp=1}
-# Making a Chart!
-ggplot(r_disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = RACE_CODE)) +
-  geom_bar() +
-  xlab("Count of Active FDOC Disciplinary Action") +
-  ylab("Count") +
-  ggtitle("Disciplinary Violation Allegations Levied Against Currently Incarcerated FDOC Population, Colored by Race") +
-  labs(caption = "Figure 2") +
-  theme_minimal() +
-  coord_flip() +
-  theme(
-    axis.text.y = element_text(hjust = 1, vjust = 0.5),
-    legend.title = element_blank(),
-    legend.position = "right",
-    plot.background = element_rect(fill = "#ECE5D8"),
-    panel.grid.major = element_line(color = "gray", linewidth = 0.2),
-    panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
-  )
-```
-
 # Collapsing Rule Violations into Categories
 
 Processing the 104 individual rule violations can be overwhelming. It would be more useful to categorize them into a smaller number of categories. For instance, violations such as 'disobeying a verbal or written order', 'disrespect of someone in authority', and 'disorderly conduct' could be categorized under 'officer got mad', along with many others. I will make the rule violation categories now.
 
-Please excuse the dust below, I will clean it up later.
+<ul>
+    <li>
+      <details>
+        <summary>Codework to import and clean data</summary>
+        <p>
 
 ```{r}
 violations_survival <- c(
@@ -262,8 +242,12 @@ disc$violation_category[matching_indices] <- lapply(disc$violation_category[matc
 disc$violation_category[sapply(disc$violation_category, length) == 0] <- "Other"
 ```
 
+  </p>
+  </details>
+  </li>
+</ul>
 
-```{r fig.width= 17, fig.height=8}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
 
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 
@@ -288,7 +272,7 @@ disc %>%
   theme_minimal() +
   coord_flip() +
   theme(
-    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 8.5),  # Make y-axis text bold
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 10.5),  # Make y-axis text bold
     axis.title = element_text(face = "bold"),  # Make axis titles bold
     legend.title = element_text(face = "bold"),  # Make legend title bold
     legend.position = "bottom",
@@ -299,8 +283,30 @@ disc %>%
     panel.grid.major = element_line(color = "gray", linewidth = 0.2),
     panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
   )
+```
 
+Okay now let's look at it from the other direction -- let's see, of those in confinement, what all they are in for.
 
-ggsave('catted_outcomes_violations.png')
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
+conf <- disc %>% 
+  filter(INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC == 'Disciplinary Confinement') %>%
+  merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID")
+
+ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = RACE_CODE)) +
+  geom_bar() +
+  xlab("Count of Active FDOC Disciplinary Action") +
+  ylab("Count") +
+  ggtitle("Disciplinary Violation Allegations Levied Against Currently Incarcerated FDOC Population, Colored by Race") +
+  labs(caption = "Figure 2") +
+  theme_minimal() +
+  coord_flip() +
+  theme(
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 8.5),
+    legend.title = element_blank(),
+    legend.position = "bottom",
+    plot.background = element_rect(fill = "#ECE5D8"),
+    panel.grid.major = element_line(color = "gray", linewidth = 0.2),
+    panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
+  )
 ```
 
