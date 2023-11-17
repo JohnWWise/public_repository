@@ -155,7 +155,7 @@ Processing the 104 individual rule violations can be overwhelming. It would be m
         <p>
 
 ```{r}
-violations_survival <- c(
+doing_time <- c(
 "Posession/manufacture of weapons, ammunition or explosives",
 "Gang-related activities",
 "Posession of unauthorized beverages",
@@ -186,7 +186,23 @@ violations_survival <- c(
 "Theft of property",
 "Possession of negotiables",
 "stolen property",
-"Canteen Shortage"
+"Canteen Shortage",
+"Being in unauthorized area",
+"Unauthorized absence from assigned area",
+"Possession of escape paraphernalia",
+"Unauthorized possession/use of communication device/technology",
+"Visiting regulation violations",
+"Possession of tobacco-related product by non-death row or non-community release inmate",
+"Telephone regulation violations",
+"Introduction of any contraband",
+"Personal or business relationship with staff member or volunteer",
+"Missing count",
+"Mail regulation violations",
+"Use of Alcohol",
+"Possession of unauthorized clothing or linen",
+"Escape or escape attempt",
+"Failure to proceed to/from designated area",
+"Possession of tobacco-related product by death row inmate"
 )
 ```
 
@@ -198,9 +214,6 @@ drugs <- c("Possession of narcotics/unauthorized drugs and paraphernalia", "Use 
 officer_angry <- c("Disobeying verbal or written order", "Creating, participating in or inciting a minor disturbance", "Participating in riots, strikes, mutinous acts or disturbances", "Disorderly conduct", "Disrespect persons of authority", "Refusing to work or participate in mandatory programs", "Disobeying institutional regulations", "Inciting riots, strikes, mutinous acts or disturbances", "Insufficient work", "Wasting State or another property", "Feigning illness or malingering")
 ```
 
-```{r}
-prison_problem <- c("Being in unauthorized area", "Unauthorized absence from assigned area", "Possession of escape paraphernalia", "Unauthorized possession/use of communication device/technology", "Visiting regulation violations", "Possession of tobacco-related product by non-death row or non-community release inmate", "Telephone regulation violations", "Introduction of any contraband", "Personal or business relationship with staff member or volunteer", "Missing count", "Mail regulation violations", "Use of Alcohol", "Possession of unauthorized clothing or linen", "Escape or escape attempt", "Failure to proceed to/from designated area", "Possession of tobacco-related product by death row inmate")
-```
 
 ```{r}
 violence <- c("Aggravated battery or attempted on correctional officer", "Battery or attempted battery on an inmate", "Aggravated battery or attempted on inmate", "Fighting", "Assault or attempted assault on a correctional officer", "Battery or attempted battery on correctional officer", "Arson or attempted arson", "Assault or attempted assault on an inmate", "Aggravated assault or attempted on inmate", "Battery or attempted battery on staff other than correctional officer", "Aggravated assault or attempted on correctional officer", "Robbery or attempted robbery", "Aggravated battery or attempted on staff other than correctional officer", "Other assault/battery or attempted", "Assault or attempted assault on staff other than correctional officer", "Assault/battery or attempted with deadly weapon", "Battery or attempted on other than staff or inmates", "Assault or attempted assault on other than staff/inmates", "Aggravated assault or attempted on staff other than correctional officer", "Aggravated battery or attempted not on staff/inmates")
@@ -217,10 +230,9 @@ sex_related <- c("Lewd or lascivious exhibition", "Obscene or profane act, gestu
 
 ```{r}
 category_mapping <- list(
-  "Surviving Prison" = violations_survival,
+  "Doing Time" = doing_time,
   "Drug Violations" = drugs,
   "Officer Got Angry" = officer_angry,
-  "Only a Problem in Prison" = prison_problem,
   "Act of Violence" = violence,
   "Misc/Add-On" = misc_rand,
   "Sex Related" = sex_related)
@@ -248,7 +260,6 @@ disc$violation_category[sapply(disc$violation_category, length) == 0] <- "Other"
 </ul>
 
 ```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
-
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 
 disc %>%
@@ -304,6 +315,31 @@ ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INC
     axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 8.5),
     legend.title = element_blank(),
     legend.position = "bottom",
+    plot.background = element_rect(fill = "#ECE5D8"),
+    panel.grid.major = element_line(color = "gray", linewidth = 0.2),
+    panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
+  )
+```
+
+```{r fig.align= 'center', fig.width= 10, code_folding = TRUE}
+conf %>%
+  mutate(violation_category = unlist(violation_category)) %>%
+  ggplot(aes(x = reorder(violation_category, violation_category, function(x) length(x)), fill = RACE_CODE)) +
+  geom_bar() +
+  xlab("Categories of Rule Violation") +
+  ylab("Count") +
+  ggtitle("Categories of Disciplinary Violation Allegations Resulting in Disc. Confinement\nFeb 2022- Sep 2023") +
+  labs(caption = "Figure 4") +
+  theme_minimal() +
+  coord_flip() +
+  theme(
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 10.5),
+    axis.title = element_text(face = "bold"),  # Make axis titles bold
+    legend.title = element_text(face = "bold"),  # Make legend title bold
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold"),  # Make plot title bold
+    plot.caption = element_text(face = "bold"),  # Make caption bold
+    axis.text.x = element_text(size = 8), # Adjust x-axis label size
     plot.background = element_rect(fill = "#ECE5D8"),
     panel.grid.major = element_line(color = "gray", linewidth = 0.2),
     panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
