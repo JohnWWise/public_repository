@@ -85,7 +85,7 @@ Unfortunately, it appears that the records for disciplinary actions only span a 
 
 # Rule Violation Allegations
 
-```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-screen"}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-screen-inset shaded"}
 # All this is for figure 1
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 fill_order <- rev(fill_order)
@@ -136,8 +136,9 @@ These plots provide valuable information. However, it's important to consider th
         <summary>Coding to merge to link personal identification information</summary>
         <p>
 
-```{r warning = FALSE, message = FALSE, code_folding = TRUE}
-r_disc <- merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), disc, by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID")
+```{r warning = FALSE, message = FALSE}
+r_disc <- merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), disc, by = "INCARCERATION_SUPERVISION_ID") %>%
+  select(-"INCARCERATION_SUPERVISION_ID")
 ```
   </p>
   </details>
@@ -151,7 +152,7 @@ Processing the 104 individual rule violations can be overwhelming. It would be m
 <ul>
     <li>
       <details>
-        <summary>Codework to import and clean data</summary>
+        <summary>Codework form and fill categories</summary>
         <p>
 
 ```{r}
@@ -259,7 +260,8 @@ disc$violation_category[sapply(disc$violation_category, length) == 0] <- "Other"
   </li>
 </ul>
 
-```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-page"}
+```{r fig.align= 'center', fig.height=10, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-page"}
+# All for plot
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 
 disc %>%
@@ -279,7 +281,7 @@ disc %>%
   xlab("Categories of Rule Violation") +
   ylab("Count") +
   ggtitle("Categories of Disciplinary Violation Allegations Against FDOC Population Feb 2022- Sep 2023, Colored by Outcome") +
-  labs(caption = "Figure 3") +
+  labs(caption = "Figure 2", face = 'bold') +
   theme_minimal() +
   coord_flip() +
   theme(
@@ -298,17 +300,24 @@ disc %>%
 
 Okay now let's look at it from the other direction -- let's see, of those in confinement, what all they are in for.
 
-```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-screen"}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-screen-inset shaded"}
+
+
+# All for plot
 conf <- disc %>% 
   filter(INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC == 'Disciplinary Confinement') %>%
   merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE, ETHNICITY_CODE), by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID")
 
-ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = RACE_CODE)) +
+conf <- conf %>%
+  mutate(Race_Ethnicity = ifelse(ETHNICITY_CODE == 'Hispanic or Latino', 'Hispanic or Latino', as.character(RACE_CODE)))
+conf$Race_Ethnicity <- as.factor(conf$Race_Ethnicity)
+
+ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = Race_Ethnicity)) +
   geom_bar() +
   xlab("Count of Active FDOC Disciplinary Action") +
   ylab("Count") +
   ggtitle("Disciplinary Violation Allegations Levied Against Currently Incarcerated FDOC Population, Colored by Race") +
-  labs(caption = "Figure 2") +
+  labs(caption = "Figure 3", face = 'bold') +
   theme_minimal() +
   coord_flip() +
   theme(
@@ -321,14 +330,11 @@ ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INC
   )
 ```
 
-```{r}
-conf <- conf %>%
-  mutate(Race_Ethnicity = ifelse(ETHNICITY_CODE == 'Hispanic or Latino', 'Hispanic or Latino', as.character(RACE_CODE)))
-conf$Race_Ethnicity <- as.factor(conf$Race_Ethnicity)
-```
 
 
-```{r fig.align= 'center', fig.width= 10, code_folding = TRUE, layout = "l-page"}
+
+```{r fig.align= 'center', fig.height = 10, fig.width= 20, code_folding = TRUE, layout = "l-page"}
+# All for plot
 conf %>%
   mutate(violation_category = unlist(violation_category)) %>%
   ggplot(aes(x = reorder(violation_category, violation_category, function(x) length(x)), fill = Race_Ethnicity)) +
