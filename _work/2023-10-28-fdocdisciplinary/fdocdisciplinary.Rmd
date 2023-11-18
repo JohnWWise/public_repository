@@ -85,7 +85,7 @@ Unfortunately, it appears that the records for disciplinary actions only span a 
 
 # Rule Violation Allegations
 
-```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-screen"}
 # All this is for figure 1
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 fill_order <- rev(fill_order)
@@ -112,7 +112,7 @@ ggplot(disc, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INC
   theme_minimal() +
   coord_flip() +
   theme(
-    axis.text.y = element_text(hjust = 1, vjust = 0.5, face="bold"),
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face="bold", size = 12.5),
     legend.title = element_blank(),
     legend.position = "bottom",
     plot.background = element_rect(fill = "#ECE5D8"),
@@ -259,7 +259,7 @@ disc$violation_category[sapply(disc$violation_category, length) == 0] <- "Other"
   </li>
 </ul>
 
-```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-page"}
 fill_order <- c("Disciplinary Confinement", "Loss of Gain Time", "Cashless Canteen Denial","Privilege Suspension - Other","Verbal Reprimand","Loss of Future Gain Time","Disciplinary Squad","Extra Duty","Restitution Payment","Alternative Housing","Privilege Suspension - Mail, Visitation","Privilege Suspension - Visitation","Privilege Suspension - Mail","Restricted Labor Squad","Disciplinary Confinement Part Time")
 
 disc %>%
@@ -283,13 +283,13 @@ disc %>%
   theme_minimal() +
   coord_flip() +
   theme(
-    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 10.5),  # Make y-axis text bold
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 12.5),  # Make y-axis text bold
     axis.title = element_text(face = "bold"),  # Make axis titles bold
     legend.title = element_text(face = "bold"),  # Make legend title bold
     legend.position = "bottom",
     plot.title = element_text(face = "bold"),  # Make plot title bold
     plot.caption = element_text(face = "bold"),  # Make caption bold
-    axis.text.x = element_text(size = 8), # Adjust x-axis label size
+    axis.text.x = element_text(size = 12.5), # Adjust x-axis label size
     plot.background = element_rect(fill = "#ECE5D8"),
     panel.grid.major = element_line(color = "gray", linewidth = 0.2),
     panel.grid.minor = element_line(color = alpha("gray", 0.2), size = 1)
@@ -298,10 +298,10 @@ disc %>%
 
 Okay now let's look at it from the other direction -- let's see, of those in confinement, what all they are in for.
 
-```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-body-outset"}
+```{r fig.align= 'center', fig.height=16, fig.width=20, code_folding = TRUE, out.width='100%', layout="l-screen"}
 conf <- disc %>% 
   filter(INCARCERATION_DISCIPLINARY_ACTION_TYPE_DESC == 'Disciplinary Confinement') %>%
-  merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE), by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID")
+  merge(root %>% select(INCARCERATION_SUPERVISION_ID, RACE_CODE, ETHNICITY_CODE), by = "INCARCERATION_SUPERVISION_ID") %>% select(-"INCARCERATION_SUPERVISION_ID")
 
 ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, function(x) length(x)), fill = RACE_CODE)) +
   geom_bar() +
@@ -312,7 +312,7 @@ ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INC
   theme_minimal() +
   coord_flip() +
   theme(
-    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 8.5),
+    axis.text.y = element_text(hjust = 1, vjust = 0.5, face = "bold", size = 12.5),
     legend.title = element_blank(),
     legend.position = "bottom",
     plot.background = element_rect(fill = "#ECE5D8"),
@@ -321,14 +321,21 @@ ggplot(conf, aes(x = reorder(INCARCERATION_DISCIPLINARY_VIOLATION_TYPE_DESC, INC
   )
 ```
 
-```{r fig.align= 'center', fig.width= 10, code_folding = TRUE}
+```{r}
+conf <- conf %>%
+  mutate(Race_Ethnicity = ifelse(ETHNICITY_CODE == 'Hispanic or Latino', 'Hispanic or Latino', as.character(RACE_CODE)))
+conf$Race_Ethnicity <- as.factor(conf$Race_Ethnicity)
+```
+
+
+```{r fig.align= 'center', fig.width= 10, code_folding = TRUE, layout = "l-page"}
 conf %>%
   mutate(violation_category = unlist(violation_category)) %>%
-  ggplot(aes(x = reorder(violation_category, violation_category, function(x) length(x)), fill = RACE_CODE)) +
+  ggplot(aes(x = reorder(violation_category, violation_category, function(x) length(x)), fill = Race_Ethnicity)) +
   geom_bar() +
   xlab("Categories of Rule Violation") +
   ylab("Count") +
-  ggtitle("Categories of Disciplinary Violation Allegations Resulting in Disc. Confinement\nFeb 2022- Sep 2023") +
+  ggtitle("Categories of Disciplinary Violation Allegations Resulting in Disc. Confinement\nFeb 2022 - Sep 2023") +
   labs(caption = "Figure 4") +
   theme_minimal() +
   coord_flip() +
@@ -346,3 +353,4 @@ conf %>%
   )
 ```
 
+more soon
