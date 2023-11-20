@@ -1,14 +1,9 @@
 ---
-title: "John's Curriculum Vitae"
+title: "John Wise's Resume"
 description: |
-  I am currently preparing applications for a PhD program in Public Health. My goal is to understand and address the complex relationship between public access to administrative data and effective health policies within the context of our society's carceral structures.
-date: "`r Sys.Date()`"
+  Having navigated nearly 19 years of incarceration in Florida, I dedicated countless hours to introspection and self-improvement, and earning my degree. Now equipped with a strong foundation of skills, I am eager to embark on my career journey. My experiences have honed my ability to excel under pressure, and my knack for getting along with diverse groups of individuals has consistently proven valuable. While I may lack direct experience, I am confident that my unique background and unwavering commitment make me a valuable potential asset to any organization.
 output:
   distill::distill_article:
-    toc: true
-    toc_float: true
-    toc_depth: 2
-    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -16,67 +11,80 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Education
-- **Indiana University East**
-  - Bachelor of Science in Data Science (Expected Graduation: December 2023)
-  - GPA: 3.934
+
+## Bachelor of Science in Data Science
+**(Expected Graduation: December 2023)**
+*Indiana University East*
+
   - Relevant Courses: Calculus for Data Science, Database Applications, Linear Algebra, Information Representation, Data Mining, Cloud Computing for Data Science
   - Transfer Credits: History, Philosophy, Computing, Statistics, Spanish, and more
-
----
+  
+  
 
 # Professional Experience
 
-- **Certified Inmate Teaching Assistant**
-  - Developed and implemented lesson plans, delivered classroom lectures, graded assignments, and provided individual tutoring to GED test takers (2013-2021)
-- **COVID Prison Stories Archive Project**
-  - Consultant and Researcher (May 2021 - August 2021)
-  - Helped develop surveys and gathered contact information for reentry organizations to facilitate former incarcerated individuals' experiences sharing.
-- **Community Spring 2021 Fellowship**
-  - Fellow (9 months)
-  - Worked alongside a cohort of peers to lead the Lighthouse Campaign focusing on Affordable Housing, including policy research, advocacy, public speaking, and community engagement.
-- **Education Access Partnership**
-  - Founder and Executive Director (May - September 2022)
-  - Established a nonprofit to enhance higher education opportunities for currently and formerly incarcerated individuals.
-- **Center for Public Opinion Research (CPOR) at Stetson University (October 2023 - Present)**
-  - Help to package and interpret data collected by CPOR and help prepare reports that can be shared with other higher education in prison programs in Florida.
+## Researcher and Consultant (contract)
+*Center for Public Opinion Research (CPOR) at Stetson University*  
+*(October 2023 - Present)*
 
----
+- Assist in packaging and interpreting data collected by CPOR.
+- Prepare reports for sharing with higher education in prison programs in Florida.
 
-# Confrences and Engagements
+## Intern  
+*University of Utah Prison Education Project*  
+*(May 2023 - August 2023)*
 
-- **National Conference for Higher Education in Prison (Denver Co. 2021, Atlanta GA 2023)**
-  - Active participant, contributed to discussions on higher education accessibility for incarcerated individuals.
-- **Reentry Summit Palm Beach Florida, October 5-7, 2022**
-  - Moderated a panel on Just Income GNV, supporting justice-impacted individuals.
-- **Bennington College's Prison Education Initiative Think Tank, Bennington Vermont, October 21-22 2022**
-  - Actively participated in a two-day think tank on providing higher education in prison for individuals serving life sentences.
-- **Santa Fe College's Free to Learn Symposium, Gainesville Florida, April 14 2022**
-  - Featured in podcast episodes and a live panel discussion on higher education opportunities for the incarcerated.
-- **Cornell University’s Prison Education Program 2023 Symposium on Baccalaureate Education in Prison, Ithaca New York, June 15-17, 2023**
-  - Participated in a panel discussion focused on the Education Justice Tracker, an application developed at Cornell University to assist higher education in prison programs in managing and administering their programs effectively.
+- Evaluated and provided feedback on the Education Justice Tracker.
+- Conducted research on data regarding incarceration and explored the importance of administrative data accessibility.
 
----
+## Fellow  
+*Community Spring*
+*(August 2021 - May 2022)*
+
+- Helped found the Lighthouse Campaign on Affordable Housing.
+- Conducted policy research, advocacy, public speaking, and community engagement.
+
+## Inmate Teaching Assistant  
+*Florida Department of Corrections*  
+*(2013-2021)*
+
+- Developed and implemented lesson plans.
+- Delivered classroom lectures, graded assignments, and provided individual tutoring to GED test takers.
+
+
 
 # Certifications
-- **Google (Coursera)**
-  - Data Analytics
+- **Data Analytics**
+  *Google (Coursera)*
 
----
 
-# Internship Experience
+# Skills
 
-- **University of Utah Prison Education Project (May 2023 - August 2023)**
-  - Evaluated and provided feedback on the Education Justice Tracker.
-  - Conducted research on data regarding incarceration and explored the importance of administrative data accessibility.
+<ul>
+  <li><strong>Data Analysis and Statistics:</strong> Proficient in statistical analysis with a focus on behavioral sciences and statistical learning.</li>
+  <li><strong>Programming and Computing:</strong> Skilled in programming languages and data structures, including database systems.</li>
+  <li><strong>Communication:</strong> Strong written communication skills demonstrated through technical and creative writing.</li>
+  <li><strong>Business and Economics:</strong> Solid understanding of macroeconomics, microeconomics, business administration, and marketing principles.</li>
+  <li><strong>Critical Thinking:</strong> Developed critical thinking skills through philosophy and religion courses.</li>
+  <li><strong>Environmental Science:</strong> Knowledgeable in environmental science and life sciences.</li>
+  <li><strong>Mathematics:</strong> Strong foundation in calculus, linear algebra, trigonometry, and precalculus algebra.</li>
+  <li><strong>Interpersonal Communication:</strong> Effective public speaking and interpersonal communication skills.</li>
+  <li><strong>Data Management:</strong> Experience in data management and fluency in data-related concepts.</li>
+  <li><strong>Research and Analysis:</strong> Exposure to research methodologies and analysis techniques.</li>
+  <li><strong>Adaptability and Resilience:</strong> Successfully navigated diverse courses and institutions, showcasing adaptability.</li>
+  <li><strong>Problem-Solving:</strong> Applied problem-solving skills in computing and data science.</li>
+  <li><strong>Teamwork and Collaboration:</strong> Collaborative approach demonstrated in group projects and internships.</li>
+</ul>
 
----
 
 # Service
 
-- **Santa Fe College (SF) Free to Learn Advisory Board Member**
-  - Provide support and guidance to SF faculty and administrators working on the Free to Learn initiative, which aims to increase public understanding of incarceration in Florida, advocate for current and formerly incarcerated individuals, and address the obstacles they face in accessing education and resources for successful re-entry into the community.
+## Free to Learn Advisory Board Member
+  *Santa Fe College (SF)*
+  
+  - Provide support and guidance to SF faculty and administrators working on the Free to Learn initiative.
+  - Aim to increase public understanding of incarceration in Florida, advocate for current and formerly incarcerated individuals, and address obstacles they face in accessing education and resources for successful re-entry into the community.
 
----
 
 References available upon request
 
