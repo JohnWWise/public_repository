@@ -5,6 +5,24 @@ output:
   postcards::trestles
 site: distill::distill_website
 ---
- 
-## Introduction
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=tsmPCi7NKrg&t=1s" frameborder="0" allowfullscreen></iframe>
+<head>
+  <!-- Other head elements -->
+
+  <!-- Plyr CSS -->
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.6.4/plyr.css">
+
+  <!-- Plyr JS -->
+  <script src="https://cdn.plyr.io/3.6.4/plyr.js"></script>
+</head>
+<body>
+  <div data-plyr-provider="youtube" data-plyr-embed-id="tsmPCi7NKrg"></div>
+
+  <!-- Initialize Plyr -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set up Plyr on all media elements
+      const players = Plyr.setup();
+    });
+  </script>
+</body>
+
