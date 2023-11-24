@@ -1703,6 +1703,7 @@ pros_across_times <- cbind(ordered_first_timers,
                            ordered_six_more_timers[2])
 new_column_names <- c("Crime Category", "First Commit.", "Second Commit.", "Third Commit.", "Fourth Commit.", "Fifth Commit.", "Sixth+ Commit.")
 names(pros_across_times) <- new_column_names
+write_csv(pros_across_times, paste0(base_dir, "/pros_across_times.csv"))
 ```
 
 ## Proportions of Crime Category by Number of Prison Commitments, Currently Incarcerated FDOC

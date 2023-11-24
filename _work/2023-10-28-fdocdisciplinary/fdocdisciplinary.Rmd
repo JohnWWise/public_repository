@@ -1,7 +1,7 @@
 ---
 title: "FDOC Disciplinary Data"
 description: |
-  This document presents an ongoing investigation into the data available through the FDLE on FDOC Disciplinary actions. (Investigation begun 2023-10-28, it's still in very rough and preliminary form)
+  This document presents an ongoing investigation into the data available through the FDLE on FDOC Disciplinary actions. (Investigation still in very rough and preliminary form)
 output:
   distill::distill_article:
     toc: true
