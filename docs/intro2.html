@@ -32,15 +32,34 @@
             height: 100%;
             object-fit: cover;
         }
+            
+        .content-container {
+          overflow: hidden; /* Clear float */
+            }
+
+        .circular-image {
+          float: left;
+          margin-right: 10px; /* Adjust the margin as needed */
+            }
+
+        .video-container {
+          float: left;
+          }
+
+            }
     </style>
 </head>
 <body>
   <h1>John W. Wise</h1>
-      <div class="circular-image">
-        <img src="images/meinjail.png" alt="Circular Image">
+      <div class="content-container">
+    <div class="circular-image">
+        <img src="images/meinjail.png" alt="Circular Me Pic">
     </div>
     <div class="video-container">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/tsmPCi7NKrg" frameborder="0" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/fibYknUCIU4?si=ywALYrSFVXBbY5-h" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
+</div>
+
+
 </body>
 </html>
