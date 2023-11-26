@@ -1815,7 +1815,7 @@ fifth_abuse <- fifth_abuse %>%
   pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
 fifth_abuse[fifth_abuse > 1] <- 1
 fifth_abuse <- fifth_abuse %>% summarise_all(sum)
-abuse <- round(fifth_abuse/59,2)
+abuse <- round(fifth_abuse/32,2)
 abuse_5 <- abuse %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
 abuse_commits <- left_join(abuse_commits,abuse_5, by = "crime")
@@ -1834,27 +1834,25 @@ abuse_commits <- left_join(abuse_commits,abuse_6, by = "crime")
 yay now I just got to do that one more time for each of the other 8 crime cats. no biggie do it tomorrow.
 
 ```{r}
-charges_cats <- charges_counts %>% select(-charge_count)
+first_burg <- left_join(charges_cats %>% filter(crime_category=='Burglary, Theft, Property Crimes'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
 
-first_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
-
-first_abuse <- first_abuse %>%
+first_burg <- first_burg %>%
   pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
-first_abuse[first_abuse > 1] <- 1
-first_abuse <- first_abuse %>% summarise_all(sum)
-abuse <- round(first_abuse/1364,2)
-abuse_1 <- abuse %>%
+first_burg[first_burg > 1] <- 1
+first_burg <- first_burg %>% summarise_all(sum)
+burg <- round(first_burg/9765,2)
+burg1 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
 
-second_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
-second_abuse <- second_abuse %>%
-  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #320
-second_abuse[second_abuse > 1] <- 1
-second_abuse <- second_abuse %>% summarise_all(sum)
-abuse <- round(second_abuse/320,2)
-abuse_2 <- abuse %>%
+second_burg <- left_join(charges_cats %>% filter(crime_category=='Burglary, Theft, Property Crimes'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_burg <- second_burg %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_burg[second_burg > 1] <- 1
+second_burg <- second_burg %>% summarise_all(sum)
+burg <- round(second_burg/5970,2)
+burg_2 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
-abuse_commits <- left_join(abuse_1,abuse_2, by = "crime")
+burg_commits <- left_join(burg1,burg_2, by = "crime")
 
 third_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
 third_abuse <- third_abuse %>%
