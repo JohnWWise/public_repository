@@ -1829,6 +1829,7 @@ abuse <- round(sixth_abuse/27,2)
 abuse_6 <- abuse %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
 abuse_commits <- left_join(abuse_commits,abuse_6, by = "crime")
+write.csv(abuse_commits,"~/vizclass/Abuse_Neglect_Crimes.csv")
 ```
 
 yay now I just got to do that one more time for each of the other 8 crime cats. no biggie do it tomorrow.
@@ -1854,43 +1855,1305 @@ burg_2 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
 burg_commits <- left_join(burg1,burg_2, by = "crime")
 
-third_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
-third_abuse <- third_abuse %>%
+third_burg <- left_join(charges_cats %>% filter(crime_category=='Burglary, Theft, Property Crimes'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_burg <- third_burg %>%
   pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
-third_abuse[third_abuse > 1] <- 1
-third_abuse <- third_abuse %>% summarise_all(sum)
-abuse <- round(third_abuse/158,2)
-abuse_3 <- abuse %>%
+third_burg[third_burg > 1] <- 1
+third_burg <- third_burg %>% summarise_all(sum)
+burg <- round(third_burg/3447,2)
+burg_3 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
-abuse_commits <- left_join(abuse_commits,abuse_3, by = "crime")
+burg_commits <- left_join(burg_commits,burg_3, by = "crime")
 
-fourth_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
-fourth_abuse <- fourth_abuse %>%
+fourth_burg <- left_join(charges_cats %>% filter(crime_category=='Burglary, Theft, Property Crimes'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_burg <- fourth_burg %>%
   pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
-fourth_abuse[fourth_abuse > 1] <- 1
-fourth_abuse <- fourth_abuse %>% summarise_all(sum)
-abuse <- round(fourth_abuse/59,2)
-abuse_4 <- abuse %>%
+fourth_burg[fourth_burg > 1] <- 1
+fourth_burg <- fourth_burg %>% summarise_all(sum)
+burg <- round(fourth_burg/1932,2)
+burg_4 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
-abuse_commits <- left_join(abuse_commits,abuse_4, by = "crime")
+burg_commits <- left_join(burg_commits,burg_4, by = "crime")
 
-fifth_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
-fifth_abuse <- fifth_abuse %>%
+fifth_burg <- left_join(charges_cats %>% filter(crime_category=='Burglary, Theft, Property Crimes'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_burg <- fifth_burg %>%
   pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
-fifth_abuse[fifth_abuse > 1] <- 1
-fifth_abuse <- fifth_abuse %>% summarise_all(sum)
-abuse <- round(fifth_abuse/59,2)
-abuse_5 <- abuse %>%
+fifth_burg[fifth_burg > 1] <- 1
+fifth_burg <- fifth_burg %>% summarise_all(sum)
+burg <- round(fifth_burg/1211,2)
+burg_5 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
-abuse_commits <- left_join(abuse_commits,abuse_5, by = "crime")
+burg_commits <- left_join(burg_commits,burg_5, by = "crime")
 
-sixth_abuse <- left_join(charges_cats %>% filter(crime_category=='Abuse/Neglect Crimes'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
-sixth_abuse <- sixth_abuse %>%
+sixth_burg <- left_join(charges_cats %>% filter(crime_category=='Burglary, Theft, Property Crimes'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_burg <- sixth_burg %>%
   pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
-sixth_abuse[sixth_abuse > 1] <- 1
-sixth_abuse <- sixth_abuse %>% summarise_all(sum)
-abuse <- round(sixth_abuse/27,2)
-abuse_6 <- abuse %>%
+sixth_burg[sixth_burg > 1] <- 1
+sixth_burg <- sixth_burg %>% summarise_all(sum)
+burg <- round(sixth_burg/1975,2)
+burg_6 <- burg %>%
   pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
-abuse_commits <- left_join(abuse_commits,abuse_6, by = "crime")
+burg_commits <- left_join(burg_commits,burg_6, by = "crime")
+write.csv(burg_commits,'burg_commits.csv')
 ```
+
+okay, only 7 more?
+
+```{r}
+first_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_id <- first_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_id[first_id > 1] <- 1
+first_id <- first_id %>% summarise_all(sum)
+id <- round(first_id/5338,2)
+id1 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_id <- second_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_id[second_id > 1] <- 1
+second_id <- second_id %>% summarise_all(sum)
+id <- round(second_id/3612,2)
+id2 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+id_commits <- left_join(id1,id2, by = "crime")
+
+third_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_id <- third_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_id[third_id > 1] <- 1
+third_id <- third_id %>% summarise_all(sum)
+id <- round(third_id/2730,2)
+id_3 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+id_commits <- left_join(id_commits,id_3, by = "crime")
+
+fourth_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_id <- fourth_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_id[fourth_id > 1] <- 1
+fourth_id <- fourth_id %>% summarise_all(sum)
+id <- round(fourth_id/1487,2)
+id4 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+id_commits <- left_join(id_commits,id4, by = "crime")
+
+fifth_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_id <- fifth_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_id[fifth_id > 1] <- 1
+fifth_id <- fifth_id %>% summarise_all(sum)
+id <- round(fifth_id/821,2)
+id5 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+id_commits <- left_join(id_commits,id5, by = "crime")
+
+sixth_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_id <- sixth_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_id[sixth_id > 1] <- 1
+sixth_id <- sixth_id %>% summarise_all(sum)
+id <- round(sixth_id/1093,2)
+id6 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+id_commits <- left_join(id_commits,id6, by = "crime")
+```
+I should really just write a few functions to do this...
+```{r}
+first_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_drug <- first_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_drug[first_drug > 1] <- 1
+first_drug <- first_drug %>% summarise_all(sum)
+drug <- round(first_drug/7590,2)
+drug1 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_drug <- second_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_drug[second_drug > 1] <- 1
+second_drug <- second_drug %>% summarise_all(sum)
+drug <- round(second_drug/4721,2)
+drug2 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+drug_commits <- left_join(drug1,drug2, by = "crime")
+
+third_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_drug <- third_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_drug[third_drug > 1] <- 1
+third_drug <- third_drug %>% summarise_all(sum)
+drug <- round(third_drug/3120,2)
+drug3 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+drug_commits <- left_join(drug_commits,drug3, by = "crime")
+
+fourth_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_drug <- fourth_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_drug[fourth_drug > 1] <- 1
+fourth_drug <- fourth_drug %>% summarise_all(sum)
+drug <- round(fourth_drug/1855,2)
+drug4 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+drug_commits <- left_join(drug_commits,drug4, by = "crime")
+
+fifth_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_drug <- fifth_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_drug[fifth_drug > 1] <- 1
+fifth_drug <- fifth_drug %>% summarise_all(sum)
+drug <- round(fifth_drug/1105,2)
+drug5 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+drug_commits <- left_join(drug_commits,drug5, by = "crime")
+
+sixth_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_drug <- sixth_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_drug[sixth_drug > 1] <- 1
+sixth_drug <- sixth_drug %>% summarise_all(sum)
+drug <- round(sixth_drug/1624,2)
+drug6 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+drug_commits <- left_join(drug_commits,drug6, by = "crime")
+write.csv(drug_commits, "~/vizclass/Drug_Offenses.csv")
+```
+
+```{r}
+first_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_id <- first_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_id[first_id > 1] <- 1
+first_id <- first_id %>% summarise_all(sum)
+id <- round(first_id/5338,2)
+id1 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_id <- second_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_id[second_id > 1] <- 1
+second_id <- second_id %>% summarise_all(sum)
+id <- round(second_id/3612,2)
+id2 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+id_commits <- left_join(id1,id2, by = "crime")
+
+third_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_id <- third_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_id[third_id > 1] <- 1
+third_id <- third_id %>% summarise_all(sum)
+id <- round(third_id/2730,2)
+id_3 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+id_commits <- left_join(id_commits,id_3, by = "crime")
+
+fourth_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_id <- fourth_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_id[fourth_id > 1] <- 1
+fourth_id <- fourth_id %>% summarise_all(sum)
+id <- round(fourth_id/1487,2)
+id4 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+id_commits <- left_join(id_commits,id4, by = "crime")
+
+fifth_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_id <- fifth_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_id[fifth_id > 1] <- 1
+fifth_id <- fifth_id %>% summarise_all(sum)
+id <- round(fifth_id/821,2)
+id5 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+id_commits <- left_join(id_commits,id5, by = "crime")
+
+sixth_id <- left_join(charges_cats %>% filter(crime_category=='Crimes of Incarceration/Criminal Identity'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_id <- sixth_id %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_id[sixth_id > 1] <- 1
+sixth_id <- sixth_id %>% summarise_all(sum)
+id <- round(sixth_id/1093,2)
+id6 <- id %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+id_commits <- left_join(id_commits,id6, by = "crime")
+```
+I should really just write a few functions to do this...
+```{r}
+first_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_drug <- first_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_drug[first_drug > 1] <- 1
+first_drug <- first_drug %>% summarise_all(sum)
+drug <- round(first_drug/7590,2)
+drug1 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_drug <- second_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_drug[second_drug > 1] <- 1
+second_drug <- second_drug %>% summarise_all(sum)
+drug <- round(second_drug/4721,2)
+drug2 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+drug_commits <- left_join(drug1,drug2, by = "crime")
+
+third_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_drug <- third_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_drug[third_drug > 1] <- 1
+third_drug <- third_drug %>% summarise_all(sum)
+drug <- round(third_drug/3120,2)
+drug3 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+drug_commits <- left_join(drug_commits,drug3, by = "crime")
+
+fourth_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_drug <- fourth_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_drug[fourth_drug > 1] <- 1
+fourth_drug <- fourth_drug %>% summarise_all(sum)
+drug <- round(fourth_drug/1855,2)
+drug4 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+drug_commits <- left_join(drug_commits,drug4, by = "crime")
+
+fifth_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_drug <- fifth_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_drug[fifth_drug > 1] <- 1
+fifth_drug <- fifth_drug %>% summarise_all(sum)
+drug <- round(fifth_drug/1105,2)
+drug5 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+drug_commits <- left_join(drug_commits,drug5, by = "crime")
+
+sixth_drug <- left_join(charges_cats %>% filter(crime_category=='Drug Offenses'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_drug <- sixth_drug %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_drug[sixth_drug > 1] <- 1
+sixth_drug <- sixth_drug %>% summarise_all(sum)
+drug <- round(sixth_drug/1624,2)
+drug6 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+drug_commits <- left_join(drug_commits,drug6, by = "crime")
+write.csv(drug_commits, "~/vizclass/Drug_Offenses.csv")
+```
+
+Motor Vehicle Crimes
+
+```{r}
+first_car <- left_join(charges_cats %>% filter(crime_category=='Motor Vehicle Crimes'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_car <- first_car %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_car[first_car > 1] <- 1
+first_car <- first_car %>% summarise_all(sum)
+car <- round(first_car/1852,2)
+car1 <- car %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_car <- left_join(charges_cats %>% filter(crime_category=='Motor Vehicle Crimes'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_car <- second_car %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_car[second_car > 1] <- 1
+second_car <- second_car %>% summarise_all(sum)
+car <- round(second_car/640,2)
+car2 <- car %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+car_commits <- left_join(car1,car2, by = "crime")
+
+third_car <- left_join(charges_cats %>% filter(crime_category=='Motor Vehicle Crimes'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_car <- third_car %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_car[third_car > 1] <- 1
+third_car <- third_car %>% summarise_all(sum)
+car <- round(third_car/442,2)
+car3 <- car %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+car_commits <- left_join(car_commits,car3, by = "crime")
+
+fourth_car <- left_join(charges_cats %>% filter(crime_category=='Motor Vehicle Crimes'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_car <- fourth_car %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_car[fourth_car > 1] <- 1
+fourth_car <- fourth_car %>% summarise_all(sum)
+car <- round(fourth_car/297,2)
+car4 <- car %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+car_commits <- left_join(car_commits,car4, by = "crime")
+
+fifth_car <- left_join(charges_cats %>% filter(crime_category=='Motor Vehicle Crimes'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_car <- fifth_car %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_car[fifth_car > 1] <- 1
+fifth_car <- fifth_car %>% summarise_all(sum)
+drug <- round(fifth_car/163,2)
+drug5 <- drug %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+car_commits <- left_join(car_commits,drug5, by = "crime")
+
+sixth_car <- left_join(charges_cats %>% filter(crime_category=='Motor Vehicle Crimes'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_car <- sixth_car %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_car[sixth_car > 1] <- 1
+sixth_car <- sixth_car %>% summarise_all(sum)
+car <- round(sixth_car/242,2)
+car6 <- car %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+car_commits <- left_join(car_commits,car6, by = "crime")
+write.csv(car_commits, "~/vizclass/Motor_Vehicle_Crimes.csv")
+```
+
+Other
+
+```{r}
+first_other <- left_join(charges_cats %>% filter(crime_category=='Other'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_other <- first_other %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_other[first_other > 1] <- 1
+first_other <- first_other %>% summarise_all(sum)
+other <- round(first_other/7786,2)
+other1 <- other %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_other <- left_join(charges_cats %>% filter(crime_category=='Other'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_other <- second_other %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_other[second_other > 1] <- 1
+second_other <- second_other %>% summarise_all(sum)
+other <- round(second_other/4951,2)
+other2 <- other %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+other_commits <- left_join(other1,other2, by = "crime")
+
+third_other <- left_join(charges_cats %>% filter(crime_category=='Other'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_other <- third_other %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_other[third_other > 1] <- 1
+third_other <- third_other %>% summarise_all(sum)
+other <- round(third_other/2615,2)
+other3 <- other %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+other_commits <- left_join(other_commits,other3, by = "crime")
+
+fourth_other <- left_join(charges_cats %>% filter(crime_category=='Other'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_other <- fourth_other %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_other[fourth_other > 1] <- 1
+fourth_other <- fourth_other %>% summarise_all(sum)
+other <- round(fourth_other/1243,2)
+other4 <- other %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+other_commits <- left_join(other_commits,other4, by = "crime")
+
+fifth_other <- left_join(charges_cats %>% filter(crime_category=='Other'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_other <- fifth_other %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_other[fifth_other > 1] <- 1
+fifth_other <- fifth_other %>% summarise_all(sum)
+other <- round(fifth_other/697,2)
+other5 <- other %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+other_commits <- left_join(other_commits,other5, by = "crime")
+
+sixth_other <- left_join(charges_cats %>% filter(crime_category=='Other'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_other <- sixth_other %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_other[sixth_other > 1] <- 1
+sixth_other <- sixth_other %>% summarise_all(sum)
+other <- round(sixth_other/758,2)
+other6 <- other %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+other_commits <- left_join(other_commits,other6, by = "crime")
+write.csv(other_commits, "~/vizclass/Other.csv")
+```
+
+Sex
+
+```{r}
+first_sex <- left_join(charges_cats %>% filter(crime_category=='Sex Crimes'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_sex <- first_sex %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_sex[first_sex > 1] <- 1
+first_sex <- first_sex %>% summarise_all(sum)
+sex <- round(first_sex/8866,2)
+sex1 <- sex %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_sex <- left_join(charges_cats %>% filter(crime_category=='Sex Crimes'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_sex <- second_sex %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_sex[second_sex > 1] <- 1
+second_sex <- second_sex %>% summarise_all(sum)
+sex <- round(second_sex/1858,2)
+sex2 <- sex %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+sex_commits <- left_join(sex1,sex2, by = "crime")
+
+third_sex <- left_join(charges_cats %>% filter(crime_category=='Sex Crimes'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_sex <- third_sex %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_sex[third_sex > 1] <- 1
+third_sex <- third_sex %>% summarise_all(sum)
+sex <- round(third_sex/810,2)
+sex3 <- sex %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+sex_commits <- left_join(sex_commits,sex3, by = "crime")
+
+fourth_sex <- left_join(charges_cats %>% filter(crime_category=='Sex Crimes'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_sex <- fourth_sex %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_sex[fourth_sex > 1] <- 1
+fourth_sex <- fourth_sex %>% summarise_all(sum)
+sex <- round(fourth_sex/373,2)
+sex4 <- sex %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+sex_commits <- left_join(sex_commits,sex4, by = "crime")
+
+fifth_sex <- left_join(charges_cats %>% filter(crime_category=='Sex Crimes'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_sex <- fifth_sex %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_sex[fifth_sex > 1] <- 1
+fifth_sex <- fifth_sex %>% summarise_all(sum)
+sex <- round(fifth_sex/181,2)
+sex5 <- sex %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+sex_commits <- left_join(sex_commits,sex5, by = "crime")
+
+sixth_sex <- left_join(charges_cats %>% filter(crime_category=='Sex Crimes'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_sex <- sixth_sex %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_sex[sixth_sex > 1] <- 1
+sixth_sex <- sixth_sex %>% summarise_all(sum)
+sex <- round(sixth_sex/267,2)
+sex6 <- sex %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+sex_commits <- left_join(sex_commits,sex6, by = "crime")
+write.csv(sex_commits, "~/vizclass/Sex_Crimes.csv")
+```
+
+```{r}
+first_hurt <- left_join(charges_cats %>% filter(crime_category=='Violent Crimes'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_hurt <- first_hurt %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_hurt[first_hurt > 1] <- 1
+first_hurt <- first_hurt %>% summarise_all(sum)
+hurt <- round(first_hurt/25302,2)
+hurt1 <- hurt %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_hurt <- left_join(charges_cats %>% filter(crime_category=='Violent Crimes'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_hurt <- second_hurt %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_hurt[second_hurt > 1] <- 1
+second_hurt <- second_hurt %>% summarise_all(sum)
+hurt <- round(second_hurt/9809,2)
+hurt2 <- hurt %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+hurt_commits <- left_join(hurt1,hurt2, by = "crime")
+
+third_hurt <- left_join(charges_cats %>% filter(crime_category=='Violent Crimes'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_hurt <- third_hurt %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_hurt[third_hurt > 1] <- 1
+third_hurt <- third_hurt %>% summarise_all(sum)
+hurt <- round(third_hurt/4849,2)
+hurt3 <- hurt %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+hurt_commits <- left_join(hurt_commits,hurt3, by = "crime")
+
+fourth_hurt <- left_join(charges_cats %>% filter(crime_category=='Violent Crimes'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_hurt <- fourth_hurt %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_hurt[fourth_hurt > 1] <- 1
+fourth_hurt <- fourth_hurt %>% summarise_all(sum)
+hurt <- round(fourth_hurt/2626,2)
+hurt4 <- hurt %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+hurt_commits <- left_join(hurt_commits,hurt4, by = "crime")
+
+fifth_hurt <- left_join(charges_cats %>% filter(crime_category=='Violent Crimes'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_hurt <- fifth_hurt %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_hurt[fifth_hurt > 1] <- 1
+fifth_hurt <- fifth_hurt %>% summarise_all(sum)
+hurt <- round(fifth_hurt/1343,2)
+hurt5 <- hurt %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+hurt_commits <- left_join(hurt_commits,hurt5, by = "crime")
+
+sixth_hurt <- left_join(charges_cats %>% filter(crime_category=='Violent Crimes'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_hurt <- sixth_hurt %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_hurt[sixth_hurt > 1] <- 1
+sixth_hurt <- sixth_hurt %>% summarise_all(sum)
+hurt <- round(sixth_hurt/1876,2)
+hurt6 <- hurt %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+hurt_commits <- left_join(hurt_commits,hurt6, by = "crime")
+write.csv(hurt_commits, "~/vizclass/Violent_Crimes.csv")
+```
+
+
+```{r}
+first_fraud <- left_join(charges_cats %>% filter(crime_category=='White-Collar and Fraud'),fist_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+
+first_fraud <- first_fraud %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber)
+first_fraud[first_fraud > 1] <- 1
+first_fraud <- first_fraud %>% summarise_all(sum)
+fraud <- round(first_fraud/1467,2)
+fraud1 <- fraud %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "First Commit.") %>% arrange(desc(`First Commit.`)) %>% slice(1:10)
+
+second_fraud <- left_join(charges_cats %>% filter(crime_category=='White-Collar and Fraud'),second_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+second_fraud <- second_fraud %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #5970
+second_fraud[second_fraud > 1] <- 1
+second_fraud <- second_fraud %>% summarise_all(sum)
+fraud <- round(second_fraud/782,2)
+fraud2 <- fraud %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Second Commit.") %>% arrange(desc(`Second Commit.`))
+fraud_commits <- left_join(fraud1,fraud2, by = "crime")
+
+third_fraud <- left_join(charges_cats %>% filter(crime_category=='White-Collar and Fraud'),third_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+third_fraud <- third_fraud %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #158
+third_fraud[third_fraud > 1] <- 1
+third_fraud <- third_fraud %>% summarise_all(sum)
+fraud <- round(third_fraud/471,2)
+fraud3 <- fraud %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Third Commit.") %>% arrange(desc(`Third Commit.`))
+fraud_commits <- left_join(fraud_commits,fraud3, by = "crime")
+
+fourth_fraud <- left_join(charges_cats %>% filter(crime_category=='White-Collar and Fraud'),fourth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fourth_fraud <- fourth_fraud %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #59
+fourth_fraud[fourth_fraud > 1] <- 1
+fourth_fraud <- fourth_fraud %>% summarise_all(sum)
+fraud <- round(fourth_fraud/271,2)
+fraud4 <- fraud %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fourth Commit.") %>% arrange(desc(`Fourth Commit.`))
+fraud_commits <- left_join(fraud_commits,fraud4, by = "crime")
+
+fifth_fraud <- left_join(charges_cats %>% filter(crime_category=='White-Collar and Fraud'),fifth_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+fifth_fraud <- fifth_fraud %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #32
+fifth_fraud[fifth_fraud > 1] <- 1
+fifth_fraud <- fifth_fraud %>% summarise_all(sum)
+fraud <- round(fifth_fraud/165,2)
+fraud5 <- fraud %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Fifth Commit.") %>% arrange(desc(`Fifth Commit.`))
+fraud_commits <- left_join(fraud_commits,fraud5, by = "crime")
+
+sixth_fraud <- left_join(charges_cats %>% filter(crime_category=='White-Collar and Fraud'),six_or_more_timers_crimes, by = 'adjudicationcharge_descr') %>% select(-crime_category)
+sixth_fraud <- sixth_fraud %>%
+  pivot_wider(names_from = adjudicationcharge_descr, values_from = adjudicationcharge_descr,    values_fn = length, values_fill = 0) %>% select(-DCNumber) #27
+sixth_fraud[sixth_fraud > 1] <- 1
+sixth_fraud <- sixth_fraud %>% summarise_all(sum)
+fraud <- round(sixth_fraud/189,2)
+fraud6 <- fraud %>%
+  pivot_longer(cols = everything(), names_to = "crime", values_to = "Sixth+ Commit.") %>% arrange(desc(`Sixth+ Commit.`))
+fraud_commits <- left_join(fraud_commits,fraud6, by = "crime")
+write.csv(fraud_commits, "~/vizclass/White-Collar_and_Fraud.csv")
+```
+
+uff all done. Someone check my work?
+Here is where the plot is!
+<a href="https://johnwwise.github.io/vizclass/project.html">Interactive Viz</a>
+
+```{html}
+<head>
+    <title>Crime Categories - Commit Duration</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        .text {
+            font-family: Arial;
+            font-size: 15px;
+        }
+
+        .axis path, .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .tick text {
+            fill: black;
+            font-size: 11px;
+        }
+
+        path {
+            fill: none;
+        }
+
+        .line {
+            stroke-width: 5; /* Adjust the thickness as needed */
+        }
+
+        .gridline {
+            stroke: #ccc;
+            stroke-opacity: 0.2;
+        }
+    </style>
+</head>
+
+
+<svg id="main" width="1200" height="600">
+    <text id='label' x='20' y='20'>Very Awesome Plot with Awesomer Title</text>
+    <g transform="translate(70,40)"></g>
+</svg>
+
+<script>
+    var CHART_WIDTH = 750;
+    var CHART_HEIGHT = 500;
+    var g;
+
+    // Load data from CSV
+    d3.csv('pros_across_times.csv', function(error, data) {
+        if (error) throw error;
+
+        // Define your accessor function for the commitData
+        var commitData = data.map(function(d) {
+            return {
+                "Crime Category": d["Crime Category"],
+                "First Commit.": +d["First Commit."],
+                "Second Commit.": +d["Second Commit."],
+                "Third Commit.": +d["Third Commit."],
+                "Fourth Commit.": +d["Fourth Commit."],
+                "Fifth Commit.": +d["Fifth Commit."],
+                "Sixth+ Commit.": +d["Sixth+ Commit."]
+            };
+        });
+
+        function drawLineChart() {
+            var xScale = d3.scale.ordinal()
+                .domain(d3.range(1, 7))
+                .rangePoints([0, CHART_WIDTH]);
+
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(commitData, function (d) {
+                    return d3.max([d["First Commit."], d["Second Commit."], d["Third Commit."], d["Fourth Commit."], d["Fifth Commit."], d["Sixth+ Commit."]]);
+                })])
+                .range([CHART_HEIGHT, 0]);
+
+            var color = d3.scale.category20()
+                .domain(commitData.map(function(d) { return d["Crime Category"]; }));
+
+            var line = d3.svg.line()
+                .x(function (d, i) {
+                    return xScale(i + 1);
+                })
+                .y(function (d) {
+                    return yScale(d);
+                });
+
+            g = d3.select("svg").select("g");
+
+// Draw gridlines
+g.selectAll(".gridline")
+    .data(yScale.ticks(10))
+    .enter().append("line")
+    .attr("class", "gridline")
+    .attr("x1", 0)
+    .attr("x2", CHART_WIDTH)
+    .attr("y1", function(d) { return yScale(d); })
+    .attr("y2", function(d) { return yScale(d); })
+    .style("stroke", "rgba(0, 0, 0, 0.2)")  // Adjust the color and opacity here
+    .style("stroke-width", 2);  // Adjust the thickness here
+
+
+            commitData.forEach(function (crime) {
+                crime.Points = [
+                    crime["First Commit."],
+                    crime["Second Commit."],
+                    crime["Third Commit."],
+                    crime["Fourth Commit."],
+                    crime["Fifth Commit."],
+                    crime["Sixth+ Commit."]
+                ];
+
+                // Append a group for each crime category
+                var crimeGroup = g.append("g")
+                    .attr("class", "crime-group")
+                    .style("opacity", 1);
+
+                // Draw line
+                crimeGroup.append("path")
+                    .data([crime])
+                    .attr("class", "line")
+                    .attr("d", line(crime.Points))
+                    .style("stroke", color(crime["Crime Category"]))
+                    .style("opacity", 0.75);
+            });
+
+            var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function (e) {
+                return "Commit " + e;
+            });
+
+            var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+            g.append("g").attr("class", "axis").attr("transform", "translate(0," + CHART_HEIGHT + ")").call(xAxis);
+            g.append("g").attr("class", "axis").call(yAxis);
+
+            // Add legend after drawing the chart
+            var legend = d3.select("svg")
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", "translate(20,50)");
+
+            var legendItems = legend.selectAll(".legend-item")
+                .data(commitData.map(function(d) { return d["Crime Category"]; }))
+                .enter().append("g")
+                .attr("class", "legend-item")
+                .attr("transform", function(d, i) { return "translate(820," + i * 20 + ")"; });
+
+            legendItems.append("rect")
+                .attr("x", 0)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", function(d) { return color(d); });
+
+            legendItems.append("text")
+                .attr("x", 25)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "start")
+                .text(function(d) { return d; });
+
+            legendItems
+                .on("mouseover", handleLegendMouseover)
+                .on("mouseout", handleLegendMouseout)
+                .on("click", handleLegendClick);
+        }
+
+
+        function handleLegendMouseover(d) {
+            // Select all gridlines, and smoothly adjust the opacity
+            g.selectAll(".gridline")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", 1);
+
+            // Select all lines, and smoothly adjust the opacity
+            g.selectAll(".line, .point-label")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", function (data) {
+                    return data["Crime Category"] === d ? 1 : 0.01;
+                })
+                .filter(function (data) {
+                    return data["Crime Category"] === d;
+                })
+                .transition()
+                .duration(400)
+                .style("opacity", 1);
+
+            g.selectAll(".point-label")
+                .filter(function (data) {
+                    return data["Crime Category"] !== d;
+                })
+                .transition()
+                .duration(400)
+                .style("opacity", 0.2);
+        }
+
+        function handleLegendMouseout() {
+            // Select all gridlines, and smoothly adjust the opacity back to 0
+            g.selectAll(".gridline")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", 0);
+
+            // Select all lines and text labels, and smoothly adjust the opacity back to 1
+            g.selectAll(".line")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", 1);
+        }
+
+function handleLegendClick(d) {
+    // Assuming you have CSV files in the same format as the original data
+    var fileName = getFileNameForCrimeType(d);
+    // Remove all elements from the SVG
+    d3.select("svg").selectAll("*").remove();
+
+    // Recreate the necessary SVG elements
+    var g = d3.select("svg").append("g").attr("transform", "translate(70,40)");
+
+    // Load data from CSV for the filtered crime type
+    d3.csv(fileName, function (error, filteredData) {
+        if (error) throw error;
+
+        var commitData = filteredData.map(function (d) {
+            return {
+                "crime": d["crime"],
+                "First Commit.": +d["First Commit."],
+                "Second Commit.": +d["Second Commit."],
+                "Third Commit.": +d["Third Commit."],
+                "Fourth Commit.": +d["Fourth Commit."],
+                "Fifth Commit.": +d["Fifth Commit."],
+                "Sixth+ Commit.": +d["Sixth+ Commit."]
+            };
+        });
+
+
+        var xScale = d3.scale.ordinal()
+            .domain(d3.range(1, 7))
+            .rangePoints([0, CHART_WIDTH]);
+
+        var yScale = d3.scale.linear()
+            .domain([0, d3.max(filteredData, function (d) {
+                return d3.max([d["First Commit."], d["Second Commit."], d["Third Commit."], d["Fourth Commit."], d["Fifth Commit."], d["Sixth+ Commit."]]);
+            })])
+            .range([CHART_HEIGHT, 0]);
+
+        var color = d3.scale.category20()
+            .domain(commitData.map(function (d) { return d["crime"]; }));
+
+        var line = d3.svg.line()
+            .x(function (d, i) {
+                return xScale(i + 1);
+            })
+            .y(function (d) {
+                return yScale(d);
+            });
+
+        g = d3.select("svg").select("g");
+
+        // Rest of the code...
+
+        commitData.forEach(function (crime) {
+            crime.Points = [
+                crime["First Commit."],
+                crime["Second Commit."],
+                crime["Third Commit."],
+                crime["Fourth Commit."],
+                crime["Fifth Commit."],
+                crime["Sixth+ Commit."]
+            ];
+
+            var crimeGroup = g.append("g")
+                .attr("class", "crime-group")
+                .style("opacity", 1);
+
+            crimeGroup.append("path")
+                .data([crime])
+                .attr("class", "line")
+                .attr("d", line(crime.Points))
+                .style("stroke", color(crime["crime"]))
+                .style("opacity", 0.75);
+        });
+
+        var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function (e) {
+            return "Commit " + e;
+        });
+
+        var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + CHART_HEIGHT + ")").call(xAxis);
+        g.append("g").attr("class", "axis").call(yAxis);
+        
+        var legend = d3.select("svg")
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate(" + (CHART_WIDTH + 40) + ",50)");
+        
+        var legendItems = legend.selectAll(".legend-item")
+            .data(commitData.map(function (d) { return d["crime"]; }))
+            .enter().append("g")
+            .attr("class", "legend-item")
+            .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legendItems.append("rect")
+            .attr("x", 0)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", function (d) { return color(d); });
+
+        legendItems.append("text")
+            .attr("x", 25)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text(function (d) { return d; });
+
+        legendItems
+            .on("mouseover", handleLegendMouseover)
+            .on("mouseout", handleLegendMouseout);
+        
+    });
+}
+
+
+
+function getFileNameForCrimeType(crimeType) {
+    // Replace spaces and slashes with underscores, and add '.csv' to create the filename
+    return crimeType.replace(/\s+/g, '_').replace(/\//g, '_').replace(/\,//g,'') + '.csv';
+}
+
+        drawLineChart();
+    });
+    
+
+</script>
+```
+
+<head>
+    <title>Crime Categories - Commit Duration</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        .text {
+            font-family: Arial;
+            font-size: 15px;
+        }
+
+        .axis path, .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .tick text {
+            fill: black;
+            font-size: 11px;
+        }
+
+        path {
+            fill: none;
+        }
+
+        .line {
+            stroke-width: 5; /* Adjust the thickness as needed */
+        }
+
+        .gridline {
+            stroke: #ccc;
+            stroke-opacity: 0.2;
+        }
+    </style>
+</head>
+
+
+<svg id="main" width="1200" height="600">
+    <text id='label' x='20' y='20'>Very Awesome Plot with Awesomer Title</text>
+    <g transform="translate(70,40)"></g>
+</svg>
+
+<script>
+    var CHART_WIDTH = 750;
+    var CHART_HEIGHT = 500;
+    var g;
+
+    // Load data from CSV
+    d3.csv('pros_across_times.csv', function(error, data) {
+        if (error) throw error;
+
+        // Define your accessor function for the commitData
+        var commitData = data.map(function(d) {
+            return {
+                "Crime Category": d["Crime Category"],
+                "First Commit.": +d["First Commit."],
+                "Second Commit.": +d["Second Commit."],
+                "Third Commit.": +d["Third Commit."],
+                "Fourth Commit.": +d["Fourth Commit."],
+                "Fifth Commit.": +d["Fifth Commit."],
+                "Sixth+ Commit.": +d["Sixth+ Commit."]
+            };
+        });
+
+        function drawLineChart() {
+            var xScale = d3.scale.ordinal()
+                .domain(d3.range(1, 7))
+                .rangePoints([0, CHART_WIDTH]);
+
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(commitData, function (d) {
+                    return d3.max([d["First Commit."], d["Second Commit."], d["Third Commit."], d["Fourth Commit."], d["Fifth Commit."], d["Sixth+ Commit."]]);
+                })])
+                .range([CHART_HEIGHT, 0]);
+
+            var color = d3.scale.category20()
+                .domain(commitData.map(function(d) { return d["Crime Category"]; }));
+
+            var line = d3.svg.line()
+                .x(function (d, i) {
+                    return xScale(i + 1);
+                })
+                .y(function (d) {
+                    return yScale(d);
+                });
+
+            g = d3.select("svg").select("g");
+
+// Draw gridlines
+g.selectAll(".gridline")
+    .data(yScale.ticks(10))
+    .enter().append("line")
+    .attr("class", "gridline")
+    .attr("x1", 0)
+    .attr("x2", CHART_WIDTH)
+    .attr("y1", function(d) { return yScale(d); })
+    .attr("y2", function(d) { return yScale(d); })
+    .style("stroke", "rgba(0, 0, 0, 0.2)")  // Adjust the color and opacity here
+    .style("stroke-width", 2);  // Adjust the thickness here
+
+
+            commitData.forEach(function (crime) {
+                crime.Points = [
+                    crime["First Commit."],
+                    crime["Second Commit."],
+                    crime["Third Commit."],
+                    crime["Fourth Commit."],
+                    crime["Fifth Commit."],
+                    crime["Sixth+ Commit."]
+                ];
+
+                // Append a group for each crime category
+                var crimeGroup = g.append("g")
+                    .attr("class", "crime-group")
+                    .style("opacity", 1);
+
+                // Draw line
+                crimeGroup.append("path")
+                    .data([crime])
+                    .attr("class", "line")
+                    .attr("d", line(crime.Points))
+                    .style("stroke", color(crime["Crime Category"]))
+                    .style("opacity", 0.75);
+            });
+
+            var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function (e) {
+                return "Commit " + e;
+            });
+
+            var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+            g.append("g").attr("class", "axis").attr("transform", "translate(0," + CHART_HEIGHT + ")").call(xAxis);
+            g.append("g").attr("class", "axis").call(yAxis);
+
+            // Add legend after drawing the chart
+            var legend = d3.select("svg")
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", "translate(20,50)");
+
+            var legendItems = legend.selectAll(".legend-item")
+                .data(commitData.map(function(d) { return d["Crime Category"]; }))
+                .enter().append("g")
+                .attr("class", "legend-item")
+                .attr("transform", function(d, i) { return "translate(820," + i * 20 + ")"; });
+
+            legendItems.append("rect")
+                .attr("x", 0)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", function(d) { return color(d); });
+
+            legendItems.append("text")
+                .attr("x", 25)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "start")
+                .text(function(d) { return d; });
+
+            legendItems
+                .on("mouseover", handleLegendMouseover)
+                .on("mouseout", handleLegendMouseout)
+                .on("click", handleLegendClick);
+        }
+
+
+        function handleLegendMouseover(d) {
+            // Select all gridlines, and smoothly adjust the opacity
+            g.selectAll(".gridline")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", 1);
+
+            // Select all lines, and smoothly adjust the opacity
+            g.selectAll(".line, .point-label")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", function (data) {
+                    return data["Crime Category"] === d ? 1 : 0.01;
+                })
+                .filter(function (data) {
+                    return data["Crime Category"] === d;
+                })
+                .transition()
+                .duration(400)
+                .style("opacity", 1);
+
+            g.selectAll(".point-label")
+                .filter(function (data) {
+                    return data["Crime Category"] !== d;
+                })
+                .transition()
+                .duration(400)
+                .style("opacity", 0.2);
+        }
+
+        function handleLegendMouseout() {
+            // Select all gridlines, and smoothly adjust the opacity back to 0
+            g.selectAll(".gridline")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", 0);
+
+            // Select all lines and text labels, and smoothly adjust the opacity back to 1
+            g.selectAll(".line")
+                .transition()  // Add transition for smooth effect
+                .duration(400)  // Duration of the transition in milliseconds
+                .style("opacity", 1);
+        }
+
+function handleLegendClick(d) {
+    // Assuming you have CSV files in the same format as the original data
+    var fileName = getFileNameForCrimeType(d);
+    // Remove all elements from the SVG
+    d3.select("svg").selectAll("*").remove();
+
+    // Recreate the necessary SVG elements
+    var g = d3.select("svg").append("g").attr("transform", "translate(70,40)");
+
+    // Load data from CSV for the filtered crime type
+    d3.csv(fileName, function (error, filteredData) {
+        if (error) throw error;
+
+        var commitData = filteredData.map(function (d) {
+            return {
+                "crime": d["crime"],
+                "First Commit.": +d["First Commit."],
+                "Second Commit.": +d["Second Commit."],
+                "Third Commit.": +d["Third Commit."],
+                "Fourth Commit.": +d["Fourth Commit."],
+                "Fifth Commit.": +d["Fifth Commit."],
+                "Sixth+ Commit.": +d["Sixth+ Commit."]
+            };
+        });
+
+
+        var xScale = d3.scale.ordinal()
+            .domain(d3.range(1, 7))
+            .rangePoints([0, CHART_WIDTH]);
+
+        var yScale = d3.scale.linear()
+            .domain([0, d3.max(filteredData, function (d) {
+                return d3.max([d["First Commit."], d["Second Commit."], d["Third Commit."], d["Fourth Commit."], d["Fifth Commit."], d["Sixth+ Commit."]]);
+            })])
+            .range([CHART_HEIGHT, 0]);
+
+        var color = d3.scale.category20()
+            .domain(commitData.map(function (d) { return d["crime"]; }));
+
+        var line = d3.svg.line()
+            .x(function (d, i) {
+                return xScale(i + 1);
+            })
+            .y(function (d) {
+                return yScale(d);
+            });
+
+        g = d3.select("svg").select("g");
+
+        // Rest of the code...
+
+        commitData.forEach(function (crime) {
+            crime.Points = [
+                crime["First Commit."],
+                crime["Second Commit."],
+                crime["Third Commit."],
+                crime["Fourth Commit."],
+                crime["Fifth Commit."],
+                crime["Sixth+ Commit."]
+            ];
+
+            var crimeGroup = g.append("g")
+                .attr("class", "crime-group")
+                .style("opacity", 1);
+
+            crimeGroup.append("path")
+                .data([crime])
+                .attr("class", "line")
+                .attr("d", line(crime.Points))
+                .style("stroke", color(crime["crime"]))
+                .style("opacity", 0.75);
+        });
+
+        var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(function (e) {
+            return "Commit " + e;
+        });
+
+        var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+        g.append("g").attr("class", "axis").attr("transform", "translate(0," + CHART_HEIGHT + ")").call(xAxis);
+        g.append("g").attr("class", "axis").call(yAxis);
+        
+        var legend = d3.select("svg")
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate(" + (CHART_WIDTH + 40) + ",50)");
+        
+        var legendItems = legend.selectAll(".legend-item")
+            .data(commitData.map(function (d) { return d["crime"]; }))
+            .enter().append("g")
+            .attr("class", "legend-item")
+            .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legendItems.append("rect")
+            .attr("x", 0)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", function (d) { return color(d); });
+
+        legendItems.append("text")
+            .attr("x", 25)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "start")
+            .text(function (d) { return d; });
+
+        legendItems
+            .on("mouseover", handleLegendMouseover)
+            .on("mouseout", handleLegendMouseout);
+        
+    });
+}
+
+
+
+function getFileNameForCrimeType(crimeType) {
+    // Replace spaces and slashes with underscores, and add '.csv' to create the filename
+    return crimeType.replace(/\s+/g, '_').replace(/\//g, '_').replace(/\,//g,'') + '.csv';
+}
+
+        drawLineChart();
+    });
+    
+
+</script>
+<h1>What is this?</h1>
+This interactive plot represents the proportions of each crime category associated with those currently incarcerated in FDOC across multiple commitments. For instance, looking at the line for drug offenses, you'll see that 14.8 percent of individuals serving their first sentence are incarcerated for drug-related crimes. This percentage increases to 21.9% for those on their second sentence, 26.5% for the third, and so on.
+
+Hovering over the legend items allows you to isolate a line for a specific crime category. Clicking on a legend item redraws the graph to display the top-10 crimes within each category. However, it's important to note that these proportions are relative to the original category's proportion, not the total population. For example, if you click on the 'drug crimes' category which constitutes around 15% of the total, you will see individual drug-related crimes, some of which may have proportions greater than 15% - these are relative to the 'drug crimes' category, not the total population.
+
+Moreover, some proportions may add up to more than 100% because some crimes are associated with multiple categories or crimes.
+
+While more features and animations are yet to be added, this functional version is ready to be shared! Please feel free to provide your feedback and reviews. Don't forget to reload the page to reset the plot. Stay tuned for the polished code! Look over the rough work if you can please! <a href="https://johnwwise.github.io/public_repository/work/2023-10-04-returns">Code and Methodology</a>
+
+Maaaan I don't know why it's not working here something to do with encapsulating html into Distill? Click the link until I get it embedded!
+
