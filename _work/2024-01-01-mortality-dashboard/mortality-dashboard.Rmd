@@ -17,9 +17,9 @@ inst = lapply(pkgs, library, character.only = TRUE)
 set.seed(8675309)
 ```
 
-# Dashboard Hosting
+# Dashboard Structure
 
-I've had considerable success using Github Pages. Ideally, the finished dashboard would reside at a dedicated URL, like 'fdocmortality.com'. I believe I could relatively quickly and easily move my entire repository to a dedicated URL. 
+I've had considerable success using Github Pages. Ideally, the finished dashboard would reside at a dedicated URL, like 'fdocmortality.com', and I believe I could relatively quickly and easily move my entire repository to a dedicated URL. 
 
 I will cross that bridge when I come to it — the final dashboard will consist of D3.js code embedded in an HTML document via the Distill package within RStudio. I should be able to host it anywhere.
 
@@ -29,7 +29,7 @@ I plan to use two data sources — the [monthly OBIS](https://fdc.myflorida.com/
 
 I should be able to write an R script that connects directly and updates monthly from the OBIS database. I should also be able to concurrently scrape the 'Inmate Mortality' tables posted by the FDOC. This would allow for the dashboard to be updated monthly, in sync with the FDOC updates.
 
-However, embedding this script within a D3 static website is beyond my current skills, if it's even feasible at all.
+However, embedding this script within a Distill static website is beyond my current skills, if it's even feasible at all.
 
 Instead, I intend to manually update the data for the dashboard biannually: once at the start of the new year and once at the start of the fiscal year.
 

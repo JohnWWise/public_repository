@@ -6158,13 +6158,13 @@ About
 
 
 <div class="d-article">
-<h1 id="dashboard-hosting">Dashboard Hosting</h1>
-<p>I’ve had considerable success using Github Pages. Ideally, the finished dashboard would reside at a dedicated URL, like ‘fdocmortality.com’. I believe I could relatively quickly and easily move my entire repository to a dedicated URL.</p>
+<h1 id="dashboard-structure">Dashboard Structure</h1>
+<p>I’ve had considerable success using Github Pages. Ideally, the finished dashboard would reside at a dedicated URL, like ‘fdocmortality.com’, and I believe I could relatively quickly and easily move my entire repository to a dedicated URL.</p>
 <p>I will cross that bridge when I come to it — the final dashboard will consist of D3.js code embedded in an HTML document via the Distill package within RStudio. I should be able to host it anywhere.</p>
 <h1 id="data-sources">Data Sources</h1>
 <p>I plan to use two data sources — the <a href="https://fdc.myflorida.com/pub/obis_request.html">monthly OBIS</a> and the <a href="https://fdc.myflorida.com/pub/mortality/index.html">fiscal-yearly inmate mortality tables</a>.</p>
 <p>I should be able to write an R script that connects directly and updates monthly from the OBIS database. I should also be able to concurrently scrape the ‘Inmate Mortality’ tables posted by the FDOC. This would allow for the dashboard to be updated monthly, in sync with the FDOC updates.</p>
-<p>However, embedding this script within a D3 static website is beyond my current skills, if it’s even feasible at all.</p>
+<p>However, embedding this script within a Distill static website is beyond my current skills, if it’s even feasible at all.</p>
 <p>Instead, I intend to manually update the data for the dashboard biannually: once at the start of the new year and once at the start of the fiscal year.</p>
 <h2 id="obis-data">OBIS Data</h2>
 <div class="layout-chunk" data-layout="l-body">
