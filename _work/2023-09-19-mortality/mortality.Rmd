@@ -36,7 +36,7 @@ Figure 2: Source: <a href="https://fdc.myflorida.com/pub/mortality/index.html">S
 </p>
 :::
 
-It is remarkable and surprising that the FDOC chose to openly post this data (this point requires further support). In my data science training, however, I have learned that data is usually presented in this way only when there is a story to tell or a point to make. By presenting the data in this way, it becomes a communication tool, and one story in partiular has been intentionally centered here by the Florida Department of Corrections: the vast majority of deaths inside are "natural," which is listed first under "Mortality Facts" and emphasized through the use of a pie chart. The third item in this list of "facts" serves to reinforce this point, and the table of the number of deaths separated by manner of death presented alongside this visual is used as an opportunity to juxtapose the total inmate population. The FDOC's story is clear: given such a large incarcerated population entering with pre-existing medical conditions, natural deaths are inevitable but slight in comparison to the total number of persons under their care.
+It is remarkable and surprising that the FDOC chose to openly post this data. In my data science training, however, I have learned that data is usually presented in this way only when there is a story to tell or a point to make. By presenting the data in this way, it becomes a communication tool, and one story in partiular has been intentionally centered here by the Florida Department of Corrections: the vast majority of deaths inside are "natural," which is listed first under "Mortality Facts" and emphasized through the use of a pie chart. The third item in this list of "facts" serves to reinforce this point, and the table of the number of deaths separated by manner of death presented alongside this visual is used as an opportunity to juxtapose the total inmate population. The FDOC's story is clear: given such a large incarcerated population entering with pre-existing medical conditions, natural deaths are inevitable but slight in comparison to the total number of persons under their care.
 
 > "On average, people should be more skeptical when they see numbers. They should be more willing to play around with the data themselves." -- [Nate Silver](https://fivethirtyeight.com/contributors/nate-silver/), founder, and editor-in-chief of FiveThirtyEight.
 
@@ -228,7 +228,7 @@ facilities <- deaths %>%
   group_by(FACILITY_description, Manner_Death) %>% 
   summarise(count = n()) %>%
   pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
-  mutate(total = sum(Natural,Suicide, Accident)) %>%
+  mutate(total = sum(Natural,Suicide, Accident,Homicide,Pending)) %>%
   arrange(desc(total))
 datatable(facilities, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
 write_csv(facilities, 'facilities.csv')
@@ -238,7 +238,7 @@ write_csv(facilities, 'facilities.csv')
 # Lake Butler Medical Reception Center
 Upon initial examination of the data, it becomes apparent that the majority of deaths occur at the Reception and Medical Center (RMC) in Lake Butler, Florida. This is because the RMC is the secure medical facility for the entire Florida Department of Corrections, and includes a hospital on site where individuals in need of hospitalization or specialty medical care are housed. The facility was founded in 1968 as an intake and processing point for all male state prisoners and as a secure medical facility.
 
-```{r plotting RMC, echo=FALSE, fig.align='center', fig.height=6, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
+```{r plotting RMC, echo=FALSE, layout="l-page", fig.align='center', fig.height=6, fig.width= 10, warning=FALSE, message=FALSE, code_folding = TRUE}
 per_month_all2 <- deaths %>%
   group_by(FACILITY_description, month = floor_date(Date_Death, unit = "month")) %>%
   summarise(Total_month_Deaths = n()) %>%
@@ -943,7 +943,7 @@ ggplot(data, aes(x = as.Date(Date_Death), y = as.Date(PrisonReleaseDate), color 
 
 Zooming in to the interesting part!
 
-```{r fig.align='center', warning=FALSE, code_folding=TRUE}
+```{r fig.align='center', warning=FALSE, code_folding=TRUE, layout= 'l-page'}
 point_size <- 3
 x_jitter_amount <- 1450
 y_jitter_amount <- 20
