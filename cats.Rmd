@@ -13,19 +13,19 @@ knitr::opts_chunk$set(echo = FALSE)
 <section>
   <h2>Yuki</h2>
   <img src= "images/Yuki_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
-  <p>This is Yuki. My partner of the time had her, a rescue of a rescue, for about a year before I came home, and she was already very senior. She was a very cranky and particular girl, but, still, she accepted me and welcomed me home immediately.</p>
+  <p>This is Yuki. My partner of the time had her, a rescue of a rescue, for about a year before I came home, and she was already very senior. She was a very cranky and particular girl, but, still, she accepted me and welcomed me home immediately. We both miss her very much.</p>
 </section>
 
 <section>
   <h2>Jinx</h2>
   <img src= "images/Jinx_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
-  <p>This is Jinx! She and her brother and sister were baby kittens under the deck of our house when we moved in, and they have all been the best cats ever!</p>
+  <p>This is Jinx! I wish I never taught her to climb me -- now she wants to do it alllll the time! </p>
 </section>
 
 <section>
   <h2>Bruiser</h2>
   <img src= "images/Bruiser_collage.jpg" alt="Cat 1" style="max-width: 100%; height: auto;">
-  <p>Bruiser is a big sweet silly goof.</p>
+  <p>Bruiser was a big sweet silly goof -- I miss him so much.</p>
 </section>
 
 <section>
