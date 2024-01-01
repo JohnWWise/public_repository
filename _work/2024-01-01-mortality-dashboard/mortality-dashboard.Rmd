@@ -1,0 +1,198 @@
+---
+title: "Mortality Dashboard"
+description: |
+  I'm creating a public dashboard using Florida Department of Corrections Inmate Mortality data. This post details my project progress, aiming to ensure transparency and gain community support. Despite anticipated challenges, sharing this project should facilitate problem-solving and keep me accountable.
+output:
+  distill::distill_article:
+    self_contained: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+pkgs = c("tidyverse",
+         "kableExtra",
+         "DT")
+inst = lapply(pkgs, library, character.only = TRUE)
+set.seed(8675309)
+```
+
+# Dashboard Hosting
+
+I've had considerable success using Github Pages. Ideally, the finished dashboard would reside at a dedicated URL, like 'fdocmortality.com'. I believe I could relatively quickly and easily move my entire repository to a dedicated URL. 
+
+I will cross that bridge when I come to it — the final dashboard will consist of D3.js code embedded in an HTML document via the Distill package within RStudio. I should be able to host it anywhere.
+
+# Data Sources
+
+I plan to use two data sources — the [monthly OBIS](https://fdc.myflorida.com/pub/obis_request.html) and the [fiscal-yearly inmate mortality tables](https://fdc.myflorida.com/pub/mortality/index.html).
+
+I should be able to write an R script that connects directly and updates monthly from the OBIS database. I should also be able to concurrently scrape the 'Inmate Mortality' tables posted by the FDOC. This would allow for the dashboard to be updated monthly, in sync with the FDOC updates.
+
+However, embedding this script within a D3 static website is beyond my current skills, if it's even feasible at all.
+
+Instead, I intend to manually update the data for the dashboard biannually: once at the start of the new year and once at the start of the fiscal year.
+
+## OBIS Data
+
+```{r code_folding = TRUE}
+x <- 10
+base_dir <- "/Users/johnwise/Downloads/INMATE_RELEASE_TEXTFILES"
+# Data Import
+Root <- read_delim(paste0(base_dir, "/INMATE_RELEASE_ROOT.txt"))
+obis_deaths <- Root  %>% filter(releasedateflag_descr == 'deceased') %>% select(DCNumber, releasedateflag_descr, PrisonReleaseDate, Sex, race_descr)
+obis_deaths %>%
+  head(x) %>%
+  kable(caption = paste("Omitting", dim(obis_deaths)[1]-x, "rows for display")) %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+The OBIS data provides demographic information on those who perished within the FDOC, such as race and sex, even though it may not be as reliable for the date of death (see my [addendum to the mortality investigation](https://johnwwise.github.io/public_repository/work/2023-09-19-mortality/#addendum).) In addition, the OBIS database contains further details like incarceration and charge histories, which could be useful if we decide to include that information in the future.
+
+## Inmate Mortality Postings
+I copied and pasted these tables from here:
+[fiscal-yearly inmate mortality tables](https://fdc.myflorida.com/pub/mortality/index.html)
+2024-01-01
+
+  <ul>
+  <li>
+    <details>
+      <summary>Reading in csv files</summary>
+      <p>
+
+```{r import and preprocess, echo=TRUE}
+# Here we are bringing in our csv files -- I copied and pasted the FDOC tables into spreadsheets and saved them 
+# as csvs. The coordinates of FDOC facilities were manually looked up by me on Google maps.
+
+# base directory for CSV files
+base_dir <- "/Users/johnwise/pubic_repository/csvs/fdoc_mortality/"
+
+# Define a function to read and preprocess CSV files
+read_and_preprocess_csv <- function(file_path) {
+  # Read the CSV file
+  data <- read_csv(file_path, col_names = TRUE, skip = 1, show_col_types = FALSE)
+  
+  # Extract 'DC Number' using regular expression
+  data$`DC Number` <- str_extract(data$`DC Number`, "(?<=DCNumber=)[^&]+")
+  
+  return(data)
+}
+
+# Read and preprocess CSV files for each fiscal year
+fy15 <- read_and_preprocess_csv(paste0(base_dir, "FY 2015-2016.csv"))
+fy16 <- read_and_preprocess_csv(paste0(base_dir, "FY 2016-2017.csv"))
+fy17 <- read_and_preprocess_csv(paste0(base_dir, "FY 2017-2018.csv"))
+fy18 <- read_and_preprocess_csv(paste0(base_dir, "FY 2018-2019.csv"))
+fy19 <- read_and_preprocess_csv(paste0(base_dir, "FY 2019-2020.csv"))
+fy20 <- read_and_preprocess_csv(paste0(base_dir, "FY 2020-2021.csv"))
+fy21 <- read_and_preprocess_csv(paste0(base_dir, "FY 2021-2022.csv"))
+fy22 <- read_and_preprocess_csv(paste0(base_dir, "FY 2022-2023.csv"))
+fy23 <- read_and_preprocess_csv(paste0(base_dir, "FY 2023-2024.csv"))
+
+# Brining in Facility coordinates, manually acquired (someone should double check these!) by the author
+cords <-read_csv(paste0(base_dir, 'facility_cords.csv'))
+```      
+  
+  </p>
+  </details>
+  </li>
+  <li>
+    <details>
+      <summary>Data cleaning</summary>
+      <p>
+
+
+```{r more preprocessing, echo= TRUE}
+# Combine data frames from different fiscal years into one
+deaths <- rbind(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
+
+# Remove individual fiscal year data frames to free up memory
+remove(fy15, fy16, fy17, fy18, fy19, fy20, fy21, fy22, fy23)
+
+# Rename columns for consistency and clarity
+colnames(deaths) <- c('Name', 'DCNumber', 'Date_Death', 'FACILITY_description', 'Manner_Death', 'Status')
+
+# Extract the first word from the 'Status' column
+deaths$Status <- str_extract(deaths$Status, "^\\S+")
+
+# Convert the 'Date_Death' column to Date format (assuming 'mdy' function from lubridate)
+deaths$Date_Death <- as.Date(mdy(deaths$Date_Death))
+
+# Convert selected columns to factor variables for categorical data
+deaths$FACILITY_descriptionn <- as.factor(deaths$FACILITY_description)
+deaths$Manner_Death <- as.factor(deaths$Manner_Death)
+deaths$Status <- as.factor(deaths$Status)
+deaths$DCNumber <- as.factor(deaths$DCNumber)
+
+```
+
+
+```{r cleaning typos and mis-entries: collapsing factors, echo=TRUE}
+# Manner of Death Data Cleaning
+deaths$Manner_Death <- recode(deaths$Manner_Death, "Natrual" = "Natural",
+                              "CLOSED" = "Closed",
+                              "4Suicide" = "Suicide",
+                              "Acdident" = "Accident")
+
+# Facilities Data Cleaning
+deaths$FACILITY_description <- recode(deaths$FACILITY_description, "Apalachee East" = "APALACHEE EAST UNIT",
+                                      "BAKER Re-Entry" = "BAKER RE-ENTRY CENTR",
+                                      "Blackwater CF" = "BLACKWATER C.F.",
+                                      "CFRC" = "CFRC-MAIN",
+                                      "CFRC East" = "CFRC-EAST", 
+                                      "CFRC South" = "CFRC-SOUTH", 
+                                      "COLUMBIA C.I." = "COLUMBIA CI", 
+                                      "Charlotte" = "CHARLOTTE C.I.", 
+                                      "Cross City" = "CROSS CITY C.I.", 
+                                      "FSP West" = "FSP WEST UNIT", 
+                                      "Hamilton Annex" = "HAMILTON ANNEX", 
+                                      "Hardee" = "HARDEE C.I.", 
+                                      "Hardee Work Camp" = "HARDEE WORK CAMP", 
+                                      "LAKE CITY" = "LAKE CITY C.F.", 
+                                      "Lake" = "LAKE C.I.", 
+                                      "Marion" = "MARION C.I.", 
+                                      "Okeechobee" = "OKEECHOBEE C.I.", 
+                                      "RMC-Main Unit" = "R.M.C.- MAIN UNIT", 
+                                      "R.M.C.-MAIN UNIT" = "R.M.C.- MAIN UNIT", 
+                                      "S.F.R.C" = "S.F.R.C.", 
+                                      "S.F.R.C. SOUTH" = "S.F.R.C. SOUTH UNIT", 
+                                      "SFRC" = "S.F.R.C.", 
+                                      "SUMTER  C.I." = "SUMTER C.I.", 
+                                      "Suwannee Annex" = "SUWANNEE C.I. ANNEX", 
+                                      "Taylor" = "TAYLOR C.I.", 
+                                      "Union" = "UNION C.I.", 
+                                      "Wakulla" = "WAKULLA C.I.", 
+                                      "Wakulla Annex" = "WAKULLA ANNEX", 
+                                      "Walton" = "WALTON C.I.")
+
+# there are three records for which the cause of death was determined to be 'Undetermined' and three records for 
+#which this variable was valued as 'Closed'. This "Closed" is meant to be a category for investigative status, 
+# so for the purposes of this investigation we collapse those categorized as "Closed" to be "Undetermined".
+deaths$Manner_Death <-  recode(deaths$Manner_Death, "Closed" = "Undetermined")
+
+```
+
+  </p>
+  </details>
+  </li>
+  </ul>
+</body>
+
+# Data Table
+
+And here we already have one component of our dashboard -- a sortable and searchable table of counts tabulated by facility and type of death for the dates between the FYs 2015-2023, and last synced with FDOC data 2024-01-01.
+
+```{r making table of deaths by faclility, echo=FALSE, warning=FALSE, message=FALSE, code_folding=TRUE}
+# Creating the table utilizing the data imported and cleaned above
+facilities <- deaths %>% 
+  group_by(FACILITY_description, Manner_Death) %>% 
+  summarise(count = n()) %>%
+  pivot_wider(names_from = Manner_Death, values_from = count, values_fill = 0) %>%
+  mutate(total = sum(Natural,Suicide, Accident,Homicide,Pending)) %>%
+  arrange(desc(total))
+datatable(facilities, options = list(scrollX = TRUE, pageLength = 10, lengthMenu = c(10, 20, 50)))
+```
+
+# Bar Chart
+
+The next component I'd like to create is a horizontal bar chart. It will represent the count of deaths for each facility, and it will be interactively filterable by type of death. This part might take a few days -- I need to review quite a bit of D3 coding before I can begin to experiment.
